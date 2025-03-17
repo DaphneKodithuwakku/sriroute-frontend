@@ -3,10 +3,10 @@ Sri Route is a feature-rich spiritual travel app designed to help users explore 
 
 ##  Core Features  
 
-### 📅 1. Event Calendar  
-🔴 **Problem:** Travelers miss important religious events.  
-✅ **Solution:** A smart, color-coded religious event calendar.  
-🎯 **Why We Stand Out:** Multi-religion focus, smart alerts, and location-based notifications.  
+###  1. Event Calendar  
+ **Problem:** Travelers miss important religious events.  
+ **Solution:** A smart, color-coded religious event calendar.  
+ **Why We Stand Out:** Multi-religion focus, smart alerts, and location-based notifications.  
 
 ---
 
