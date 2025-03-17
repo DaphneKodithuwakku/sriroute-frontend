@@ -32,6 +32,6 @@ Sri Route is a feature-rich spiritual travel app designed to help users explore 
 ---
 
 ###  5. Cultural Sensitivity Guide  
-🔴 **Problem:** Travelers unknowingly violate customs.  
-✅ **Solution:** A guide on proper etiquette, dress codes, and photography rules.  
-🎯 **Why We Stand Out:** Integrated with the pilgrimage planner, visual guides, and AI chatbot support.  
+ **Problem:** Travelers unknowingly violate customs.  
+ **Solution:** A guide on proper etiquette, dress codes, and photography rules.  
+ **Why We Stand Out:** Integrated with the pilgrimage planner, visual guides, and AI chatbot support.  
