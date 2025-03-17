@@ -11,9 +11,9 @@ Sri Route is a feature-rich spiritual travel app designed to help users explore 
 ---
 
 ###  2. Virtual Tours  
-🔴 **Problem:** Sacred sites are often inaccessible.  
-✅ **Solution:** 360° immersive virtual tours with educational content.  
-🎯 **Why We Stand Out:** Interactive info panels, historical insights, and self-paced tours.  
+ **Problem:** Sacred sites are often inaccessible.  
+ **Solution:** 360° immersive virtual tours with educational content.  
+ **Why We Stand Out:** Interactive info panels, historical insights, and self-paced tours.  
 
 ---
 
