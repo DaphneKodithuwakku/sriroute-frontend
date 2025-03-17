@@ -17,7 +17,7 @@ Sri Route is a feature-rich spiritual travel app designed to help users explore 
 
 ---
 
-### 🤖 3. AI-Powered Personalized Pilgrimage Planner  
+###  3. AI-Powered Personalized Pilgrimage Planner  
 🔴 **Problem:** Planning a spiritual trip is overwhelming.  
 ✅ **Solution:** AI-generated optimized travel itineraries.  
 🎯 **Why We Stand Out:** Real-time adjustments, multi-religion support, Google Maps integration.  
