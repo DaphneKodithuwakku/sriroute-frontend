@@ -25,9 +25,9 @@ Sri Route is a feature-rich spiritual travel app designed to help users explore 
 ---
 
 ###  4. Gamified Achievements  
-🔴 **Problem:** Users lack motivation to visit religious sites.  
-✅ **Solution:** Digital badges for religious visits, donations & offerings.  
-🎯 **Why We Stand Out:** GPS tracking, leaderboard, and social sharing.  
+ **Problem:** Users lack motivation to visit religious sites.  
+ **Solution:** Digital badges for religious visits, donations & offerings.  
+ **Why We Stand Out:** GPS tracking, leaderboard, and social sharing.  
 
 ---
 
