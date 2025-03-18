@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -255,6 +257,8 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
           ),
           boxShadow: [
             BoxShadow(
+              // ignore: duplicate_ignore
+              // ignore: deprecated_member_use
               color: Colors.black.withOpacity(0.1),
               blurRadius: 10,
               offset: Offset(0, -5),
@@ -262,7 +266,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
           ],
         ),
         child: SafeArea(
-          child: Container(
+          child: SizedBox(
             height: 50,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -316,8 +320,8 @@ class NavBarIcon extends StatelessWidget {
     this.index,
     this.selectedIndex,
     this.onTap, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -394,7 +398,7 @@ class ResultsScreen extends StatelessWidget {
           ],
         ),
         child: SafeArea(
-          child: Container(
+          child: SizedBox(
             height: 50,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -437,8 +441,8 @@ class PilgrimageCard extends StatelessWidget {
     required this.imageUrl,
     required this.title,
     required this.location,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
