@@ -452,7 +452,7 @@ class PilgrimageCard extends StatelessWidget {
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
-        ],
+        ], //
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
