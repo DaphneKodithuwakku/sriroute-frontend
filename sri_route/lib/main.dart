@@ -352,7 +352,20 @@ class ResultsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Expanded(
-                  c
+                  child: ListView(
+                    children: const [
+                      PilgrimageCard(
+                        imageUrl: 'https://via.placeholder.com/600x400',
+                        title: 'Sacred Site 1',
+                        location: 'Location 1',
+                      ),
+                      SizedBox(height: 16),
+                      PilgrimageCard(
+                        imageUrl: 'https://via.placeholder.com/600x400',
+                        title: 'Sacred Site 2',
+                        location: 'Location 2',
+                      ),
+                    ],
                   ),
                 ),
               ],
