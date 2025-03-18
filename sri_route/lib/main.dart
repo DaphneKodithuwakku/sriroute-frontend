@@ -173,7 +173,228 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                       },
                     ),
                   ),
-                  
+                  const SizedBox(height: 20),
+                  _buildTextField(
+                    budgetController,
+                    'Budget',
+                    'Enter your budget',
+                    TextInputType.number,
+                  ),
+                  const SizedBox(height: 20),
+                  _buildTextField(
+                    daysController,
+                    'Days',
+                    'Enter number of days',
+                    TextInputType.number,
+                    const Icon(
+                      Icons.calendar_month,
+                      color: Colors.teal,
+                    ), // Fixed suffixIcon
+                  ),
+                  const SizedBox(height: 20),
+                  _buildTextField(regionController, 'Region', 'Enter region'),
+                  const SizedBox(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          budgetController.clear();
+                          daysController.clear();
+                          regionController.clear();
+                          setState(() {
+                            selectedReligion = 'Buddhism';
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[200],
+                          foregroundColor: Colors.teal[900],
+                        ),
+                        child: const Text(
+                          'Reset',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ResultsScreen(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.teal[700],
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text(
+                          'Explore',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: _buildBottomNavBar(),
+    );
+  }
+
+  Widget _buildTextField(
+    TextEditingController controller,
+    String label,
+    String hint, [
+    TextInputType? keyboardType,
+    Widget? suffixIcon,
+  ]) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        labelStyle: TextStyle(
+          color: Colors.teal[900],
+          fontWeight: FontWeight.w600,
+        ),
+        suffixIcon: suffixIcon, // Correct parameter name
+      ),
+      keyboardType: keyboardType ?? TextInputType.text,
+    );
+  }
+
+  Widget _buildBottomNavBar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.teal[900],
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 10,
+            offset: Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavIcon(Icons.home_outlined, 'Home'),
+          _buildNavIcon(Icons.directions_walk, 'Travel'),
+          _buildNavIcon(Icons.explore_outlined, 'Discover'),
+          _buildNavIcon(Icons.favorite_border, 'Saved'),
+          _buildNavIcon(Icons.person_outline, 'Profile'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavIcon(IconData icon, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: Colors.white, size: 26),
+        const SizedBox(height: 4),
+        Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
+      ],
+    );
+  }
+}
+
+class ResultsScreen extends StatelessWidget {
+  const ResultsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text(
+          'Your Sacred Path',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.teal[900],
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, size: 22),
+          onPressed: () => Navigator.pop(context),
+        ),
+        centerTitle: true,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.teal[100]!, Colors.teal[50]!],
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Text(
+                  'Discover Your Journey',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.teal[900],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  c
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: _buildBottomNavBar(),
+    );
+  }
+
+  Widget _buildBottomNavBar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.teal[900],
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavIcon(Icons.home_outlined, 'Home'),
+          _buildNavIcon(Icons.directions_walk, 'Travel'),
+          _buildNavIcon(Icons.explore_outlined, 'Discover'),
+          _buildNavIcon(Icons.favorite_border, 'Saved'),
+          _buildNavIcon(Icons.person_outline, 'Profile'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavIcon(IconData icon, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: Colors.white, size: 26),
+        const SizedBox(height: 4),
+        Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
+      ],
+    );
+  }
+}
 
 class PilgrimageCard extends StatelessWidget {
   final String imageUrl;
