@@ -21,182 +21,227 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          // Header Background with Curved Corners
-          Container(
-            height: 230, // Adjust height as needed
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30), // Curved bottom left
-                bottomRight: Radius.circular(30), // Curved bottom right
-              ),
-              image: DecorationImage(
-                image: AssetImage('assets/header_bg.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
-            ),
-          ),
-
-          // Safe Area Content
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: CustomScrollView(
+        slivers: [
+          // 🔥 SliverAppBar (Sticky Scrolling Header)
+          SliverAppBar(
+            expandedHeight: 180, // Adjust height as needed
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
                 children: [
-                  SizedBox(height: 10), // Space from top
-                  // User Info Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
+                  // Background Image with Curved Corners
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                    ),
+                    child: Image.asset(
+                      'assets/header_bg.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+
+                  // Dark Overlay for better visibility
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      ),
+                    ),
+                  ),
+
+                  // Header Content (Hi Jenny + Icons + Search)
+                  SafeArea(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Hi, Jenny',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                          SizedBox(height: 10),
+
+                          // Row with User Info + Icons
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Hi, Jenny',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    'Alberto, Canada',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.notifications,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: 10),
+                                  CircleAvatar(
+                                    radius: 22,
+                                    backgroundImage: AssetImage(
+                                      'assets/user_profile.png',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 5),
-                          Text(
-                            'Alberto, Canada',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white70,
+
+                          SizedBox(height: 15),
+
+                          // Search Bar inside the header
+                          TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Search for places...',
+                              prefixIcon: Icon(Icons.search),
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                              ),
                             ),
                           ),
                         ],
-                      ),
-                      CircleAvatar(
-                        radius: 22,
-                        backgroundImage: AssetImage('assets/user_profile.png'),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 20), // Space before search bar
-                  // Search Bar
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search for places...',
-                      prefixIcon: Icon(Icons.search),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: EdgeInsets.symmetric(vertical: 10),
-                    ),
-                  ),
-
-                  SizedBox(height: 30), // Space before categories
-                  // Categories
-                  Text(
-                    'Categories',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 0.5),
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisCount: 3,
-                    children: [
-                      categoryItem('Religious Sites', Icons.place, Colors.red),
-                      categoryItem(
-                        'Virtual Tours',
-                        Icons.vrpano,
-                        Colors.orange,
-                      ),
-                      categoryItem(
-                        'Pilgrimage Planner',
-                        Icons.event,
-                        Colors.yellow,
-                      ),
-                      categoryItem(
-                        'Donation',
-                        Icons.volunteer_activism,
-                        Colors.green,
-                      ),
-                      categoryItem(
-                        'Cultural Guide',
-                        Icons.menu_book,
-                        Colors.lightGreen,
-                      ),
-                      categoryItem(
-                        'Achievements',
-                        Icons.videogame_asset,
-                        Colors.blue,
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 20),
-
-                  // Popular Virtual Tours
-                  Text(
-                    'Popular (Virtual Tours)',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    height: 120,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        tourCard(
-                          'Sri Dalada M...',
-                          'Kandy',
-                          'assets/sri_dalada.png',
-                        ),
-                        tourCard(
-                          'Red Mosque',
-                          'Colombo',
-                          'assets/red_mosque.png',
-                        ),
-                        tourCard(
-                          'Basilica of O...',
-                          'Ragama',
-                          'assets/basilica.png',
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 20),
-
-                  // Maps Section
-                  Text(
-                    'Maps',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: AssetImage('assets/map.png'),
-                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
+          ),
+
+          // 🔥 Body starts here (Categories, Virtual Tours, etc.)
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SizedBox(height: 10),
+
+              // Categories
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'Categories',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(height: 10), // Reduced space here
+              // Grid of Categories
+              GridView.count(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 3,
+                childAspectRatio:
+                    1, // Adjusts the aspect ratio of the grid items
+                children: [
+                  categoryItem('Religious Sites', Icons.place, Colors.red),
+                  categoryItem('Virtual Tours', Icons.vrpano, Colors.orange),
+                  categoryItem(
+                    'Pilgrimage Planner',
+                    Icons.event,
+                    Colors.yellow,
+                  ),
+                  categoryItem(
+                    'Donation',
+                    Icons.volunteer_activism,
+                    Colors.green,
+                  ),
+                  categoryItem(
+                    'Cultural Guide',
+                    Icons.menu_book,
+                    Colors.lightGreen,
+                  ),
+                  categoryItem(
+                    'Achievements',
+                    Icons.videogame_asset,
+                    Colors.blue,
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 5),
+
+              // Popular Virtual Tours
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'Popular (Virtual Tours)',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(height: 10),
+
+              SizedBox(
+                height: 120,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(left: 16),
+                  children: [
+                    tourCard(
+                      'Sri Dalada M...',
+                      'Kandy',
+                      'assets/sri_dalada.png',
+                    ),
+                    tourCard('Red Mosque', 'Colombo', 'assets/red_mosque.png'),
+                    tourCard(
+                      'Basilica of O...',
+                      'Ragama',
+                      'assets/basilica.png',
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 20),
+
+              // Maps Section
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  'Maps',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(height: 10),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: AssetImage('assets/map.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 30), // Prevent bottom cut-off
+            ]),
           ),
         ],
       ),
