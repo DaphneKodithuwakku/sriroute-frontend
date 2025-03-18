@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                   // Dark Overlay for better visibility
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black.withOpacity(0.55),
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30),
@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 10),
+                          SizedBox(height: 40),
 
                           // Row with User Info + Icons
                           Row(
@@ -147,7 +147,7 @@ class HomeScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(height: 10), // Reduced space here
+              SizedBox(height: 1), // Reduced space here
               // Grid of Categories
               GridView.count(
                 shrinkWrap: true,
@@ -268,15 +268,19 @@ class HomeScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CircleAvatar(
-          radius: 25,
+          radius: 35,
           backgroundColor: color,
-          child: Icon(icon, color: Colors.white),
+          child: Icon(
+            icon,
+            color: const Color.fromARGB(255, 0, 0, 0),
+            size: 35,
+          ),
         ),
         SizedBox(height: 5),
         Text(
           title,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 12),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
         ),
       ],
     );
