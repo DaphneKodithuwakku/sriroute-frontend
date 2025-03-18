@@ -55,7 +55,6 @@ class PilgrimagePlannerScreen extends StatefulWidget {
   const PilgrimagePlannerScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _PilgrimagePlannerScreenState createState() =>
       _PilgrimagePlannerScreenState();
 }
@@ -102,7 +101,6 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                   color: Colors.indigo[900],
                 ),
                 decoration: InputDecoration(
-                  labelText: 'Buddhism',
                   labelStyle: TextStyle(
                     color: Colors.indigo[900],
                     fontWeight: FontWeight.bold,
@@ -147,7 +145,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
             ),
             SizedBox(height: 16),
             Text(
-              'Days / Time:',
+              'Days :',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -247,43 +245,59 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              NavBarIcon(Icons.home_outlined, 0, _selectedIndex, (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              }),
-              NavBarIcon(Icons.directions_bus_outlined, 1, _selectedIndex, (
-                index,
-              ) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              }),
-              NavBarIcon(Icons.explore_outlined, 2, _selectedIndex, (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              }),
-              NavBarIcon(Icons.notifications_outlined, 3, _selectedIndex, (
-                index,
-              ) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              }),
-              NavBarIcon(Icons.person_outline, 4, _selectedIndex, (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              }),
-            ],
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(top: 12, bottom: 8),
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: Offset(0, -5),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Container(
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                NavBarIcon(Icons.home_outlined, 0, _selectedIndex, (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                }),
+                NavBarIcon(Icons.directions_bus_outlined, 1, _selectedIndex, (
+                  index,
+                ) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                }),
+                NavBarIcon(Icons.explore_outlined, 2, _selectedIndex, (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                }),
+                NavBarIcon(Icons.notifications_outlined, 3, _selectedIndex, (
+                  index,
+                ) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                }),
+                NavBarIcon(Icons.person_outline, 4, _selectedIndex, (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                }),
+              ],
+            ),
           ),
         ),
       ),
@@ -302,8 +316,8 @@ class NavBarIcon extends StatelessWidget {
     this.index,
     this.selectedIndex,
     this.onTap, {
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -363,34 +377,50 @@ class ResultsScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                icon: Icon(Icons.home_outlined, color: Colors.grey),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.directions_bus_outlined, color: Colors.grey),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.explore_outlined, color: Colors.grey),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.notifications_outlined, color: Colors.grey),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.person_outline, color: Colors.grey),
-                onPressed: () {},
-              ),
-            ],
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(top: 12, bottom: 8),
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: Offset(0, -5),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Container(
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home_outlined, color: Colors.grey),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: Icon(Icons.directions_bus_outlined, color: Colors.grey),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: Icon(Icons.explore_outlined, color: Colors.grey),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: Icon(Icons.notifications_outlined, color: Colors.grey),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: Icon(Icons.person_outline, color: Colors.grey),
+                  onPressed: () {},
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -407,8 +437,8 @@ class PilgrimageCard extends StatelessWidget {
     required this.imageUrl,
     required this.title,
     required this.location,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -418,7 +448,6 @@ class PilgrimageCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.1),
             blurRadius: 8,
             offset: Offset(0, 2),
@@ -445,7 +474,6 @@ class PilgrimageCard extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
-                    // ignore: deprecated_member_use
                     colors: [Colors.black.withOpacity(0.7), Colors.transparent],
                   ),
                 ),
@@ -464,7 +492,6 @@ class PilgrimageCard extends StatelessWidget {
                     Text(
                       location,
                       style: TextStyle(
-                        // ignore: deprecated_member_use
                         color: Colors.white.withOpacity(0.9),
                         fontSize: 14,
                       ),
