@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'map_screen.dart'; // Import the map screen
 
 void main() {
   runApp(MyApp());
@@ -141,7 +142,7 @@ class HomeScreen extends StatelessWidget {
               SizedBox(height: 20), // Adjust this value to control the spacing
               // Categories
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   'Categories',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -194,7 +195,7 @@ class HomeScreen extends StatelessWidget {
               SizedBox(height: 10),
 
               SizedBox(
-                height: 140,
+                height: 120,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.only(left: 16),
@@ -217,25 +218,38 @@ class HomeScreen extends StatelessWidget {
               SizedBox(height: 20),
 
               // Maps Section
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Maps',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 10),
-
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: AssetImage('assets/map.png'),
-                      fit: BoxFit.cover,
-                    ),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to the MapScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MapScreen()),
+                  );
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Maps',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: AssetImage('assets/map.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
