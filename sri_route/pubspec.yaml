@@ -55,15 +55,16 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  uses-material-design: true
+ uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-assets:
-    - assets/sri_dalada.png
-    - assets/basilica.png
-    - assets/red_mosque.png
-    - assets/map.png
-    - assets/user_profile.png
+ assets:
+     - assets/sri_dalada.png
+     - assets/basilica.png
+     - assets/red_mosque.png
+     - assets/map.png
+     - assets/user_profile.png
+     - assets/header_bg.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
