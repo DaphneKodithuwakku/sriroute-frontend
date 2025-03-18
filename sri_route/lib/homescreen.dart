@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
         slivers: [
           // 🔥 SliverAppBar (Sticky Scrolling Header)
           SliverAppBar(
-            expandedHeight: 180, // Adjust height as needed
+            expandedHeight: 200, // Adjust height as needed
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
@@ -137,24 +137,24 @@ class HomeScreen extends StatelessWidget {
           // 🔥 Body starts here (Categories, Virtual Tours, etc.)
           SliverList(
             delegate: SliverChildListDelegate([
-              SizedBox(height: 10),
-
+              // Add padding above the "Categories" text to push it down
+              SizedBox(height: 20), // Adjust this value to control the spacing
               // Categories
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Text(
                   'Categories',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(height: 1), // Reduced space here
+
               // Grid of Categories
               GridView.count(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 crossAxisCount: 3,
                 childAspectRatio:
-                    1, // Adjusts the aspect ratio of the grid items
+                    1.20, // Adjusts the aspect ratio of the grid items
                 children: [
                   categoryItem('Religious Sites', Icons.place, Colors.red),
                   categoryItem('Virtual Tours', Icons.vrpano, Colors.orange),
@@ -181,8 +181,8 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: 5),
-
+              // Reduced space under Categories Grid
+              SizedBox(height: 5), // Adjust or remove if necessary
               // Popular Virtual Tours
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -194,7 +194,7 @@ class HomeScreen extends StatelessWidget {
               SizedBox(height: 10),
 
               SizedBox(
-                height: 120,
+                height: 140,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.only(left: 16),
