@@ -195,7 +195,7 @@ class HomeScreen extends StatelessWidget {
               SizedBox(height: 10),
 
               SizedBox(
-                height: 120,
+                height: 130,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.only(left: 16),
@@ -215,7 +215,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 20),
+              SizedBox(height: 25),
 
               // Maps Section
               GestureDetector(
