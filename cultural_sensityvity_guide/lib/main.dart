@@ -55,3 +55,49 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class CulturalSensitivityPage extends StatefulWidget {
+  const CulturalSensitivityPage({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _CulturalSensitivityPageState createState() =>
+      _CulturalSensitivityPageState();
+}
+
+class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
+  String selectedReligion = 'Buddhism';
+  int _selectedNavIndex = 2;
+
+  final Map<String, Map<String, dynamic>> guidelines = {
+    'Buddhism': {
+      'title': 'Buddhist Cultural Sensitivity',
+      'icon': Icons.temple_buddhist,
+      'color': Colors.brown[700], // Professional earthy brown
+      'dress_code': {
+        'title': 'Dress Code',
+        'icon': Icons.checkroom,
+        'content':
+            'Wear loose-fitting, white or muted clothing to temples—bright colors may be seen as disrespectful. Cover shoulders, chest, and knees. Remove hats and shoes before entering sacred spaces. Avoid leather, as it’s linked to harming animals.',
+      },
+      'photo_rules': {
+        'title': 'Photography Rules',
+        'icon': Icons.camera_alt,
+        'content':
+            'Never pose in front of or touch Buddha statues for photos—it’s considered disrespectful. Photography inside shrines is often forbidden; look for signs or ask monks. Avoid flash to preserve serenity and artifacts.',
+      },
+      'behavior': {
+        'title': 'Respectful Behavior',
+        'icon': Icons.people,
+        'content':
+            'Bow slightly to monks as a greeting, but don’t shake hands. Never point your feet at Buddha images or people—it’s offensive. Sit lower than monks or statues to show humility. Avoid loud speech or laughter in meditation areas.',
+      },
+      'offerings': {
+        'title': 'Appropriate Offerings',
+        'icon': Icons.card_giftcard,
+        'content':
+            'Offer lotus flowers, incense sticks, or small candles—avoid artificial items. Present offerings with both hands, palms up, as a sign of respect. Join locals in chanting or bowing if invited, but don’t interrupt meditations.',
+      },
+    },
+    
+  };
