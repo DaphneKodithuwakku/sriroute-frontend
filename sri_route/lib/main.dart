@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Sacred Journey', // Kept in MaterialApp title for app metadata
+      title: 'Sacred Journey',
       theme: ThemeData(
         primarySwatch: Colors.teal,
         scaffoldBackgroundColor: Colors.white,
@@ -84,10 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        // Removed title
-        elevation: 0,
-      ),
+      appBar: AppBar(elevation: 0),
       body: SafeArea(
         child: Center(child: _widgetOptions.elementAt(_selectedIndex)),
       ),
@@ -270,13 +267,28 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.arrow_back_ios, color: Colors.teal[900]),
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color:
+                            Colors.black, // Changed to black to match the image
+                        size: 24,
+                      ),
                       onPressed: () => Navigator.pop(context),
+                    ),
+                    const SizedBox(width: 16),
+                    const Text(
+                      'Plan Your Journey with AI',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            Colors.black, // Changed to black to match the image
+                      ),
                     ),
                   ],
                 ),
@@ -461,7 +473,6 @@ class ResultsScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        // Removed title
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, size: 22),
           onPressed: () => Navigator.pop(context),
