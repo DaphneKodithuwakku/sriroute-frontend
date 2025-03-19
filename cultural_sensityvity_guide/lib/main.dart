@@ -547,3 +547,38 @@ Widget _buildVisualGuide() {
       ),
     );
   }
+
+  Widget _buildIslamVisualGuide() {
+    return Container(
+      height: 120,
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildGuideIcon(
+            icon: Icons.mosque,
+            label: 'Prayer Space',
+            color: Colors.teal[800]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.handshake,
+            label: 'Salam Greeting',
+            color: Colors.teal[800]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.people_alt,
+            label: 'Gender Separate',
+            color: Colors.teal[800]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.local_dining,
+            label: 'Ramadan Dates',
+            color: Colors.teal[800]!,
+          ),
+        ],
+      ),
+    );
+  }
