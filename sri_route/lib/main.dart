@@ -11,10 +11,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Sacred Journey',
+      title: 'Sacred Journey', // Kept in MaterialApp title for app metadata
       theme: ThemeData(
         primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: Colors.white, // Changed to white
+        scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.transparent,
           foregroundColor: Colors.teal[900],
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
@@ -67,11 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = <Widget>[
-    const Text('Home Screen'), // You can replace with your Home screen widget
-    const Text('VR Tour Screen'), // You can replace with your VR Tour widget
+    const Text('Home Screen'),
+    const Text('VR Tour Screen'),
     const PilgrimagePlannerScreen(),
-    const Text('User Manual Screen'), // You can replace with your Manual widget
-    const Text('Profile Screen'), // You can replace with your Profile widget
+    const Text('User Manual Screen'),
+    const Text('Profile Screen'),
   ];
 
   void _onItemTapped(int index) {
@@ -85,19 +85,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(
-          'Sacred Journey',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Colors.teal[900],
-          ),
-        ),
-        centerTitle: true,
+        // Removed title
+        elevation: 0,
       ),
       body: SafeArea(
         child: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-      ), // Removed gradient Container, using white Scaffold background
+      ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         child: Container(
@@ -105,11 +98,11 @@ class _MyHomePageState extends State<MyHomePage> {
           decoration: BoxDecoration(
             color: Colors.black87,
             borderRadius: BorderRadius.circular(30),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                color: Colors.black26,
+                color: Colors.black.withOpacity(0.3),
                 blurRadius: 10,
-                offset: Offset(0, 5),
+                offset: const Offset(0, 5),
               ),
             ],
           ),
@@ -178,7 +171,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-// Simple VR Glasses Icon
 class SimpleVRGlassesIcon extends StatelessWidget {
   final Color color;
   final double size;
@@ -259,7 +251,6 @@ class PilgrimagePlannerScreen extends StatefulWidget {
 }
 
 class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
-  final TextEditingController budgetController = TextEditingController();
   final TextEditingController daysController = TextEditingController();
   final TextEditingController regionController = TextEditingController();
   String selectedReligion = 'Buddhism';
@@ -273,118 +264,167 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Craft Your Pilgrimage',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.teal[900],
-              ),
-            ),
-            const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.teal.withOpacity(0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: DropdownButtonFormField<String>(
-                value: selectedReligion,
-                icon: const Icon(
-                  Icons.arrow_drop_down_circle,
-                  color: Colors.teal,
-                ),
-                decoration: InputDecoration(
-                  labelText: 'Religion',
-                  labelStyle: TextStyle(
-                    color: Colors.teal[900],
-                    fontWeight: FontWeight.w600,
-                  ),
-                  border: InputBorder.none,
-                ),
-                items:
-                    religions.map((String religion) {
-                      return DropdownMenuItem<String>(
-                        value: religion,
-                        child: Text(religion),
-                      );
-                    }).toList(),
-                onChanged: (String? value) {
-                  if (value != null) {
-                    setState(() {
-                      selectedReligion = value;
-                    });
-                  }
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            _buildTextField(
-              budgetController,
-              'Budget',
-              'Enter your budget',
-              TextInputType.number,
-            ),
-            const SizedBox(height: 20),
-            _buildTextField(
-              daysController,
-              'Days',
-              'Enter number of days',
-              TextInputType.number,
-              const Icon(Icons.calendar_month, color: Colors.teal),
-            ),
-            const SizedBox(height: 20),
-            _buildTextField(regionController, 'Region', 'Enter region'),
-            const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          child: SingleChildScrollView(
+            child: Column(
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    budgetController.clear();
-                    daysController.clear();
-                    regionController.clear();
-                    setState(() {
-                      selectedReligion = 'Buddhism';
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[200],
-                    foregroundColor: Colors.teal[900],
-                  ),
-                  child: const Text('Reset', style: TextStyle(fontSize: 16)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back_ios, color: Colors.teal[900]),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ResultsScreen(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal[700],
-                    foregroundColor: Colors.white,
+                const SizedBox(height: 32),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Text('Explore', style: TextStyle(fontSize: 16)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.teal.withOpacity(0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: DropdownButtonFormField<String>(
+                            value: selectedReligion,
+                            icon: const Icon(
+                              Icons.arrow_drop_down_circle,
+                              color: Colors.teal,
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Religion',
+                              labelStyle: TextStyle(
+                                color: Colors.teal[900],
+                                fontWeight: FontWeight.w600,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                            items:
+                                religions.map((String religion) {
+                                  return DropdownMenuItem<String>(
+                                    value: religion,
+                                    child: Text(religion),
+                                  );
+                                }).toList(),
+                            onChanged: (String? value) {
+                              if (value != null) {
+                                setState(() {
+                                  selectedReligion = value;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.teal.withOpacity(0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: _buildTextField(
+                            daysController,
+                            'Days',
+                            'Enter number of days',
+                            TextInputType.number,
+                            const Icon(
+                              Icons.calendar_month,
+                              color: Colors.teal,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.teal.withOpacity(0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: _buildTextField(
+                            regionController,
+                            'Region',
+                            'Enter region',
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                daysController.clear();
+                                regionController.clear();
+                                setState(() {
+                                  selectedReligion = 'Buddhism';
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey[200],
+                                foregroundColor: Colors.teal[900],
+                              ),
+                              child: const Text(
+                                'Reset',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ResultsScreen(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.teal[700],
+                                foregroundColor: Colors.white,
+                              ),
+                              child: const Text(
+                                'Explore',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -421,19 +461,12 @@ class ResultsScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(
-          'Your Sacred Path',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Colors.teal[900],
-          ),
-        ),
+        // Removed title
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, size: 22),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
+        elevation: 0,
       ),
       body: SafeArea(
         child: Padding(
@@ -469,7 +502,7 @@ class ResultsScreen extends StatelessWidget {
             ],
           ),
         ),
-      ), // Removed gradient Container, using white Scaffold background
+      ),
     );
   }
 }
