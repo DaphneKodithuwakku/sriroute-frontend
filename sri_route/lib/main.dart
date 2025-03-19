@@ -186,10 +186,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                     'Days',
                     'Enter number of days',
                     TextInputType.number,
-                    const Icon(
-                      Icons.calendar_month,
-                      color: Colors.teal,
-                    ), // Fixed suffixIcon
+                    const Icon(Icons.calendar_month, color: Colors.teal),
                   ),
                   const SizedBox(height: 20),
                   _buildTextField(regionController, 'Region', 'Enter region'),
@@ -241,7 +238,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
+      bottomNavigationBar: _buildCircularBottomNavBar(),
     );
   }
 
@@ -261,17 +258,17 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
           color: Colors.teal[900],
           fontWeight: FontWeight.w600,
         ),
-        suffixIcon: suffixIcon, // Correct parameter name
+        suffixIcon: suffixIcon,
       ),
       keyboardType: keyboardType ?? TextInputType.text,
     );
   }
 
-  Widget _buildBottomNavBar() {
+  Widget _buildCircularBottomNavBar() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.teal[900],
+        color: Colors.black87,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         boxShadow: const [
           BoxShadow(
@@ -281,24 +278,34 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavIcon(Icons.home_outlined, 'Home'),
-          _buildNavIcon(Icons.directions_walk, 'Travel'),
-          _buildNavIcon(Icons.explore_outlined, 'Discover'),
-          _buildNavIcon(Icons.favorite_border, 'Saved'),
-          _buildNavIcon(Icons.person_outline, 'Profile'),
-        ],
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(Icons.home_outlined, 'Home'),
+            _buildNavItem(Icons.directions_walk, 'Travel'),
+            _buildNavItem(Icons.explore_outlined, 'Discover'),
+            _buildNavItem(Icons.favorite_border, 'Saved'),
+            _buildNavItem(Icons.person_outline, 'Profile'),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildNavIcon(IconData icon, String label) {
+  Widget _buildNavItem(IconData icon, String label) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: Colors.white, size: 26),
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white12,
+          ),
+          child: Icon(icon, color: Colors.white, size: 24),
+        ),
         const SizedBox(height: 4),
         Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
       ],
@@ -373,35 +380,52 @@ class ResultsScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
+      bottomNavigationBar: _buildCircularBottomNavBar(),
     );
   }
 
-  Widget _buildBottomNavBar() {
+  Widget _buildCircularBottomNavBar() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.teal[900],
+        color: Colors.black87,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavIcon(Icons.home_outlined, 'Home'),
-          _buildNavIcon(Icons.directions_walk, 'Travel'),
-          _buildNavIcon(Icons.explore_outlined, 'Discover'),
-          _buildNavIcon(Icons.favorite_border, 'Saved'),
-          _buildNavIcon(Icons.person_outline, 'Profile'),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 10,
+            offset: Offset(0, -2),
+          ),
         ],
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(Icons.home_outlined, 'Home'),
+            _buildNavItem(Icons.directions_walk, 'Travel'),
+            _buildNavItem(Icons.explore_outlined, 'Discover'),
+            _buildNavItem(Icons.favorite_border, 'Saved'),
+            _buildNavItem(Icons.person_outline, 'Profile'),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildNavIcon(IconData icon, String label) {
+  Widget _buildNavItem(IconData icon, String label) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: Colors.white, size: 26),
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white12,
+          ),
+          child: Icon(icon, color: Colors.white, size: 24),
+        ),
         const SizedBox(height: 4),
         Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
       ],
