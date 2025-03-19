@@ -192,11 +192,11 @@ class SimpleVRGlassesIcon extends StatelessWidget {
   final Color color;
   final double size;
 
-  const SimpleVRGlassesIcon({required this.color, this.size = 24});
+  const SimpleVRGlassesIcon({super.key, required this.color, this.size = 24});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: size,
       height: size,
       child: CustomPaint(painter: _SimpleVRGlassesPainter(color: color)),
