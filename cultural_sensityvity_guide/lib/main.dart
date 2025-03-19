@@ -512,3 +512,38 @@ Widget _buildVisualGuide() {
       ),
     );
   }
+
+  Widget _buildHinduismVisualGuide() {
+    return Container(
+      height: 120,
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildGuideIcon(
+            icon: Icons.donut_large,
+            label: 'Clockwise Walk',
+            color: Colors.deepOrange[700]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.front_hand,
+            label: 'Accept Tilak',
+            color: Colors.deepOrange[700]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.local_florist,
+            label: 'Marigolds',
+            color: Colors.deepOrange[700]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.no_drinks,
+            label: 'No Alcohol',
+            color: Colors.deepOrange[700]!,
+          ),
+        ],
+      ),
+    );
+  }
