@@ -4,16 +4,6 @@ void main() {
   runApp(MyApp());
 }
 
-class ResultsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Results')),
-      body: Center(child: Text('Results will be displayed here')),
-    );
-  }
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -23,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.teal,
         scaffoldBackgroundColor: Colors.teal[50],
-        primarySwatch: Colors.blue, // From first app
+        primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.transparent,
           foregroundColor: Colors.teal[900],
@@ -70,14 +60,12 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  // List of pages or screens
   static final List<Widget> _widgetOptions = <Widget>[
     Container(
       decoration: BoxDecoration(
@@ -213,7 +201,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-// Custom VR Tour Icon
 class VRTourIcon extends StatelessWidget {
   final Color color;
   final double size;
@@ -230,7 +217,6 @@ class VRTourIcon extends StatelessWidget {
   }
 }
 
-// Painter for VR Tour Icon
 class _VRTourPainter extends CustomPainter {
   final Color color;
 
@@ -332,8 +318,6 @@ class _VRTourPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-// Duplicate class definition removed
-
 class PilgrimagePlannerScreen extends StatefulWidget {
   const PilgrimagePlannerScreen({super.key});
 
@@ -357,14 +341,12 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
 
   @override
   void dispose() {
-    // Dispose controllers to prevent memory leaks
     budgetController.dispose();
     daysController.dispose();
     regionController.dispose();
     super.dispose();
   }
 
-  // Basic validation before navigating to ResultsScreen
   void _validateAndNavigate() {
     if (budgetController.text.isEmpty ||
         daysController.text.isEmpty ||
@@ -384,7 +366,6 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       return;
     }
 
-    // Navigate to ResultsScreen if validation passes
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ResultsScreen()),
@@ -434,7 +415,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                     value: selectedReligion,
                     icon: const Icon(Icons.arrow_drop_down, color: Colors.blue),
                     decoration: InputDecoration(
-                      labelText: selectedReligion, // Dynamically update label
+                      labelText: selectedReligion,
                       labelStyle: const TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.w600,
@@ -520,9 +501,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                         child: ElevatedButton(
                           onPressed: _validateAndNavigate,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(
-                              0xFF1A237E,
-                            ), // Dark blue
+                            backgroundColor: const Color(0xFF1A237E),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 20,
@@ -566,8 +545,8 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
           fontWeight: FontWeight.w400,
         ),
         suffixIcon: suffixIcon,
-        filled: true, // Enable filled background
-        fillColor: Colors.white.withOpacity(0.9), // Match dropdown background
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.9),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -586,6 +565,151 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
         ),
       ),
       keyboardType: keyboardType ?? TextInputType.text,
+    );
+  }
+}
+
+class ResultsScreen extends StatelessWidget {
+  const ResultsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: const Text(
+          'Plan Your Journey with AI',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, size: 22),
+          onPressed: () => Navigator.pop(context),
+        ),
+        centerTitle: true,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.teal[100]!, Colors.teal[50]!],
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                const Text(
+                  'Hey! Here are some places according to your budget, days and region',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: ListView(
+                    children: const [
+                      PilgrimageCard(
+                        imageUrl: 'https://via.placeholder.com/600x400',
+                        title: 'Jaya Sri Maha Bodhi',
+                        location: 'Anuradhapura',
+                      ),
+                      SizedBox(height: 16),
+                      PilgrimageCard(
+                        imageUrl: 'https://via.placeholder.com/600x400',
+                        title: 'Sri Dalada Maligawa',
+                        location: 'Kandy',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PilgrimageCard extends StatelessWidget {
+  final String imageUrl;
+  final String title;
+  final String location;
+
+  const PilgrimageCard({
+    required this.imageUrl,
+    required this.title,
+    required this.location,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
+          children: [
+            Image.network(
+              imageUrl,
+              height: 200,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder:
+                  (context, error, stackTrace) => Container(
+                    color: Colors.grey,
+                    child: const Icon(
+                      Icons.error,
+                      color: Colors.white,
+                      size: 50,
+                    ),
+                  ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                color: Colors.black.withOpacity(0.6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      location,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
