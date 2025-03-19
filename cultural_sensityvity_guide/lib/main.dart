@@ -443,4 +443,72 @@ Widget _buildVisualGuide() {
     }
   }
 
-  
+  Widget _buildBuddhismVisualGuide() {
+    return Container(
+      height: 120,
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildGuideIcon(
+            icon: Icons.person_outline,
+            label: 'Bow to Monks',
+            color: Colors.brown[700]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.directions_walk,
+            label: 'Sit Lower',
+            color: Colors.brown[700]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.self_improvement,
+            label: 'Mindful Silence',
+            color: Colors.brown[700]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.handshake,
+            label: 'No Handshakes',
+            color: Colors.brown[700]!,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChristianityVisualGuide() {
+    return Container(
+      height: 120,
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildGuideIcon(
+            icon: Icons.pan_tool,
+            label: 'Genuflect',
+            color: Colors.blueGrey[600]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.music_note,
+            label: 'Join Hymns',
+            color: Colors.blueGrey[600]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.local_florist,
+            label: 'No Lent Flowers',
+            color: Colors.blueGrey[600]!,
+          ),
+          _buildGuideIcon(
+            icon: Icons.no_meals,
+            label: 'No Communion',
+            color: Colors.blueGrey[600]!,
+          ),
+        ],
+      ),
+    );
+  }
