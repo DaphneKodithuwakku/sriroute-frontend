@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const SriRouteApp());
+  runApp(MyApp());
 }
 
-class SriRouteApp extends StatelessWidget {
-  const SriRouteApp({super.key});
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Sacred Journey',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.teal,
         scaffoldBackgroundColor: Colors.teal[50],
+        primarySwatch: Colors.blue, // From first app
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.transparent,
           foregroundColor: Colors.teal[900],
@@ -51,9 +51,272 @@ class SriRouteApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const PilgrimagePlannerScreen(),
+      home: MyHomePage(),
     );
   }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+
+  // List of pages or screens
+  static final List<Widget> _widgetOptions = <Widget>[
+    Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.teal[100]!, Colors.teal[50]!],
+        ),
+      ),
+      child: const Center(child: Text('Home Screen')),
+    ),
+    Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.teal[100]!, Colors.teal[50]!],
+        ),
+      ),
+      child: const Center(child: Text('VR Tour')),
+    ),
+    const PilgrimagePlannerScreen(),
+    Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.teal[100]!, Colors.teal[50]!],
+        ),
+      ),
+      child: const Center(child: Text('User Manual Screen')),
+    ),
+    Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.teal[100]!, Colors.teal[50]!],
+        ),
+      ),
+      child: const Center(child: Text('Profile Screen')),
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text(
+          'Sacred Journey',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 1.2,
+            color: Colors.teal[900],
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(Icons.home, size: 24),
+                color:
+                    _selectedIndex == 0
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.7),
+                onPressed: () => _onItemTapped(0),
+              ),
+              IconButton(
+                icon: VRTourIcon(
+                  color:
+                      _selectedIndex == 1
+                          ? Colors.white
+                          : Colors.white.withOpacity(0.7),
+                  size: 28,
+                ),
+                onPressed: () => _onItemTapped(1),
+              ),
+              IconButton(
+                icon: Icon(Icons.search, size: 24),
+                color:
+                    _selectedIndex == 2
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.7),
+                onPressed: () => _onItemTapped(2),
+              ),
+              IconButton(
+                icon: Icon(Icons.menu_book, size: 24),
+                color:
+                    _selectedIndex == 3
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.7),
+                onPressed: () => _onItemTapped(3),
+              ),
+              IconButton(
+                icon: Icon(Icons.person, size: 24),
+                color:
+                    _selectedIndex == 4
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.7),
+                onPressed: () => _onItemTapped(4),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Custom VR Tour Icon
+class VRTourIcon extends StatelessWidget {
+  final Color color;
+  final double size;
+
+  const VRTourIcon({required this.color, this.size = 28});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      child: CustomPaint(painter: _VRTourPainter(color: color)),
+    );
+  }
+}
+
+// Painter for VR Tour Icon
+class _VRTourPainter extends CustomPainter {
+  final Color color;
+
+  _VRTourPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.5
+          ..strokeCap = StrokeCap.round;
+
+    final Paint fillPaint =
+        Paint()
+          ..color = color.withOpacity(0.2)
+          ..style = PaintingStyle.fill;
+
+    final Rect headsetRect = Rect.fromLTRB(
+      size.width * 0.15,
+      size.height * 0.25,
+      size.width * 0.85,
+      size.height * 0.75,
+    );
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(headsetRect, Radius.circular(4)),
+      fillPaint,
+    );
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(headsetRect, Radius.circular(4)),
+      paint,
+    );
+
+    canvas.drawOval(
+      Rect.fromLTRB(
+        size.width * 0.25,
+        size.height * 0.35,
+        size.width * 0.45,
+        size.height * 0.65,
+      ),
+      paint,
+    );
+    canvas.drawOval(
+      Rect.fromLTRB(
+        size.width * 0.55,
+        size.height * 0.35,
+        size.width * 0.75,
+        size.height * 0.65,
+      ),
+      paint,
+    );
+
+    canvas.drawLine(
+      Offset(0, size.height * 0.5),
+      Offset(size.width * 0.15, size.height * 0.5),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(size.width * 0.85, size.height * 0.5),
+      Offset(size.width, size.height * 0.5),
+      paint,
+    );
+
+    final Paint tourPaint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5;
+    canvas.drawCircle(
+      Offset(size.width * 0.5, size.height * 0.5),
+      size.width * 0.1,
+      tourPaint,
+    );
+    final Path tourPath =
+        Path()
+          ..moveTo(size.width * 0.45, size.height * 0.55)
+          ..quadraticBezierTo(
+            size.width * 0.5,
+            size.height * 0.45,
+            size.width * 0.55,
+            size.height * 0.55,
+          );
+    canvas.drawPath(tourPath, tourPaint);
+
+    final Paint shadowPaint =
+        Paint()
+          ..color = color.withOpacity(0.5)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5;
+    canvas.drawLine(
+      Offset(size.width * 0.15, size.height * 0.75),
+      Offset(size.width * 0.85, size.height * 0.75),
+      shadowPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class PilgrimagePlannerScreen extends StatefulWidget {
@@ -79,166 +342,144 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text(
-          'Sacred Journey Planner',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1.2,
-            color: Colors.teal[900],
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.teal[100]!, Colors.teal[50]!],
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 22),
-          onPressed: () {
-            // Add navigation logic here if needed
-          },
-        ),
-        centerTitle: true,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.teal[100]!, Colors.teal[50]!],
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Craft Your Pilgrimage',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.teal[900],
-                      shadows: [
-                        Shadow(
-                          color: Colors.teal[200]!,
-                          offset: const Offset(2, 2),
-                          blurRadius: 4,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.9),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.teal.withOpacity(0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: DropdownButtonFormField<String>(
-                      value: selectedReligion,
-                      icon: const Icon(
-                        Icons.arrow_drop_down_circle,
-                        color: Colors.teal,
-                      ),
-                      decoration: InputDecoration(
-                        labelText: 'Religion',
-                        labelStyle: TextStyle(
-                          color: Colors.teal[900],
-                          fontWeight: FontWeight.w600,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                      items:
-                          religions.map((String religion) {
-                            return DropdownMenuItem<String>(
-                              value: religion,
-                              child: Text(religion),
-                            );
-                          }).toList(),
-                      onChanged: (String? value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedReligion = value;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  _buildTextField(
-                    budgetController,
-                    'Budget',
-                    'Enter your budget',
-                    TextInputType.number,
-                  ),
-                  const SizedBox(height: 20),
-                  _buildTextField(
-                    daysController,
-                    'Days',
-                    'Enter number of days',
-                    TextInputType.number,
-                    const Icon(Icons.calendar_month, color: Colors.teal),
-                  ),
-                  const SizedBox(height: 20),
-                  _buildTextField(regionController, 'Region', 'Enter region'),
-                  const SizedBox(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          budgetController.clear();
-                          daysController.clear();
-                          regionController.clear();
-                          setState(() {
-                            selectedReligion = 'Buddhism';
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[200],
-                          foregroundColor: Colors.teal[900],
-                        ),
-                        child: const Text(
-                          'Reset',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ResultsScreen(),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal[700],
-                          foregroundColor: Colors.white,
-                        ),
-                        child: const Text(
-                          'Explore',
-                          style: TextStyle(fontSize: 16),
-                        ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Craft Your Pilgrimage',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.teal[900],
+                    shadows: [
+                      Shadow(
+                        color: Colors.teal[200]!,
+                        offset: const Offset(2, 2),
+                        blurRadius: 4,
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.teal.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: DropdownButtonFormField<String>(
+                    value: selectedReligion,
+                    icon: const Icon(
+                      Icons.arrow_drop_down_circle,
+                      color: Colors.teal,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Religion',
+                      labelStyle: TextStyle(
+                        color: Colors.teal[900],
+                        fontWeight: FontWeight.w600,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                    items:
+                        religions.map((String religion) {
+                          return DropdownMenuItem<String>(
+                            value: religion,
+                            child: Text(religion),
+                          );
+                        }).toList(),
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        setState(() {
+                          selectedReligion = value;
+                        });
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  budgetController,
+                  'Budget',
+                  'Enter your budget',
+                  TextInputType.number,
+                ),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  daysController,
+                  'Days',
+                  'Enter number of days',
+                  TextInputType.number,
+                  const Icon(Icons.calendar_month, color: Colors.teal),
+                ),
+                const SizedBox(height: 20),
+                _buildTextField(regionController, 'Region', 'Enter region'),
+                const SizedBox(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        budgetController.clear();
+                        daysController.clear();
+                        regionController.clear();
+                        setState(() {
+                          selectedReligion = 'Buddhism';
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey[200],
+                        foregroundColor: Colors.teal[900],
+                      ),
+                      child: const Text(
+                        'Reset',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ResultsScreen(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal[700],
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text(
+                        'Explore',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: _buildCircularBottomNavBar(),
     );
   }
 
@@ -261,54 +502,6 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
         suffixIcon: suffixIcon,
       ),
       keyboardType: keyboardType ?? TextInputType.text,
-    );
-  }
-
-  Widget _buildCircularBottomNavBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.black87,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 10,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home_outlined, 'Home'),
-            _buildNavItem(Icons.directions_walk, 'Travel'),
-            _buildNavItem(Icons.explore_outlined, 'Discover'),
-            _buildNavItem(Icons.favorite_border, 'Saved'),
-            _buildNavItem(Icons.person_outline, 'Profile'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white12,
-          ),
-          child: Icon(icon, color: Colors.white, size: 24),
-        ),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
-      ],
     );
   }
 }
@@ -380,55 +573,6 @@ class ResultsScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildCircularBottomNavBar(),
-    );
-  }
-
-  Widget _buildCircularBottomNavBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.black87,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 10,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home_outlined, 'Home'),
-            _buildNavItem(Icons.directions_walk, 'Travel'),
-            _buildNavItem(Icons.explore_outlined, 'Discover'),
-            _buildNavItem(Icons.favorite_border, 'Saved'),
-            _buildNavItem(Icons.person_outline, 'Profile'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white12,
-          ),
-          child: Icon(icon, color: Colors.white, size: 24),
-        ),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
-      ],
     );
   }
 }
