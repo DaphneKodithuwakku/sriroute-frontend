@@ -220,3 +220,213 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
         break;
     }
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          guidelines[selectedReligion]!['title']!,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, size: 24),
+          onPressed: () => Navigator.pop(context),
+        ),
+        centerTitle: true,
+        actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.language, size: 24),
+            onSelected: (String language) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Language changed to $language')),
+              );
+            },
+            itemBuilder: (BuildContext context) {
+              return ['English', 'Sinhala', 'Tamil'].map((String language) {
+                return PopupMenuItem<String>(
+                  value: language,
+                  child: Text(language),
+                );
+              }).toList();
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    guidelines[selectedReligion]!['color'] as Color,
+                    (guidelines[selectedReligion]!['color'] as Color)
+                        .withOpacity(0.8),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Icon(
+                    guidelines[selectedReligion]!['icon'] as IconData,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: selectedReligion,
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.white,
+                      ),
+                      dropdownColor: Colors.blueGrey[800],
+                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedReligion = newValue!;
+                        });
+                      },
+                      items:
+                          ['Buddhism', 'Christianity', 'Hinduism', 'Islam']
+                              .map(
+                                (religion) => DropdownMenuItem(
+                                  value: religion,
+                                  child: Text(religion),
+                                ),
+                              )
+                              .toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            _buildVisualGuide(),
+            const SizedBox(height: 24),
+            ...['dress_code', 'photo_rules', 'behavior', 'offerings'].map(
+              (key) => _buildGuideItem(
+                guidelines[selectedReligion]![key]['icon'] as IconData,
+                guidelines[selectedReligion]![key]['title'] as String,
+                guidelines[selectedReligion]![key]['content'] as String,
+                guidelines[selectedReligion]!['color'] as Color,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.book, color: Colors.blueGrey[800], size: 28),
+                        const SizedBox(width: 12),
+                        Text(
+                          "Additional Resources",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey[800],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _buildResourceTile(
+                      Icons.language,
+                      "Local Customs Guide",
+                      "Download our comprehensive guide",
+                      () => _showDownloadDialog(context),
+                    ),
+                    _buildResourceTile(
+                      Icons.translate,
+                      "Common Phrases",
+                      "Learn respectful greetings",
+                      () => _showPhrasesDialog(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blueGrey[800]!, Colors.blueGrey[600]!],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: SafeArea(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              NavBarIcon(
+                Icons.home_outlined,
+                0,
+                _selectedNavIndex,
+                _navigateToPage,
+              ),
+              NavBarIcon(
+                Icons.directions_bus_outlined,
+                1,
+                _selectedNavIndex,
+                _navigateToPage,
+              ),
+              NavBarIcon(
+                Icons.explore_outlined,
+                2,
+                _selectedNavIndex,
+                _navigateToPage,
+              ),
+              NavBarIcon(
+                Icons.notifications_outlined,
+                3,
+                _selectedNavIndex,
+                _navigateToPage,
+              ),
+              NavBarIcon(
+                Icons.person_outline,
+                4,
+                _selectedNavIndex,
+                _navigateToPage,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
