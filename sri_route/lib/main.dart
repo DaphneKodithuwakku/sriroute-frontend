@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Sacred Journey',
       theme: ThemeData(
         primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: Colors.teal[50],
+        scaffoldBackgroundColor: Colors.white, // Changed to white
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.transparent,
           foregroundColor: Colors.teal[900],
@@ -95,18 +95,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.teal[100]!, Colors.teal[50]!],
-          ),
-        ),
-        child: SafeArea(
-          child: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-        ),
-      ),
+      body: SafeArea(
+        child: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+      ), // Removed gradient Container, using white Scaffold background
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         child: Container(
@@ -444,50 +435,41 @@ class ResultsScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.teal[100]!, Colors.teal[50]!],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Text(
+                'Discover Your Journey',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.teal[900],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: ListView(
+                  children: const [
+                    PilgrimageCard(
+                      imageUrl: 'https://via.placeholder.com/600x400',
+                      title: 'Sacred Site 1',
+                      location: 'Location 1',
+                    ),
+                    SizedBox(height: 16),
+                    PilgrimageCard(
+                      imageUrl: 'https://via.placeholder.com/600x400',
+                      title: 'Sacred Site 2',
+                      location: 'Location 2',
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Text(
-                  'Discover Your Journey',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.teal[900],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: ListView(
-                    children: const [
-                      PilgrimageCard(
-                        imageUrl: 'https://via.placeholder.com/600x400',
-                        title: 'Sacred Site 1',
-                        location: 'Location 1',
-                      ),
-                      SizedBox(height: 16),
-                      PilgrimageCard(
-                        imageUrl: 'https://via.placeholder.com/600x400',
-                        title: 'Sacred Site 2',
-                        location: 'Location 2',
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      ), // Removed gradient Container, using white Scaffold background
     );
   }
 }
