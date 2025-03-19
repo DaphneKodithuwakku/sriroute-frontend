@@ -156,3 +156,37 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
             'Offer marigolds, bananas, or sweets like laddoos—check temple rules, as some ban onions or garlic. Present offerings to priests with your right hand, bowing slightly. During festivals, small oil lamps (diyas) are appreciated.',
       },
     },
+
+    void _navigateToPage(int index) {
+    setState(() {
+      _selectedNavIndex = index;
+    });
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const TransportPage()),
+        );
+        break;
+      case 2:
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const NotificationsPage()),
+        );
+        break;
+      case 4:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ProfilePage()),
+        );
+        break;
+    }
+  }
