@@ -11,7 +11,7 @@ class WelcomePage3 extends StatelessWidget {
         children: [
           // Background Image
           Positioned.fill(
-            child: Image.asset('assets/welcomepage1.png', fit: BoxFit.fitWidth, alignment: Alignment.topCenter),
+            child: Image.asset('assets/welcomepage3.png', fit: BoxFit.fitWidth, alignment: Alignment.topCenter),
           ),
           // Bottom Card with Content
           Align(
