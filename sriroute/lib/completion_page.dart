@@ -108,12 +108,13 @@ class _SignupCompletionPageState extends State<SignupCompletionPage> {
                   ),
                   onPressed: () {
                     if (_isAgreed) {
-                      // Handle continue action
+                      // Navigate to the Signup Success Page
+                      Navigator.pushNamed(context, "/signup-success");
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
-                            "Please agree to the Terms & Conditions",
+                            "Please agree to the Terms & Conditions.",
                           ),
                           backgroundColor: Colors.red,
                         ),

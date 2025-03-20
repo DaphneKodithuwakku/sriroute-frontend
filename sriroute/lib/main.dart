@@ -3,6 +3,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 import 'signup_page.dart'; // Import Signup Page
 import 'completion_page.dart'; // Import Completion Page
+import 'signup_success_page.dart'; // Import Signup Success Page
 
 void main() => runApp(const MyApp());
 
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
         "/completion":
             (context) =>
                 const SignupCompletionPage(), // Route for Completion Page
+        "/signup-success":
+            (context) => const SignupSuccessPage(), // ✅ Route for Success Page
       },
     );
   }
@@ -82,9 +85,7 @@ class LoginPage extends StatelessWidget {
                   foregroundColor: Colors.white,
                   minimumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: () {
-                  // Handle login logic here
-                },
+                onPressed: () {},
                 child: const Text("Log In"),
               ),
 
