@@ -7,6 +7,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  // ignore: unused_field
   GoogleMapController? _controller;
 
   // Default Camera Position (Sri Lanka)
