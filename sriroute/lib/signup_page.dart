@@ -8,174 +8,181 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool agreeToTerms = false;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   String? selectedLanguage;
+  bool agreeToTerms = false;
+
   final List<String> languages = ["English", "Spanish", "French", "German"];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Sign-up"),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Center(
-              child: Column(
+      body: GestureDetector(
+        onTap:
+            () =>
+                FocusScope.of(
+                  context,
+                ).unfocus(), // Hide keyboard when tapping outside
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header
+              const Center(
+                child: Column(
+                  children: [
+                    Text(
+                      "Almost there!",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "Just a few more details to set up your account.",
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+
+              // Username Input
+              buildTextField(
+                controller: _usernameController,
+                hintText: "Username",
+                icon: Icons.person,
+              ),
+              const SizedBox(height: 15),
+
+              // Email Input
+              buildTextField(
+                controller: _emailController,
+                hintText: "Email address",
+                icon: Icons.email,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 15),
+
+              // Password Input
+              buildTextField(
+                controller: _passwordController,
+                hintText: "Password",
+                icon: Icons.lock,
+                obscureText: true,
+              ),
+              const SizedBox(height: 15),
+
+              // Language Selection Dropdown
+              buildLanguageDropdown(),
+              const SizedBox(height: 20),
+
+              // Terms & Conditions Checkbox
+              Row(
                 children: [
-                  Text(
-                    "Nice to see you!",
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  Checkbox(
+                    value: agreeToTerms,
+                    activeColor: Colors.green,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        agreeToTerms = value!;
+                      });
+                    },
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    "Create your account",
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
+                  const Text("I agree with Terms & Conditions"),
                 ],
               ),
-            ),
-            const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
-            // Username Input
-            TextField(
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.person, color: Colors.white),
-                hintText: "Username",
-                filled: true,
-                fillColor: Colors.black,
-                hintStyle: const TextStyle(color: Colors.white),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
+              // Continue Button → **Navigates to Completion Page**
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 50),
                 ),
+                onPressed: () {
+                  if (_validateInputs()) {
+                    Navigator.pushNamed(context, "/completion");
+                  }
+                },
+                child: const Text("Continue"),
               ),
-              style: const TextStyle(color: Colors.white),
-            ),
-            const SizedBox(height: 15),
-
-            // Email Input
-            TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.email, color: Colors.white),
-                hintText: "Email address",
-                filled: true,
-                fillColor: Colors.black,
-                hintStyle: const TextStyle(color: Colors.white),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              style: const TextStyle(color: Colors.white),
-            ),
-            const SizedBox(height: 15),
-
-            // Password Input
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.lock, color: Colors.white),
-                hintText: "Password",
-                filled: true,
-                fillColor: Colors.black,
-                hintStyle: const TextStyle(color: Colors.white),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              style: const TextStyle(color: Colors.white),
-            ),
-            const SizedBox(height: 15),
-
-            // Language Selection Dropdown
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.language, color: Colors.white),
-                filled: true,
-                fillColor: Colors.black,
-                hintText: "Language",
-                hintStyle: const TextStyle(color: Colors.white),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              dropdownColor: Colors.black,
-              style: const TextStyle(color: Colors.white),
-              value: selectedLanguage,
-              items:
-                  languages.map((String language) {
-                    return DropdownMenuItem<String>(
-                      value: language,
-                      child: Text(
-                        language,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }).toList(),
-              onChanged: (String? value) {
-                setState(() {
-                  selectedLanguage = value;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-
-            // Terms & Conditions Checkbox
-            Row(
-              children: [
-                Checkbox(
-                  value: agreeToTerms,
-                  activeColor: Colors.green,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      agreeToTerms = value!;
-                    });
-                  },
-                ),
-                const Text(
-                  "I agree with Terms & Conditions",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // Continue Button
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 50),
-              ),
-              onPressed: () {
-                if (agreeToTerms) {
-                  // Handle sign-up logic here
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "You must agree to the Terms & Conditions.",
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              },
-              child: const Text("Continue"),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-      backgroundColor: Colors.white,
     );
+  }
+
+  // Widget for Input Fields
+  Widget buildTextField({
+    required TextEditingController controller,
+    required String hintText,
+    required IconData icon,
+    bool obscureText = false,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon, color: Colors.black),
+        hintText: hintText,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+  }
+
+  // Widget for Language Selection Dropdown
+  Widget buildLanguageDropdown() {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.language, color: Colors.black),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+      value: selectedLanguage,
+      items:
+          languages.map((lang) {
+            return DropdownMenuItem(value: lang, child: Text(lang));
+          }).toList(),
+      onChanged: (value) {
+        setState(() {
+          selectedLanguage = value;
+        });
+      },
+    );
+  }
+
+  // Validation for Inputs
+  bool _validateInputs() {
+    if (_usernameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
+        selectedLanguage == null ||
+        !agreeToTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please fill all fields and agree to Terms & Conditions",
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+    return true;
   }
 }
