@@ -93,7 +93,14 @@ class WelcomePage1 extends StatelessWidget {
                       ),
                       // Centered FAB
                       FloatingActionButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomePage2(),
+                            ),
+                          );
+                        },
                         backgroundColor: Colors.black,
                         shape: CircleBorder(),
                         child: Icon(Icons.arrow_right_alt, color: Colors.white),
