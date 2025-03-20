@@ -2,44 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
-
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
-  static const LatLng _center = LatLng(6.9271, 79.8612); // Coordinates for Colombo, Sri Lanka
-  final Set<Marker> _markers = {};
+  GoogleMapController? _controller;
 
-  void _onMapCreated(GoogleMapController controller) {
-    setState(() {
-      _markers.add(
-        Marker(
-          markerId: MarkerId('colombo'),
-          position: _center,
-          infoWindow: InfoWindow(
-            title: 'Colombo',
-            snippet: 'Capital of Sri Lanka',
-          ),
-        ),
-      );
-    });
-  }
+  // Default Camera Position (Sri Lanka)
+  static const CameraPosition _initialPosition = CameraPosition(
+    target: LatLng(7.8731, 80.7718), // Sri Lanka Center
+    zoom: 7.0,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Map'),
-      ),
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target: _center,
-          zoom: 11.0,
-        ),
-        markers: _markers,
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: _initialPosition,
+            mapType: MapType.normal,
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
+            },
+          ),
+
+          // 🔙 Back Button (Top Left Corner)
+          Positioned(
+            top: 40, // Adjust top padding if needed
+            left: 16,
+            child: FloatingActionButton(
+              mini: true,
+              backgroundColor: Colors.white,
+              onPressed: () => Navigator.pop(context),
+              child: Icon(Icons.arrow_back, color: Colors.black),
+            ),
+          ),
+        ],
       ),
     );
   }
