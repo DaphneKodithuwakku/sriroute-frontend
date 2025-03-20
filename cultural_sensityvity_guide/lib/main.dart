@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           height: 60,
           decoration: BoxDecoration(
-            color: Colors.black, // Changed from gradient to solid black
+            color: Colors.black,
             borderRadius: BorderRadius.circular(30),
             boxShadow: [
               BoxShadow(
@@ -314,7 +314,10 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
                   ),
                 ],
               ),
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 16,
+              ), // Adjusted to make it thinner
               child: Row(
                 children: [
                   Icon(
@@ -768,8 +771,8 @@ class TransportPage extends StatelessWidget {
   const TransportPage({super.key});
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Transport')),
-    body: const Center(child: Text('Transport Page')),
+    appBar: AppBar(title: const Text('Virtual Videos')),
+    body: const Center(child: Text('Virtual Videos')),
   );
 }
 
