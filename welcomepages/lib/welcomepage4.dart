@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:welcomepages/welcomepage5.dart';
 
 class WelcomePage4 extends StatelessWidget {
   const WelcomePage4({super.key});
@@ -101,7 +102,7 @@ class WelcomePage4 extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => WelcomePage4(),
+                              builder: (context) => WelcomePage5(),
                             ),
                           );
                         },
