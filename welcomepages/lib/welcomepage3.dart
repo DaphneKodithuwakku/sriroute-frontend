@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class WelcomePage3 extends StatelessWidget {
   const WelcomePage3({super.key});
 
@@ -11,7 +10,11 @@ class WelcomePage3 extends StatelessWidget {
         children: [
           // Background Image
           Positioned.fill(
-            child: Image.asset('assets/welcomepage3.png', fit: BoxFit.fitWidth, alignment: Alignment.topCenter),
+            child: Image.asset(
+              'assets/welcomepage3.png',
+              fit: BoxFit.fitWidth,
+              alignment: Alignment.topCenter,
+            ),
           ),
           // Bottom Card with Content
           Align(
@@ -63,7 +66,7 @@ class WelcomePage3 extends StatelessWidget {
                         child: Icon(
                           Icons.circle,
                           size: 10,
-                          color: index == 0 ? Colors.black : Colors.grey,
+                          color: index == 2 ? Colors.black : Colors.grey,
                         ),
                       );
                     }),
