@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WelcomePage3 extends StatelessWidget {
-  const WelcomePage3({super.key});
+class WelcomePage4 extends StatelessWidget {
+  const WelcomePage4({super.key});
 
   @override
   Widget build(BuildContext context) {
