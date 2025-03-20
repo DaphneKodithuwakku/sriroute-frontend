@@ -61,6 +61,7 @@ flutter:
   assets:
     - assets/welcomepage1.png
     - assets/welcomepage2.png
+    - assets/welcomepage3.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
