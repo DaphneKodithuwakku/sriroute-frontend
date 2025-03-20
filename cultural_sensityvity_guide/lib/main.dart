@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.blueGrey[800], // Professional dark blue-grey
-        scaffoldBackgroundColor: Colors.grey[50], // Subtle off-white background
+        primaryColor: Colors.blueGrey[800],
+        scaffoldBackgroundColor: Colors.grey[50],
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           foregroundColor: Colors.black87,
@@ -72,7 +72,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
     'Buddhism': {
       'title': 'Buddhist Cultural Sensitivity',
       'icon': Icons.temple_buddhist,
-      'color': Colors.brown[700], // Professional earthy brown
+      'color': Colors.brown[700],
       'dress_code': {
         'title': 'Dress Code',
         'icon': Icons.checkroom,
@@ -101,7 +101,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
     'Christianity': {
       'title': 'Christian Cultural Sensitivity',
       'icon': Icons.church,
-      'color': Colors.blueGrey[600], // Professional muted blue-grey
+      'color': Colors.blueGrey[600],
       'dress_code': {
         'title': 'Dress Code',
         'icon': Icons.checkroom,
@@ -130,7 +130,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
     'Hinduism': {
       'title': 'Hindu Cultural Sensitivity',
       'icon': Icons.temple_hindu,
-      'color': Colors.deepOrange[700], // Professional deep orange
+      'color': Colors.deepOrange[700],
       'dress_code': {
         'title': 'Dress Code',
         'icon': Icons.checkroom,
@@ -159,7 +159,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
     'Islam': {
       'title': 'Islamic Cultural Sensitivity',
       'icon': Icons.mosque,
-      'color': Colors.teal[800], // Professional teal
+      'color': Colors.teal[800],
       'dress_code': {
         'title': 'Dress Code',
         'icon': Icons.checkroom,
@@ -234,24 +234,6 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
-        actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.language, size: 24),
-            onSelected: (String language) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Language changed to $language')),
-              );
-            },
-            itemBuilder: (BuildContext context) {
-              return ['English', 'Sinhala', 'Tamil'].map((String language) {
-                return PopupMenuItem<String>(
-                  value: language,
-                  child: Text(language),
-                );
-              }).toList();
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -580,6 +562,101 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildGuideIcon({
+    required IconData icon,
+    required String label,
+    required Color color,
+  }) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: color.withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Icon(icon, color: color, size: 28),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGuideItem(
+    IconData icon,
+    String title,
+    String text,
+    Color color,
+  ) {
+    return Card(
+      elevation: 3,
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: color, size: 28),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(text, style: const TextStyle(fontSize: 16, height: 1.5)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildResourceTile(
+    IconData icon,
+    String title,
+    String subtitle,
+    VoidCallback onTap,
+  ) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.blueGrey[800], size: 24),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+      subtitle: Text(subtitle),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+      contentPadding: EdgeInsets.zero,
+      onTap: onTap,
     );
   }
 
