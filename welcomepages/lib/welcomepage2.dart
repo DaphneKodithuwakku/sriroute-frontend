@@ -29,7 +29,7 @@ class WelcomePage1 extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Discover Sri Lanka's Sacred Places",
+                    "Explore Sri Lanka’s Buddhist Heritage",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Inter',
