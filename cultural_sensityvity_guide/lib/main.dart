@@ -431,7 +431,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
     );
   }
 
-Widget _buildVisualGuide() {
+  Widget _buildVisualGuide() {
     if (selectedReligion == 'Buddhism') {
       return _buildBuddhismVisualGuide();
     } else if (selectedReligion == 'Hinduism') {
@@ -610,3 +610,40 @@ Widget _buildVisualGuide() {
           ),
     );
   }
+
+  void _showPhrasesDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Common Phrases'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '• Hello: ආයුබෝවන් (Sinhala)',
+                    style: TextStyle(color: Colors.brown[700]),
+                  ),
+                  Text(
+                    '• Peace: As-salamu Alaikum (Islam)',
+                    style: TextStyle(color: Colors.teal[800]),
+                  ),
+                  Text(
+                    '• Thank you: நன்றி (Tamil)',
+                    style: TextStyle(color: Colors.deepOrange[700]),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+    );
+  }
+}
