@@ -43,7 +43,7 @@ class WelcomePage3 extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      "Explore Sri Lanka’s sacred sites and stay updated on spiritual events.",
+                      "Experience the beauty of kovils, vibrant festivals, and timeless traditions.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         height: 1.2,
