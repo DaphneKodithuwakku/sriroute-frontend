@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // for date formatting
 
 void main() {
   runApp(const MyApp());
@@ -259,7 +260,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
     'Islam',
   ];
 
-  // Function to show the date picker and calculate days
+  // Function to show the date picker and display the selected date
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -280,9 +281,10 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       },
     );
     if (picked != null) {
-      final int daysDifference = picked.difference(DateTime.now()).inDays;
       setState(() {
-        daysController.text = daysDifference.toString();
+        // Format the date (e.g., "March 25, 2025")
+        String formattedDate = DateFormat('MMMM d, yyyy').format(picked);
+        daysController.text = formattedDate;
       });
     }
   }
@@ -389,9 +391,9 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                           ),
                           child: _buildTextField(
                             daysController,
-                            'Days',
-                            'Enter number of days',
-                            TextInputType.number,
+                            'Date', // Changed label to 'Date'
+                            'Select a date', // Changed hint to 'Select a date'
+                            null, // Removed TextInputType.number
                             InkWell(
                               onTap: () => _selectDate(context),
                               child: const Icon(
