@@ -51,7 +51,100 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const CulturalSensitivityPage(),
+      home: const MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+
+  static final List<Widget> _widgetOptions = <Widget>[
+    const HomePage(),
+    const TransportPage(),
+    const PilgrimagePlannerPage(),
+    const CulturalSensitivityPage(),
+    const ProfilePage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.black, // Changed from gradient to solid black
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.home,
+                  color: _selectedIndex == 0 ? Colors.white : Colors.white70,
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(0),
+              ),
+              IconButton(
+                icon: SimpleVRGlassesIcon(
+                  color: _selectedIndex == 1 ? Colors.white : Colors.white70,
+                  size: 34,
+                ),
+                onPressed: () => _onItemTapped(1),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: _selectedIndex == 2 ? Colors.white : Colors.white70,
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(2),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.menu_book,
+                  color: _selectedIndex == 3 ? Colors.white : Colors.white70,
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(3),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.person,
+                  color: _selectedIndex == 4 ? Colors.white : Colors.white70,
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(4),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -66,7 +159,6 @@ class CulturalSensitivityPage extends StatefulWidget {
 
 class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
   String selectedReligion = 'Buddhism';
-  int _selectedNavIndex = 2;
 
   final Map<String, Map<String, dynamic>> guidelines = {
     'Buddhism': {
@@ -187,40 +279,6 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
     },
   };
 
-  void _navigateToPage(int index) {
-    setState(() {
-      _selectedNavIndex = index;
-    });
-    switch (index) {
-      case 0:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const HomePage()),
-        );
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const TransportPage()),
-        );
-        break;
-      case 2:
-        break;
-      case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const NotificationsPage()),
-        );
-        break;
-      case 4:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const ProfilePage()),
-        );
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -228,10 +286,6 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
         title: Text(
           guidelines[selectedReligion]!['title']!,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 24),
-          onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
       ),
@@ -342,72 +396,11 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
                       "Download our comprehensive guide",
                       () => _showDownloadDialog(context),
                     ),
-                    _buildResourceTile(
-                      Icons.translate,
-                      "Common Phrases",
-                      "Learn respectful greetings",
-                      () => _showPhrasesDialog(context),
-                    ),
                   ],
                 ),
               ),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blueGrey[800]!, Colors.blueGrey[600]!],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: SafeArea(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              NavBarIcon(
-                Icons.home_outlined,
-                0,
-                _selectedNavIndex,
-                _navigateToPage,
-              ),
-              NavBarIcon(
-                Icons.directions_bus_outlined,
-                1,
-                _selectedNavIndex,
-                _navigateToPage,
-              ),
-              NavBarIcon(
-                Icons.explore_outlined,
-                2,
-                _selectedNavIndex,
-                _navigateToPage,
-              ),
-              NavBarIcon(
-                Icons.notifications_outlined,
-                3,
-                _selectedNavIndex,
-                _navigateToPage,
-              ),
-              NavBarIcon(
-                Icons.person_outline,
-                4,
-                _selectedNavIndex,
-                _navigateToPage,
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -687,79 +680,78 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
           ),
     );
   }
+}
 
-  void _showPhrasesDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Common Phrases'),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '• Hello: ආයුබෝවන් (Sinhala)',
-                    style: TextStyle(color: Colors.brown[700]),
-                  ),
-                  Text(
-                    '• Peace: As-salamu Alaikum (Islam)',
-                    style: TextStyle(color: Colors.teal[800]),
-                  ),
-                  Text(
-                    '• Thank you: நன்றி (Tamil)',
-                    style: TextStyle(color: Colors.deepOrange[700]),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Close'),
-              ),
-            ],
-          ),
+// Simple VR Glasses Icon
+class SimpleVRGlassesIcon extends StatelessWidget {
+  final Color color;
+  final double size;
+
+  const SimpleVRGlassesIcon({required this.color, this.size = 24});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      child: CustomPaint(painter: _SimpleVRGlassesPainter(color: color)),
     );
   }
 }
 
-class NavBarIcon extends StatelessWidget {
-  final IconData iconData;
-  final int index;
-  final int selectedIndex;
-  final Function(int) onTap;
+class _SimpleVRGlassesPainter extends CustomPainter {
+  final Color color;
 
-  const NavBarIcon(
-    this.iconData,
-    this.index,
-    this.selectedIndex,
-    this.onTap, {
-    super.key,
-  });
+  _SimpleVRGlassesPainter({required this.color});
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onTap(index),
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color:
-              index == selectedIndex
-                  ? Colors.white.withOpacity(0.2)
-                  : Colors.transparent,
-        ),
-        child: Icon(
-          iconData,
-          color: index == selectedIndex ? Colors.white : Colors.white70,
-          size: 28,
-        ),
+  void paint(Canvas canvas, Size size) {
+    final Paint paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5
+          ..strokeCap = StrokeCap.round;
+
+    canvas.drawRect(
+      Rect.fromLTRB(
+        size.width * 0.15,
+        size.height * 0.35,
+        size.width * 0.85,
+        size.height * 0.65,
       ),
+      paint,
+    );
+
+    canvas.drawLine(
+      Offset(size.width * 0.5, size.height * 0.35),
+      Offset(size.width * 0.5, size.height * 0.65),
+      paint,
+    );
+
+    canvas.drawOval(
+      Rect.fromLTRB(
+        size.width * 0.2,
+        size.height * 0.4,
+        size.width * 0.45,
+        size.height * 0.6,
+      ),
+      paint,
+    );
+
+    canvas.drawOval(
+      Rect.fromLTRB(
+        size.width * 0.55,
+        size.height * 0.4,
+        size.width * 0.8,
+        size.height * 0.6,
+      ),
+      paint,
     );
   }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 // Placeholder pages
@@ -781,12 +773,12 @@ class TransportPage extends StatelessWidget {
   );
 }
 
-class NotificationsPage extends StatelessWidget {
-  const NotificationsPage({super.key});
+class PilgrimagePlannerPage extends StatelessWidget {
+  const PilgrimagePlannerPage({super.key});
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Notifications')),
-    body: const Center(child: Text('Notifications Page')),
+    appBar: AppBar(title: const Text('Pilgrimage Planner')),
+    body: const Center(child: Text('Pilgrimage Planner Page')),
   );
 }
 
