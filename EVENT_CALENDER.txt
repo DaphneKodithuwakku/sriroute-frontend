@@ -1,1 +1,9 @@
+
+
 Event calender provides the upcoming cultural events in the srilanka 
+
+
+1. Event Calendar
+Problem: Travelers miss important religious events.
+Solution: A smart, color-coded religious event calendar.
+Why We Stand Out: Multi-religion focus, smart alerts, and location-based notifications
