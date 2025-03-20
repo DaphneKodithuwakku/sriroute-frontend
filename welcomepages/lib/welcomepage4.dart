@@ -33,7 +33,7 @@ class WelcomePage4 extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    " A Journey Through Hindu Devotion",
+                    " The Essence of Islamic Culture",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Inter',
