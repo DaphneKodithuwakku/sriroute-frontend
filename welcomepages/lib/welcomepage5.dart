@@ -11,7 +11,7 @@ class WelcomePage4 extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/welcomepage4.png',
+              'assets/welcomepage5.png',
               fit: BoxFit.fitWidth,
               alignment: Alignment.topCenter,
             ),
