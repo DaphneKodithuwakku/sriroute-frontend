@@ -274,11 +274,12 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                     IconButton(
                       icon: Icon(
                         Icons.arrow_back_ios,
-                        color:
-                            Colors.black, // Changed to black to match the image
+                        color: Colors.black,
                         size: 24,
                       ),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        Navigator.popUntil(context, (route) => route.isFirst);
+                      },
                     ),
                     const SizedBox(width: 16),
                     const Text(
@@ -286,8 +287,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color:
-                            Colors.black, // Changed to black to match the image
+                        color: Colors.black,
                       ),
                     ),
                   ],
@@ -475,23 +475,26 @@ class ResultsScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, size: 22),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.popUntil(context, (route) => route.isFirst);
+          },
         ),
         elevation: 0,
+        title: Text(
+          'Discover Your Journey',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.teal[900],
+          ),
+        ),
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Discover Your Journey',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal[900],
-                ),
-              ),
               const SizedBox(height: 20),
               Expanded(
                 child: ListView(
