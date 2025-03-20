@@ -66,7 +66,7 @@ class WelcomePage5 extends StatelessWidget {
                         child: Icon(
                           Icons.circle,
                           size: 10,
-                          color: index == 3 ? Colors.black : Colors.grey,
+                          color: index == 4 ? Colors.black : Colors.grey,
                         ),
                       );
                     }),
