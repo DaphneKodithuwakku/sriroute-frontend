@@ -34,7 +34,7 @@ class WelcomePage1 extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Inter',
                       height: 1.1,
-                      fontSize: 30,
+                      fontSize: 35,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -67,7 +67,7 @@ class WelcomePage1 extends StatelessWidget {
                       );
                     }),
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 45),
                   // Buttons Row with Centered FAB
                   Stack(
                     alignment: Alignment.center,
