@@ -582,3 +582,31 @@ Widget _buildVisualGuide() {
       ),
     );
   }
+
+  void _showDownloadDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Download Guide'),
+            content: const Text(
+              'Would you like to download the cultural sensitivity guide?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Download started...')),
+                  );
+                  Navigator.pop(context);
+                },
+                child: const Text('Download'),
+              ),
+            ],
+          ),
+    );
+  }
