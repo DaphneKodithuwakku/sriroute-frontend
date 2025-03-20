@@ -1,2 +1,0 @@
-C:/sriroute-frontend/sri_route/android/app/.cxx/Debug/49134t62/x86_64/CMakeFiles/edit_cache.dir
-C:/sriroute-frontend/sri_route/android/app/.cxx/Debug/49134t62/x86_64/CMakeFiles/rebuild_cache.dir
