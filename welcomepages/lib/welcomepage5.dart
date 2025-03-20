@@ -46,7 +46,7 @@ class WelcomePage5 extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      "Visit historic mosques, sacred shrines, and embrace spiritual harmony.",
+                      "Discover grand churches, peaceful chapels, and stories of faith.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         height: 1.2,
