@@ -279,7 +279,6 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
     },
   };
 
-  // Map icon labels to guideline keys for easy lookup
   final Map<String, Map<String, String>> iconToGuideline = {
     'Buddhism': {
       'Bow to Monks': 'behavior',
@@ -311,6 +310,14 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Switch back to the Home page (index 0)
+            (context.findAncestorStateOfType<_MyHomePageState>())
+                ?._onItemTapped(0);
+          },
+        ),
         title: Text(
           guidelines[selectedReligion]!['title']!,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -390,42 +397,6 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
                 guidelines[selectedReligion]![key]['title'] as String,
                 guidelines[selectedReligion]![key]['content'] as String,
                 guidelines[selectedReligion]!['color'] as Color,
-              ),
-            ),
-            const SizedBox(height: 24),
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.book, color: Colors.blueGrey[800], size: 28),
-                        const SizedBox(width: 12),
-                        Text(
-                          "Additional Resources",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueGrey[800],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    _buildResourceTile(
-                      Icons.language,
-                      "Local Customs Guide",
-                      "Download our comprehensive guide",
-                      () => _showDownloadDialog(context),
-                    ),
-                  ],
-                ),
               ),
             ),
           ],
@@ -707,50 +678,6 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
-
-  Widget _buildResourceTile(
-    IconData icon,
-    String title,
-    String subtitle,
-    VoidCallback onTap,
-  ) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.blueGrey[800], size: 24),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-      subtitle: Text(subtitle),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-      contentPadding: EdgeInsets.zero,
-      onTap: onTap,
-    );
-  }
-
-  void _showDownloadDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Download Guide'),
-            content: const Text(
-              'Would you like to download the cultural sensitivity guide?',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Download started...')),
-                  );
-                  Navigator.pop(context);
-                },
-                child: const Text('Download'),
-              ),
-            ],
-          ),
-    );
-  }
 }
 
 // Simple VR Glasses Icon
@@ -758,11 +685,11 @@ class SimpleVRGlassesIcon extends StatelessWidget {
   final Color color;
   final double size;
 
-  const SimpleVRGlassesIcon({required this.color, this.size = 24});
+  const SimpleVRGlassesIcon({super.key, required this.color, this.size = 24});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: size,
       height: size,
       child: CustomPaint(painter: _SimpleVRGlassesPainter(color: color)),
