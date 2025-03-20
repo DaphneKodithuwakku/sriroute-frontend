@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'welcomepage2.dart';
 
-class WelcomePage1 extends StatelessWidget {
-  const WelcomePage1({super.key});
+
+class WelcomePage3 extends StatelessWidget {
+  const WelcomePage3({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class WelcomePage1 extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => WelcomePage2(),
+                              builder: (context) => WelcomePage3(),
                             ),
                           );
                         },
