@@ -45,7 +45,7 @@ class LoginPage extends StatelessWidget {
             children: [
               // Welcome Text
               const Text(
-                "Hey! Welcome to Sri Route!",
+                "Hello! Welcome to Sri Route!",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const Text(
