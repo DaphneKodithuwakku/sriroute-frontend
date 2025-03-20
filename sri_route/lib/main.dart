@@ -250,8 +250,8 @@ class PilgrimagePlannerScreen extends StatefulWidget {
 
 class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
   final TextEditingController daysController = TextEditingController();
-  final TextEditingController regionController = TextEditingController();
   String selectedReligion = 'Buddhism';
+  String selectedRegion = 'Colombo District'; // Default region
 
   final List<String> religions = [
     'Buddhism',
@@ -260,13 +260,15 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
     'Islam',
   ];
 
-  // Function to show the date range picker without restrictions
+  // Only Colombo District for now
+  final List<String> regions = ['Colombo District'];
+
   Future<void> _selectDateRange(BuildContext context) async {
     final DateTimeRange? picked = await showDateRangePicker(
       context: context,
       initialDateRange: DateTimeRange(
         start: DateTime.now(),
-        end: DateTime.now().add(const Duration(days: 2)), // Default range
+        end: DateTime.now().add(const Duration(days: 2)),
       ),
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
@@ -306,7 +308,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back_ios,
                         color: Colors.black,
                         size: 24,
@@ -371,13 +373,15 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                                     child: Text(religion),
                                   );
                                 }).toList(),
-                            onChanged: (String? value) {
-                              if (value != null) {
+                            onChanged: (String? newValue) {
+                              if (newValue != null) {
                                 setState(() {
-                                  selectedReligion = value;
+                                  selectedReligion = newValue;
+                                  print('Religion changed to: $newValue');
                                 });
                               }
                             },
+                            isExpanded: true,
                           ),
                         ),
                         const SizedBox(height: 24),
@@ -409,6 +413,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                         ),
                         const SizedBox(height: 24),
                         Container(
+                          padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(12),
@@ -420,10 +425,30 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                               ),
                             ],
                           ),
-                          child: _buildTextField(
-                            regionController,
-                            'Region',
-                            'Enter region',
+                          child: DropdownButton<String>(
+                            value: selectedRegion,
+                            icon: const Icon(
+                              Icons.arrow_drop_down_circle,
+                              color: Colors.teal,
+                            ),
+                            underline:
+                                const SizedBox(), // Removes default underline
+                            isExpanded: true,
+                            items:
+                                regions.map((String region) {
+                                  return DropdownMenuItem<String>(
+                                    value: region,
+                                    child: Text(region),
+                                  );
+                                }).toList(),
+                            onChanged: (String? newValue) {
+                              if (newValue != null) {
+                                setState(() {
+                                  selectedRegion = newValue;
+                                  print('Region changed to: $newValue');
+                                });
+                              }
+                            },
                           ),
                         ),
                         const SizedBox(height: 40),
@@ -433,9 +458,12 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                             ElevatedButton(
                               onPressed: () {
                                 daysController.clear();
-                                regionController.clear();
                                 setState(() {
                                   selectedReligion = 'Buddhism';
+                                  selectedRegion = 'Colombo District';
+                                  print(
+                                    'Reset: Religion = $selectedReligion, Region = $selectedRegion',
+                                  );
                                 });
                               },
                               style: ElevatedButton.styleFrom(
