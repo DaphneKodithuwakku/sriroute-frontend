@@ -647,3 +647,77 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
     );
   }
 }
+
+class NavBarIcon extends StatelessWidget {
+  final IconData iconData;
+  final int index;
+  final int selectedIndex;
+  final Function(int) onTap;
+
+  const NavBarIcon(
+    this.iconData,
+    this.index,
+    this.selectedIndex,
+    this.onTap, {
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => onTap(index),
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color:
+              index == selectedIndex
+                  ? Colors.white.withOpacity(0.2)
+                  : Colors.transparent,
+        ),
+        child: Icon(
+          iconData,
+          color: index == selectedIndex ? Colors.white : Colors.white70,
+          size: 28,
+        ),
+      ),
+    );
+  }
+}
+
+// Placeholder pages
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Home')),
+    body: const Center(child: Text('Home Page')),
+  );
+}
+
+class TransportPage extends StatelessWidget {
+  const TransportPage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Transport')),
+    body: const Center(child: Text('Transport Page')),
+  );
+}
+
+class NotificationsPage extends StatelessWidget {
+  const NotificationsPage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Notifications')),
+    body: const Center(child: Text('Notifications Page')),
+  );
+}
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Profile')),
+    body: const Center(child: Text('Profile Page')),
+  );
+}
