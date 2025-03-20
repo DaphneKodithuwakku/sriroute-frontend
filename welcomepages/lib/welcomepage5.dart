@@ -33,7 +33,7 @@ class WelcomePage5 extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    " The Essence of Islamic Culture",
+                    "Sri Lanka’s Christian Heritage",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Inter',
