@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // for date formatting
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -260,11 +260,14 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
     'Islam',
   ];
 
-  // Function to show the date picker and display the selected date
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+  // Function to show the date range picker without restrictions
+  Future<void> _selectDateRange(BuildContext context) async {
+    final DateTimeRange? picked = await showDateRangePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDateRange: DateTimeRange(
+        start: DateTime.now(),
+        end: DateTime.now().add(const Duration(days: 2)), // Default range
+      ),
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       builder: (context, child) {
@@ -280,11 +283,12 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
         );
       },
     );
+
     if (picked != null) {
       setState(() {
-        // Format the date (e.g., "March 25, 2025")
-        String formattedDate = DateFormat('MMMM d, yyyy').format(picked);
-        daysController.text = formattedDate;
+        String formattedStart = DateFormat('MMM d').format(picked.start);
+        String formattedEnd = DateFormat('MMM d, yyyy').format(picked.end);
+        daysController.text = '$formattedStart - $formattedEnd';
       });
     }
   }
@@ -391,11 +395,11 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                           ),
                           child: _buildTextField(
                             daysController,
-                            'Date', // Changed label to 'Date'
-                            'Select a date', // Changed hint to 'Select a date'
-                            null, // Removed TextInputType.number
+                            'Date Range',
+                            'Select date range',
+                            null,
                             InkWell(
-                              onTap: () => _selectDate(context),
+                              onTap: () => _selectDateRange(context),
                               child: const Icon(
                                 Icons.calendar_month,
                                 color: Colors.teal,
@@ -494,7 +498,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
         suffixIcon: suffixIcon,
       ),
       keyboardType: keyboardType ?? TextInputType.text,
-      readOnly: suffixIcon != null, // Make read-only if there's a calendar icon
+      readOnly: suffixIcon != null,
     );
   }
 }
