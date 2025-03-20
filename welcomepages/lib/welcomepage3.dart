@@ -102,7 +102,7 @@ class WelcomePage3 extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => WelcomePage3(),
+                              builder: (context) => WelcomePage4(),
                             ),
                           );
                         },
