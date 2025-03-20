@@ -38,7 +38,7 @@ class WelcomePage1 extends StatelessWidget {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(height: 10), // Added more space
+                  SizedBox(height: 12), // Added more space
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
