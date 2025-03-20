@@ -46,7 +46,7 @@ class WelcomePage4 extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      "Experience the beauty of kovils, vibrant festivals, and timeless traditions.",
+                      "Visit historic mosques, sacred shrines, and embrace spiritual harmony.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         height: 1.2,
