@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'welcomepage3.dart'
+import 'welcomepage3.dart';
 
 class WelcomePage2 extends StatelessWidget {
   const WelcomePage2({super.key});
@@ -98,7 +98,14 @@ class WelcomePage2 extends StatelessWidget {
                       ),
                       // Centered FAB
                       FloatingActionButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomePage3(),
+                            ),
+                          );
+                        },
                         backgroundColor: Colors.black,
                         shape: CircleBorder(),
                         child: Icon(Icons.arrow_right_alt, color: Colors.white),
