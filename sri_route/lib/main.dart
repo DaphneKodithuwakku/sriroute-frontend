@@ -259,6 +259,34 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
     'Islam',
   ];
 
+  // Function to show the date picker and calculate days
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.teal,
+            colorScheme: const ColorScheme.light(primary: Colors.teal),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      final int daysDifference = picked.difference(DateTime.now()).inDays;
+      setState(() {
+        daysController.text = daysDifference.toString();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -364,9 +392,12 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                             'Days',
                             'Enter number of days',
                             TextInputType.number,
-                            const Icon(
-                              Icons.calendar_month,
-                              color: Colors.teal,
+                            InkWell(
+                              onTap: () => _selectDate(context),
+                              child: const Icon(
+                                Icons.calendar_month,
+                                color: Colors.teal,
+                              ),
                             ),
                           ),
                         ),
@@ -461,6 +492,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
         suffixIcon: suffixIcon,
       ),
       keyboardType: keyboardType ?? TextInputType.text,
+      readOnly: suffixIcon != null, // Make read-only if there's a calendar icon
     );
   }
 }
