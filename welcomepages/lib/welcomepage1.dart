@@ -33,7 +33,7 @@ class WelcomePage1 extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      height: 1.1,
+                      height: 1,
                       fontSize: 35,
                       fontWeight: FontWeight.w800,
                     ),
