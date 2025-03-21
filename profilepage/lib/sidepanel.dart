@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'homescreen.dart';
-
+import 'profile.dart';
 
 class SidePanel extends StatelessWidget {
   @override
@@ -19,7 +19,11 @@ class SidePanel extends StatelessWidget {
           SizedBox(height: 20),
           _buildMenuItem(Icons.apps, "Home", Colors.red),
           _buildMenuItem(Icons.search, "Pilgrimage Planner", Colors.orange),
-          _buildMenuItem(Icons.favorite, "Virtual Tour Favorites", Colors.amber),
+          _buildMenuItem(
+            Icons.favorite,
+            "Virtual Tour Favorites",
+            Colors.amber,
+          ),
           _buildMenuItem(Icons.settings, "Settings", Colors.green),
         ],
       ),
