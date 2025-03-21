@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 200, 
+            expandedHeight: 200,
             floating: false,
             pinned: true,
             leading: IconButton(
@@ -77,12 +77,15 @@ class HomeScreen extends StatelessWidget {
                               ),
                               Row(
                                 children: [
-                                  Icon(Icons.notifications, color: Colors.white),
+                                  Icon(
+                                    Icons.notifications,
+                                    color: Colors.white,
+                                  ),
                                   SizedBox(width: 10),
                                   CircleAvatar(
                                     radius: 22,
                                     backgroundImage: AssetImage(
-                                      'assets/user_profile.png',
+                                      'assets/profilepicture.png',
                                     ),
                                   ),
                                 ],
