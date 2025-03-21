@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(), // HomeScreen with a button to ReligiousSitesPage
+    HomeScreen(),
     const Center(child: Text('VR Tour Screen')),
     const Center(child: Text('Search Screen')),
     const Center(child: Text('User Manual Screen')),
@@ -445,7 +445,8 @@ class ReligiousSitesList extends StatelessWidget {
                   icon: const Icon(Icons.map),
                   label: const Text('Open in Google Maps'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
+                    backgroundColor: const Color(0xFF1976D2), // Dark Blue
+                    foregroundColor: Colors.white, // Text/icon color
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -494,7 +495,7 @@ final List<ReligiousSite> religiousSites = [
     district: "Colombo",
     imageUrl: "https://images.unsplash.com/photo-1593696140826-99e8c7f88640",
     description:
-        "A famous Buddhist temple in Colombo known for its mix of modern and traditional architecture.",
+        "A blend of modern and traditional architecture with a museum-like collection of artifacts.",
     googleMapsLink: "https://maps.google.com/?q=Gangaramaya+Temple,Colombo",
   ),
   ReligiousSite(
@@ -503,7 +504,7 @@ final List<ReligiousSite> religiousSites = [
     district: "Colombo",
     imageUrl: "https://images.unsplash.com/photo-1602210059334-3455a18f362d",
     description:
-        "An ancient Buddhist temple famous for its beautiful frescoes and historical significance.",
+        "Famous for its ancient frescoes and believed to be visited by the Buddha.",
     googleMapsLink:
         "https://maps.google.com/?q=Kelaniya+Raja+Maha+Vihara,Colombo",
   ),
@@ -541,7 +542,7 @@ final List<ReligiousSite> religiousSites = [
     district: "Colombo",
     imageUrl: "https://images.unsplash.com/photo-1518030704478-8c2e62f7e1b8",
     description:
-        "A revered Catholic shrine known for its historical significance and miracles.",
+        "A Catholic shrine known for miracles and drawing multi-faith visitors.",
     googleMapsLink: "https://maps.google.com/?q=St+Anthony’s+Shrine,Colombo",
   ),
   ReligiousSite(

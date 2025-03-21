@@ -21,6 +21,9 @@ dependencies:
   # Google Fonts for enhanced typography
   google_fonts: ^6.1.0
 
+  # URL Launcher for opening Google Maps links
+  url_launcher: ^6.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
