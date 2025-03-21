@@ -27,11 +27,14 @@ class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
     "Islam",
   ];
   final List<String> districts = [
-    "Colombo",
-    "Kandy",
-    "Jaffna",
-    "Galle",
-    "Anuradhapura",
+    "Colombo", "Kandy", "Galle", "Jaffna", "Anuradhapura", "Matale", "Gampaha",
+    "Mannar",
+    "Negombo",
+    "Nuwara Eliya",
+    "Puttalam",
+    "Trincomalee",
+    "Batticaloa",
+    "Hambantota", // Add more districts as needed (Sri Lanka has 25 total)
   ];
 
   @override
@@ -146,391 +149,26 @@ class ReligiousSite {
 }
 
 final List<ReligiousSite> religiousSites = [
-  // Colombo
-  ReligiousSite(
-    name: "Gangaramaya Temple",
-    religion: "Buddhism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Kelaniya Raja Maha Vihara",
-    religion: "Buddhism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Asokaramaya Temple",
-    religion: "Buddhism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Vajira Sri Temple",
-    religion: "Buddhism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Isipathanaramaya Temple",
-    religion: "Buddhism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "St. Anthony’s Shrine",
-    religion: "Christianity",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Wolvendaal Church",
-    religion: "Christianity",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "St. Lucia’s Cathedral",
-    religion: "Christianity",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "All Saints’ Church",
-    religion: "Christianity",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "St. Andrew’s Scots Kirk",
-    religion: "Christianity",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Sri Kailawasanathan Swami Devasthanam",
-    religion: "Hinduism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "New Kathiresan Kovil",
-    religion: "Hinduism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Old Kathiresan Kovil",
-    religion: "Hinduism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Sri Ponnambalawaneswaram Kovil",
-    religion: "Hinduism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Sri Muthumariamman Kovil",
-    religion: "Hinduism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Jami Ul-Alfar Mosque",
-    religion: "Islam",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Dewatagaha Mosque",
-    religion: "Islam",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Colombo Grand Mosque",
-    religion: "Islam",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Kollupitiya Mosque",
-    religion: "Islam",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Maradana Mosque",
-    religion: "Islam",
-    district: "Colombo",
-  ),
-
-  // Kandy
+  // Buddhism
   ReligiousSite(
     name: "Temple of the Tooth",
     religion: "Buddhism",
     district: "Kandy",
   ),
   ReligiousSite(
-    name: "Lankatilaka Vihara",
-    religion: "Buddhism",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Gadaladeniya Vihara",
-    religion: "Buddhism",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Embekka Devalaya",
-    religion: "Buddhism",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Degaldoruwa Raja Maha Vihara",
-    religion: "Buddhism",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "St. Paul’s Church",
-    religion: "Christianity",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Trinity College Chapel",
-    religion: "Christianity",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "St. Anthony’s Cathedral",
-    religion: "Christianity",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Church of Ceylon",
-    religion: "Christianity",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Kandy Methodist Church",
-    religion: "Christianity",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Kataragama Devale",
-    religion: "Hinduism",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Sri Maha Vishnu Devale",
-    religion: "Hinduism",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Pattini Devale",
-    religion: "Hinduism",
-    district: "Kandy",
-  ),
-  ReligiousSite(name: "Natha Devale", religion: "Hinduism", district: "Kandy"),
-  ReligiousSite(
-    name: "Sri Ganesh Kovil",
-    religion: "Hinduism",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Kandy Jumma Mosque",
-    religion: "Islam",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Meera Makam Mosque",
-    religion: "Islam",
-    district: "Kandy",
-  ),
-  ReligiousSite(name: "Hanafi Mosque", religion: "Islam", district: "Kandy"),
-  ReligiousSite(
-    name: "Katugastota Mosque",
-    religion: "Islam",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Peradeniya Mosque",
-    religion: "Islam",
-    district: "Kandy",
-  ),
-
-  // Jaffna
-  ReligiousSite(
-    name: "Nagadeepa Purana Vihara",
-    religion: "Buddhism",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Nallur Buddhist Temple",
-    religion: "Buddhism",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Jaffna Viharaya 1",
-    religion: "Buddhism",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Jaffna Viharaya 2",
-    religion: "Buddhism",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Jaffna Viharaya 3",
-    religion: "Buddhism",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "St. James’ Church",
-    religion: "Christianity",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "St. Mary’s Cathedral",
-    religion: "Christianity",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Jaffna Methodist Church",
-    religion: "Christianity",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Our Lady of Refuge Church",
-    religion: "Christianity",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "St. John’s Church",
-    religion: "Christianity",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Nallur Kandaswamy Temple",
-    religion: "Hinduism",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Naguleswaram Temple",
-    religion: "Hinduism",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Maviddapuram Kandaswamy Kovil",
-    religion: "Hinduism",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Keerimalai Naguleswaram Kovil",
-    religion: "Hinduism",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Vallipuram Kovil",
-    religion: "Hinduism",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Jaffna Jumma Mosque",
-    religion: "Islam",
-    district: "Jaffna",
-  ),
-  ReligiousSite(name: "Osmaniya Mosque", religion: "Islam", district: "Jaffna"),
-  ReligiousSite(
-    name: "Grand Mosque Jaffna",
-    religion: "Islam",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Chavakachcheri Mosque",
-    religion: "Islam",
-    district: "Jaffna",
-  ),
-  ReligiousSite(
-    name: "Point Pedro Mosque",
-    religion: "Islam",
-    district: "Jaffna",
-  ),
-
-  // Galle
-  ReligiousSite(
-    name: "Galle Buddhist Temple",
-    religion: "Buddhism",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "Rumassala Temple",
-    religion: "Buddhism",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "Unawatuna Temple",
-    religion: "Buddhism",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "Karandeniya Temple",
-    religion: "Buddhism",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "Hikkaduwa Temple",
-    religion: "Buddhism",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "Dutch Reformed Church",
-    religion: "Christianity",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "All Saints’ Church Galle",
-    religion: "Christianity",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "St. Mary’s Cathedral Galle",
-    religion: "Christianity",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "Galle Methodist Church",
-    religion: "Christianity",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "St. Aloysius Church",
-    religion: "Christianity",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "Nagavihara Kovil",
-    religion: "Hinduism",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "Sri Vishnu Kovil",
-    religion: "Hinduism",
-    district: "Galle",
-  ),
-  ReligiousSite(name: "Galle Kovil 1", religion: "Hinduism", district: "Galle"),
-  ReligiousSite(name: "Galle Kovil 2", religion: "Hinduism", district: "Galle"),
-  ReligiousSite(name: "Galle Kovil 3", religion: "Hinduism", district: "Galle"),
-  ReligiousSite(
-    name: "Meeran Jumma Mosque",
-    religion: "Islam",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "Galle Fort Mosque",
-    religion: "Islam",
-    district: "Galle",
-  ),
-  ReligiousSite(name: "Hikkaduwa Mosque", religion: "Islam", district: "Galle"),
-  ReligiousSite(
-    name: "Ambalangoda Mosque",
-    religion: "Islam",
-    district: "Galle",
-  ),
-  ReligiousSite(
-    name: "Galle Town Mosque",
-    religion: "Islam",
-    district: "Galle",
-  ),
-
-  // Anuradhapura
-  ReligiousSite(
     name: "Jaya Sri Maha Bodhi",
     religion: "Buddhism",
     district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Dambulla Cave Temple",
+    religion: "Buddhism",
+    district: "Matale",
+  ),
+  ReligiousSite(
+    name: "Kelaniya Raja Maha Vihara",
+    religion: "Buddhism",
+    district: "Gampaha",
   ),
   ReligiousSite(
     name: "Ruwanwelisaya",
@@ -543,88 +181,104 @@ final List<ReligiousSite> religiousSites = [
     district: "Anuradhapura",
   ),
   ReligiousSite(
-    name: "Abhayagiri Vihara",
+    name: "Gangaramaya Temple",
     religion: "Buddhism",
-    district: "Anuradhapura",
+    district: "Colombo",
   ),
+
+  // Christianity
   ReligiousSite(
-    name: "Jetavanaramaya",
-    religion: "Buddhism",
-    district: "Anuradhapura",
-  ),
-  ReligiousSite(
-    name: "St. Joseph’s Church",
+    name: "St. Anthony’s Shrine",
     religion: "Christianity",
-    district: "Anuradhapura",
+    district: "Colombo",
   ),
   ReligiousSite(
-    name: "Anuradhapura Methodist Church",
+    name: "Shrine of Our Lady of Madhu",
     religion: "Christianity",
-    district: "Anuradhapura",
-  ),
-  ReligiousSite(
-    name: "Holy Family Church",
-    religion: "Christianity",
-    district: "Anuradhapura",
+    district: "Mannar",
   ),
   ReligiousSite(
     name: "St. Mary’s Church",
     religion: "Christianity",
-    district: "Anuradhapura",
+    district: "Negombo",
   ),
   ReligiousSite(
-    name: "Church of Ceylon Anuradhapura",
+    name: "Wolvendaal Church",
     religion: "Christianity",
-    district: "Anuradhapura",
+    district: "Colombo",
   ),
   ReligiousSite(
-    name: "Natha Devale",
+    name: "St. Lucia’s Cathedral",
+    religion: "Christianity",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Dutch Reformed Church",
+    religion: "Christianity",
+    district: "Galle",
+  ),
+
+  // Hinduism
+  ReligiousSite(
+    name: "Nallur Kandaswamy Temple",
     religion: "Hinduism",
-    district: "Anuradhapura",
+    district: "Jaffna",
   ),
   ReligiousSite(
-    name: "Shiva Devale No. 1",
+    name: "Koneswaram Temple",
     religion: "Hinduism",
-    district: "Anuradhapura",
+    district: "Trincomalee",
   ),
   ReligiousSite(
-    name: "Shiva Devale No. 2",
+    name: "Sita Amman Temple",
     religion: "Hinduism",
-    district: "Anuradhapura",
+    district: "Nuwara Eliya",
   ),
   ReligiousSite(
-    name: "Anuradhapura Kovil 1",
+    name: "Munneswaram Temple",
     religion: "Hinduism",
-    district: "Anuradhapura",
+    district: "Puttalam",
   ),
   ReligiousSite(
-    name: "Anuradhapura Kovil 2",
+    name: "Thiruketheeswaram Temple",
     religion: "Hinduism",
-    district: "Anuradhapura",
+    district: "Mannar",
   ),
   ReligiousSite(
-    name: "Anuradhapura Grand Mosque",
+    name: "Naguleswaram Temple",
+    religion: "Hinduism",
+    district: "Jaffna",
+  ),
+
+  // Islam
+  ReligiousSite(
+    name: "Jami Ul-Alfar Mosque",
     religion: "Islam",
-    district: "Anuradhapura",
+    district: "Colombo",
   ),
   ReligiousSite(
-    name: "Kekirawa Mosque",
+    name: "Dewatagaha Mosque",
     religion: "Islam",
-    district: "Anuradhapura",
+    district: "Colombo",
   ),
   ReligiousSite(
-    name: "Mihintale Mosque",
+    name: "Kechimalai Mosque",
     religion: "Islam",
-    district: "Anuradhapura",
+    district: "Batticaloa",
   ),
   ReligiousSite(
-    name: "Anuradhapura Town Mosque",
+    name: "Hambantota Grand Mosque",
     religion: "Islam",
-    district: "Anuradhapura",
+    district: "Hambantota",
   ),
   ReligiousSite(
-    name: "Medawachchiya Mosque",
+    name: "Kattankudy Mosque",
     religion: "Islam",
-    district: "Anuradhapura",
+    district: "Batticaloa",
+  ),
+  ReligiousSite(
+    name: "Galle Fort Mosque",
+    religion: "Islam",
+    district: "Galle",
   ),
 ];
