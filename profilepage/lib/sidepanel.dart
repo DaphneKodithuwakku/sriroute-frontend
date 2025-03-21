@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'homescreen.dart';
-import 'profile.dart';
+import 'homescreen.dart'; // Import HomeScreen
+import 'profile.dart'; // Import ProfilePage
 
 class SidePanel extends StatelessWidget {
   @override
@@ -13,38 +13,45 @@ class SidePanel extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.close),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(); // Close drawer
             },
           ),
           SizedBox(height: 20),
-          _buildMenuItem(Icons.apps, "Home", Colors.red),
-          _buildMenuItem(Icons.search, "Pilgrimage Planner", Colors.orange),
-          _buildMenuItem(
-            Icons.favorite,
-            "Virtual Tour Favorites",
-            Colors.amber,
-          ),
-          _buildMenuItem(Icons.settings, "Settings", Colors.green),
+          _buildMenuItem(context, Icons.apps, "Home", Colors.red, HomeScreen()),
+          _buildMenuItem(context, Icons.search, "Pilgrimage Planner", Colors.orange, null),
+          _buildMenuItem(context, Icons.favorite, "Virtual Tour Favorites", Colors.amber, null),
+          _buildMenuItem(context, Icons.settings, "Settings", Colors.green, ProfilePage()),
         ],
       ),
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: color,
-            child: Icon(icon, color: Colors.white),
-          ),
-          SizedBox(width: 12),
-          Text(
-            title,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-        ],
+  Widget _buildMenuItem(BuildContext context, IconData icon, String title, Color color, Widget? page) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pop(); // Close the drawer first
+        if (page != null) {
+          Navigator.pushReplacement( // Navigate to the page
+            context,
+            MaterialPageRoute(builder: (context) => page),
+          );
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: color,
+              child: Icon(icon, color: Colors.white),
+            ),
+            SizedBox(width: 12),
+            Text(
+              title,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
       ),
     );
   }
