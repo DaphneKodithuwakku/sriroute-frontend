@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'homescreen.dart';
-import 'profile.dart';
+import 'homescreen.dart'; // Import the HomeScreen
+import 'profile.dart'; // Keep the ProfilePage import for later navigation
 
 void main() {
   runApp(MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Profile Page',
       theme: ThemeData(primarySwatch: Colors.green),
-      home: ProfilePage(),
+      home: HomeScreen(), // Start from HomeScreen
     );
   }
 }
