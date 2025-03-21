@@ -37,14 +37,43 @@ flutter:
 
   # Define all assets (images) used in the app
   assets:
-    - assets/images/Gangaramaya_Temple.jpg  # This includes all images in the assets/images/ folder
-    # Alternatively, list all images explicitly (uncomment below if preferred):
-    # - assets/images/Gangaramaya_Temple.jpg
-    # - assets/images/Kelaniya_Raja_Maha_Vihara.jpg
-    # - assets/images/Asokaramaya_Temple.jpg
-    # - assets/images/Vajira_Sri_Temple.jpg
-    # - assets/images/Isipathanaramaya_Temple.jpg
-    # ... (add all other image paths from your ReligiousSite objects)
+    - assets/images/Gangaramaya_Temple.jpg 
+    - assets/images/Gangaramaya_Temple.jpg
+    - assets/images/Kelaniya_Raja_Maha_Vihara.jpg
+    - assets/images/Asokaramaya_Temple.jpg
+    - assets/images/Vajira_Sri_Temple.jpg
+    - assets/images/Isipathanaramaya_Temple.jpg
+    - assets/images/St_Anthony’s_Shrine.jpg
+    - assets/images/Wolvendaal_Church.jpg
+    - assets/images/St_Lucia’s_Cathedral.jpg
+    - assets/images/All_Saints’_Church.jpg
+    - assets/images/St_Andrew’s_Scots_Kirk.jpg
+    - Sri_Kailawasanathan_Swami_Devasthanam.jpg
+    - New_Kathiresan_Kovil.jpg
+    - 
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+
+    -
+    -
+    -
+    
+  
 
   # Uncomment and configure custom fonts here if you want to use local font files
   # fonts:
