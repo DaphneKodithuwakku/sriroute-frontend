@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'homescreen.dart'; // Import the HomeScreen
-import 'profile.dart'; // Keep the ProfilePage import for later navigation
+import 'homescreen.dart';
 
 void main() {
   runApp(MyApp());
