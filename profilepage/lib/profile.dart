@@ -14,7 +14,7 @@ class ProfilePage extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
       ),
       body: Column(
@@ -27,7 +27,11 @@ class ProfilePage extends StatelessWidget {
           SizedBox(height: 10),
           Text(
             'Jenny Peters',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+            ),
           ),
           SizedBox(height: 5),
           Row(
@@ -46,16 +50,21 @@ class ProfilePage extends StatelessWidget {
             onPressed: () {},
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
             ),
             child: Text('Edit profile', style: TextStyle(color: Colors.white)),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           Expanded(
             child: ListView(
               children: [
-                _buildSettingsTile(Icons.bookmark, 'Saved/Favourite Virtual Tours'),
+                _buildSettingsTile(
+                  Icons.bookmark,
+                  'Saved/Favourite Virtual Tours',
+                ),
                 _buildSettingsTile(Icons.security, 'Security & Permissions'),
                 _buildSettingsTile(Icons.notifications, 'Notifications'),
                 _buildSettingsTile(Icons.lock, 'Privacy'),
