@@ -525,3 +525,106 @@ final List<ReligiousSite> religiousSites = [
     religion: "Islam",
     district: "Galle",
   ),
+
+  // Anuradhapura
+  ReligiousSite(
+    name: "Jaya Sri Maha Bodhi",
+    religion: "Buddhism",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Ruwanwelisaya",
+    religion: "Buddhism",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Mihintale",
+    religion: "Buddhism",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Abhayagiri Vihara",
+    religion: "Buddhism",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Jetavanaramaya",
+    religion: "Buddhism",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "St. Joseph’s Church",
+    religion: "Christianity",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Anuradhapura Methodist Church",
+    religion: "Christianity",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Holy Family Church",
+    religion: "Christianity",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "St. Mary’s Church",
+    religion: "Christianity",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Church of Ceylon Anuradhapura",
+    religion: "Christianity",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Natha Devale",
+    religion: "Hinduism",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Shiva Devale No. 1",
+    religion: "Hinduism",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Shiva Devale No. 2",
+    religion: "Hinduism",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Anuradhapura Kovil 1",
+    religion: "Hinduism",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Anuradhapura Kovil 2",
+    religion: "Hinduism",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Anuradhapura Grand Mosque",
+    religion: "Islam",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Kekirawa Mosque",
+    religion: "Islam",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Mihintale Mosque",
+    religion: "Islam",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Anuradhapura Town Mosque",
+    religion: "Islam",
+    district: "Anuradhapura",
+  ),
+  ReligiousSite(
+    name: "Medawachchiya Mosque",
+    religion: "Islam",
+    district: "Anuradhapura",
+  ),
+];
