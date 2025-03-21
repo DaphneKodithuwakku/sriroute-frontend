@@ -440,4 +440,88 @@ final List<ReligiousSite> religiousSites = [
     district: "Jaffna",
   ),
 
-  
+  // Galle
+  ReligiousSite(
+    name: "Galle Buddhist Temple",
+    religion: "Buddhism",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "Rumassala Temple",
+    religion: "Buddhism",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "Unawatuna Temple",
+    religion: "Buddhism",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "Karandeniya Temple",
+    religion: "Buddhism",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "Hikkaduwa Temple",
+    religion: "Buddhism",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "Dutch Reformed Church",
+    religion: "Christianity",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "All Saints’ Church Galle",
+    religion: "Christianity",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "St. Mary’s Cathedral Galle",
+    religion: "Christianity",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "Galle Methodist Church",
+    religion: "Christianity",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "St. Aloysius Church",
+    religion: "Christianity",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "Nagavihara Kovil",
+    religion: "Hinduism",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "Sri Vishnu Kovil",
+    religion: "Hinduism",
+    district: "Galle",
+  ),
+  ReligiousSite(name: "Galle Kovil 1", religion: "Hinduism", district: "Galle"),
+  ReligiousSite(name: "Galle Kovil 2", religion: "Hinduism", district: "Galle"),
+  ReligiousSite(name: "Galle Kovil 3", religion: "Hinduism", district: "Galle"),
+  ReligiousSite(
+    name: "Meeran Jumma Mosque",
+    religion: "Islam",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "Galle Fort Mosque",
+    religion: "Islam",
+    district: "Galle",
+  ),
+  ReligiousSite(name: "Hikkaduwa Mosque", religion: "Islam", district: "Galle"),
+  ReligiousSite(
+    name: "Ambalangoda Mosque",
+    religion: "Islam",
+    district: "Galle",
+  ),
+  ReligiousSite(
+    name: "Galle Town Mosque",
+    religion: "Islam",
+    district: "Galle",
+  ),
