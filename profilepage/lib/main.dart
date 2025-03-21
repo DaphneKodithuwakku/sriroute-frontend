@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'homescreen.dart';
 import 'profile.dart';
 
 void main() {
@@ -11,9 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Profile Page',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
+      theme: ThemeData(primarySwatch: Colors.green),
       home: ProfilePage(),
     );
   }
