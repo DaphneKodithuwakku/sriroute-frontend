@@ -326,6 +326,51 @@ class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
           ],
         ),
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(Icons.home, color: Colors.white, size: 24),
+                onPressed: null, // No action
+              ),
+              IconButton(
+                icon: SimpleVRGlassesIcon(
+                  color: Colors.white.withOpacity(0.7),
+                  size: 34,
+                ),
+                onPressed: null, // No action
+              ),
+              IconButton(
+                icon: Icon(Icons.search, color: Colors.white, size: 24),
+                onPressed: null, // No action
+              ),
+              IconButton(
+                icon: Icon(Icons.menu_book, color: Colors.white, size: 24),
+                onPressed: null, // No action
+              ),
+              IconButton(
+                icon: Icon(Icons.person, color: Colors.white, size: 24),
+                onPressed: null, // No action
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -481,7 +526,7 @@ class ReligiousSite {
   final String name;
   final String religion;
   final String district;
-  final String imagePath; // Changed from imageUrl to imagePath
+  final String imagePath;
   final String description;
   final String googleMapsLink;
 
@@ -489,7 +534,7 @@ class ReligiousSite {
     required this.name,
     required this.religion,
     required this.district,
-    required this.imagePath, // Changed from imageUrl to imagePath
+    required this.imagePath,
     required this.description,
     required this.googleMapsLink,
   });
@@ -801,14 +846,6 @@ final List<ReligiousSite> religiousSites = [
     googleMapsLink: "https://maps.google.com/?q=Natha+Devale,Kandy",
   ),
   ReligiousSite(
-    name: "Sri Ganesh Kovil",
-    religion: "Hinduism",
-    district: "Kandy",
-    imagePath: "assets/images/Sri_Ganesh_Kovil.jpg",
-    description: "A Hindu temple dedicated to Lord Ganesha in Kandy.",
-    googleMapsLink: "https://maps.google.com/?q=Sri+Ganesh+Kovil,Kandy",
-  ),
-  ReligiousSite(
     name: "Kandy Jumma Mosque",
     religion: "Islam",
     district: "Kandy",
@@ -860,40 +897,6 @@ final List<ReligiousSite> religiousSites = [
     googleMapsLink: "https://maps.google.com/?q=Nagadeepa+Purana+Vihara,Jaffna",
   ),
   ReligiousSite(
-    name: "Nallur Buddhist Temple",
-    religion: "Buddhism",
-    district: "Jaffna",
-    imagePath: "assets/images/Nallur_Buddhist_Temple.jpg",
-    description: "A Buddhist temple in the Nallur area of Jaffna.",
-    googleMapsLink: "https://maps.google.com/?q=Nallur+Buddhist+Temple,Jaffna",
-  ),
-  ReligiousSite(
-    name: "Jaffna Viharaya 1",
-    religion: "Buddhism",
-    district: "Jaffna",
-    imagePath: "assets/images/Jaffna_Viharaya_1.jpg",
-    description:
-        "One of the Buddhist temples in Jaffna, serving the local community.",
-    googleMapsLink: "https://maps.google.com/?q=Jaffna+Viharaya+1,Jaffna",
-  ),
-  ReligiousSite(
-    name: "Jaffna Viharaya 2",
-    religion: "Buddhism",
-    district: "Jaffna",
-    imagePath: "assets/images/Jaffna_Viharaya_2.jpg",
-    description: "A Buddhist temple in Jaffna with cultural significance.",
-    googleMapsLink: "https://maps.google.com/?q=Jaffna+Viharaya+2,Jaffna",
-  ),
-  ReligiousSite(
-    name: "Jaffna Viharaya 3",
-    religion: "Buddhism",
-    district: "Jaffna",
-    imagePath: "assets/images/Jaffna_Viharaya_3.jpg",
-    description:
-        "Another Buddhist temple in Jaffna, promoting peace and meditation.",
-    googleMapsLink: "https://maps.google.com/?q=Jaffna+Viharaya+3,Jaffna",
-  ),
-  ReligiousSite(
     name: "St. James’ Church",
     religion: "Christianity",
     district: "Jaffna",
@@ -912,21 +915,12 @@ final List<ReligiousSite> religiousSites = [
   ),
   ReligiousSite(
     name: "Jaffna Methodist Church",
-    religion: "Christian security",
+    religion: "Christianity",
     district: "Jaffna",
     imagePath: "assets/images/Jaffna_Methodist_Church.jpg",
     description:
         "A Methodist church serving the Christian community in Jaffna.",
     googleMapsLink: "https://maps.google.com/?q=Jaffna+Methodist+Church,Jaffna",
-  ),
-  ReligiousSite(
-    name: "Our Lady of Refuge Church",
-    religion: "Christianity",
-    district: "Jaffna",
-    imagePath: "assets/images/Our_Lady_of_Refuge_Church.jpg",
-    description: "A Catholic church known for its devotion to the Virgin Mary.",
-    googleMapsLink:
-        "https://maps.google.com/?q=Our+Lady+of+Refuge+Church,Jaffna",
   ),
   ReligiousSite(
     name: "St. John’s Church",
@@ -956,15 +950,6 @@ final List<ReligiousSite> religiousSites = [
     googleMapsLink: "https://maps.google.com/?q=Naguleswaram+Temple,Jaffna",
   ),
   ReligiousSite(
-    name: "Maviddapuram Kandaswamy Kovil",
-    religion: "Hinduism",
-    district: "Jaffna",
-    imagePath: "assets/images/Maviddapuram_Kandaswamy_Kovil.jpg",
-    description: "A Hindu temple dedicated to Lord Murugan in Maviddapuram.",
-    googleMapsLink:
-        "https://maps.google.com/?q=Maviddapuram+Kandaswamy+Kovil,Jaffna",
-  ),
-  ReligiousSite(
     name: "Keerimalai Naguleswaram Kovil",
     religion: "Hinduism",
     district: "Jaffna",
@@ -991,14 +976,6 @@ final List<ReligiousSite> religiousSites = [
     googleMapsLink: "https://maps.google.com/?q=Jaffna+Jumma+Mosque,Jaffna",
   ),
   ReligiousSite(
-    name: "Osmaniya Mosque",
-    religion: "Islam",
-    district: "Jaffna",
-    imagePath: "assets/images/Osmaniya_Mosque.jpg",
-    description: "A notable mosque in Jaffna with historical significance.",
-    googleMapsLink: "https://maps.google.com/?q=Osmaniya+Mosque,Jaffna",
-  ),
-  ReligiousSite(
     name: "Grand Mosque Jaffna",
     religion: "Islam",
     district: "Jaffna",
@@ -1016,25 +993,8 @@ final List<ReligiousSite> religiousSites = [
         "A mosque in Chavakachcheri, catering to the local Muslim population.",
     googleMapsLink: "https://maps.google.com/?q=Chavakachcheri+Mosque,Jaffna",
   ),
-  ReligiousSite(
-    name: "Point Pedro Mosque",
-    religion: "Islam",
-    district: "Jaffna",
-    imagePath: "assets/images/Point_Pedro_Mosque.jpg",
-    description:
-        "A mosque in Point Pedro, a key religious site in northern Jaffna.",
-    googleMapsLink: "https://maps.google.com/?q=Point+Pedro+Mosque,Jaffna",
-  ),
 
   // Galle
-  ReligiousSite(
-    name: "Galle Buddhist Temple",
-    religion: "Buddhism",
-    district: "Galle",
-    imagePath: "assets/images/Galle_Buddhist_Temple.jpg",
-    description: "A Buddhist temple in Galle offering a peaceful retreat.",
-    googleMapsLink: "https://maps.google.com/?q=Galle+Buddhist+Temple,Galle",
-  ),
   ReligiousSite(
     name: "Rumassala Temple",
     religion: "Buddhism",
@@ -1042,31 +1002,6 @@ final List<ReligiousSite> religiousSites = [
     imagePath: "assets/images/Rumassala_Temple.jpg",
     description: "A temple on Rumassala Hill, linked to the Ramayana legend.",
     googleMapsLink: "https://maps.google.com/?q=Rumassala+Temple,Galle",
-  ),
-  ReligiousSite(
-    name: "Unawatuna Temple",
-    religion: "Buddhism",
-    district: "Galle",
-    imagePath: "assets/images/Unawatuna_Temple.jpg",
-    description:
-        "A Buddhist temple near Unawatuna beach, known for its serenity.",
-    googleMapsLink: "https://maps.google.com/?q=Unawatuna+Temple,Galle",
-  ),
-  ReligiousSite(
-    name: "Karandeniya Temple",
-    religion: "Buddhism",
-    district: "Galle",
-    imagePath: "assets/images/Karandeniya_Temple.jpg",
-    description: "A local Buddhist temple in Karandeniya, Galle district.",
-    googleMapsLink: "https://maps.google.com/?q=Karandeniya+Temple,Galle",
-  ),
-  ReligiousSite(
-    name: "Hikkaduwa Temple",
-    religion: "Buddhism",
-    district: "Galle",
-    imagePath: "assets/images/Hikkaduwa_Temple.jpg",
-    description: "A temple in Hikkaduwa, popular among tourists and locals.",
-    googleMapsLink: "https://maps.google.com/?q=Hikkaduwa+Temple,Galle",
   ),
   ReligiousSite(
     name: "Dutch Reformed Church",
@@ -1103,55 +1038,6 @@ final List<ReligiousSite> religiousSites = [
     googleMapsLink: "https://maps.google.com/?q=Galle+Methodist+Church,Galle",
   ),
   ReligiousSite(
-    name: "St. Aloysius Church",
-    religion: "Christianity",
-    district: "Galle",
-    imagePath: "assets/images/St_Aloysius_Church.jpg",
-    description: "A Catholic church in Galle with historical significance.",
-    googleMapsLink: "https://maps.google.com/?q=St+Aloysius+Church,Galle",
-  ),
-  ReligiousSite(
-    name: "Nagavihara Kovil",
-    religion: "Hinduism",
-    district: "Galle",
-    imagePath: "assets/images/Nagavihara_Kovil.jpg",
-    description: "A Hindu temple in Galle dedicated to Lord Vishnu.",
-    googleMapsLink: "https://maps.google.com/?q=Nagavihara+Kovil,Galle",
-  ),
-  ReligiousSite(
-    name: "Sri Vishnu Kovil",
-    religion: "Hinduism",
-    district: "Galle",
-    imagePath: "assets/images/Sri_Vishnu_Kovil.jpg",
-    description: "A temple dedicated to Lord Vishnu in the Galle district.",
-    googleMapsLink: "https://maps.google.com/?q=Sri+Vishnu+Kovil,Galle",
-  ),
-  ReligiousSite(
-    name: "Galle Kovil 1",
-    religion: "Hinduism",
-    district: "Galle",
-    imagePath: "assets/images/Galle_Kovil_1.jpg",
-    description: "A local Hindu temple in Galle serving the community.",
-    googleMapsLink: "https://maps.google.com/?q=Galle+Kovil+1,Galle",
-  ),
-  ReligiousSite(
-    name: "Galle Kovil 2",
-    religion: "Hinduism",
-    district: "Galle",
-    imagePath: "assets/images/Galle_Kovil_2.jpg",
-    description: "Another Hindu temple in Galle with traditional architecture.",
-    googleMapsLink: "https://maps.google.com/?q=Galle+Kovil+2,Galle",
-  ),
-  ReligiousSite(
-    name: "Galle Kovil 3",
-    religion: "Hinduism",
-    district: "Galle",
-    imagePath: "assets/images/Galle_Kovil_3.jpg",
-    description:
-        "A Hindu temple in Galle, part of the local religious landscape.",
-    googleMapsLink: "https://maps.google.com/?q=Galle+Kovil+3,Galle",
-  ),
-  ReligiousSite(
     name: "Meeran Jumma Mosque",
     religion: "Islam",
     district: "Galle",
@@ -1169,28 +1055,12 @@ final List<ReligiousSite> religiousSites = [
     googleMapsLink: "https://maps.google.com/?q=Galle+Fort+Mosque,Galle",
   ),
   ReligiousSite(
-    name: "Hikkaduwa Mosque",
-    religion: "Islam",
-    district: "Galle",
-    imagePath: "assets/images/Hikkaduwa_Mosque.jpg",
-    description: "A mosque in Hikkaduwa, popular among locals and visitors.",
-    googleMapsLink: "https://maps.google.com/?q=Hikkaduwa+Mosque,Galle",
-  ),
-  ReligiousSite(
     name: "Ambalangoda Mosque",
     religion: "Islam",
     district: "Galle",
     imagePath: "assets/images/Ambalangoda_Mosque.jpg",
     description: "A community mosque in Ambalangoda, Galle district.",
     googleMapsLink: "https://maps.google.com/?q=Ambalangoda+Mosque,Galle",
-  ),
-  ReligiousSite(
-    name: "Galle Town Mosque",
-    religion: "Islam",
-    district: "Galle",
-    imagePath: "assets/images/Galle_Town_Mosque.jpg",
-    description: "A mosque in Galle town, central to the Muslim population.",
-    googleMapsLink: "https://maps.google.com/?q=Galle+Town+Mosque,Galle",
   ),
 
   // Anuradhapura
@@ -1251,43 +1121,6 @@ final List<ReligiousSite> religiousSites = [
         "https://maps.google.com/?q=St+Joseph’s+Church,Anuradhapura",
   ),
   ReligiousSite(
-    name: "Anuradhapura Methodist Church",
-    religion: "Christianity",
-    district: "Anuradhapura",
-    imagePath: "assets/images/Anuradhapura_Methodist_Church.jpg",
-    description:
-        "A Methodist church in Anuradhapura with a growing congregation.",
-    googleMapsLink:
-        "https://maps.google.com/?q=Anuradhapura+Methodist+Church,Anuradhapura",
-  ),
-  ReligiousSite(
-    name: "Holy Family Church",
-    religion: "Christianity",
-    district: "Anuradhapura",
-    imagePath: "assets/images/Holy_Family_Church.jpg",
-    description:
-        "A Catholic church dedicated to the Holy Family in Anuradhapura.",
-    googleMapsLink:
-        "https://maps.google.com/?q=Holy+Family+Church,Anuradhapura",
-  ),
-  ReligiousSite(
-    name: "St. Mary’s Church",
-    religion: "Christianity",
-    district: "Anuradhapura",
-    imagePath: "assets/images/St_Mary’s_Church.jpg",
-    description: "A prominent Christian church in Anuradhapura.",
-    googleMapsLink: "https://maps.google.com/?q=St+Mary’s+Church,Anuradhapura",
-  ),
-  ReligiousSite(
-    name: "Church of Ceylon Anuradhapura",
-    religion: "Christianity",
-    district: "Anuradhapura",
-    imagePath: "assets/images/Church_of_Ceylon_Anuradhapura.jpg",
-    description: "An Anglican church in Anuradhapura with historical roots.",
-    googleMapsLink:
-        "https://maps.google.com/?q=Church+of+Ceylon+Anuradhapura,Anuradhapura",
-  ),
-  ReligiousSite(
     name: "Natha Devale",
     religion: "Hinduism",
     district: "Anuradhapura",
@@ -1315,25 +1148,6 @@ final List<ReligiousSite> religiousSites = [
     googleMapsLink: "https://maps.google.com/?q=Shiva+Devale+No+2,Anuradhapura",
   ),
   ReligiousSite(
-    name: "Anuradhapura Kovil 1",
-    religion: "Hinduism",
-    district: "Anuradhapura",
-    imagePath: "assets/images/Anuradhapura_Kovil_1.jpg",
-    description: "A local Hindu temple in Anuradhapura serving devotees.",
-    googleMapsLink:
-        "https://maps.google.com/?q=Anuradhapura+Kovil+1,Anuradhapura",
-  ),
-  ReligiousSite(
-    name: "Anuradhapura Kovil 2",
-    religion: "Hinduism",
-    district: "Anuradhapura",
-    imagePath: "assets/images/Anuradhapura_Kovil_2.jpg",
-    description:
-        "A Hindu temple in Anuradhapura with traditional architecture.",
-    googleMapsLink:
-        "https://maps.google.com/?q=Anuradhapura+Kovil+2,Anuradhapura",
-  ),
-  ReligiousSite(
     name: "Anuradhapura Grand Mosque",
     religion: "Islam",
     district: "Anuradhapura",
@@ -1343,23 +1157,6 @@ final List<ReligiousSite> religiousSites = [
         "https://maps.google.com/?q=Anuradhapura+Grand+Mosque,Anuradhapura",
   ),
   ReligiousSite(
-    name: "Kekirawa Mosque",
-    religion: "Islam",
-    district: "Anuradhapura",
-    imagePath: "assets/images/Kekirawa_Mosque.jpg",
-    description: "A mosque in Kekirawa, part of the Anuradhapura district.",
-    googleMapsLink: "https://maps.google.com/?q=Kekirawa+Mosque,Anuradhapura",
-  ),
-  ReligiousSite(
-    name: "Mihintale Mosque",
-    religion: "Islam",
-    district: "Anuradhapura",
-    imagePath: "assets/images/Mihintale_Mosque.jpg",
-    description:
-        "A mosque near Mihintale, serving the local Muslim population.",
-    googleMapsLink: "https://maps.google.com/?q=Mihintale+Mosque,Anuradhapura",
-  ),
-  ReligiousSite(
     name: "Anuradhapura Town Mosque",
     religion: "Islam",
     district: "Anuradhapura",
@@ -1367,15 +1164,5 @@ final List<ReligiousSite> religiousSites = [
     description: "A mosque in Anuradhapura town, a key religious site.",
     googleMapsLink:
         "https://maps.google.com/?q=Anuradhapura+Town+Mosque,Anuradhapura",
-  ),
-  ReligiousSite(
-    name: "Medawachchiya Mosque",
-    religion: "Islam",
-    district: "Anuradhapura",
-    imagePath: "assets/images/Medawachchiya_Mosque.jpg",
-    description:
-        "A mosque in Medawachchiya, part of the Anuradhapura district.",
-    googleMapsLink:
-        "https://maps.google.com/?q=Medawachchiya+Mosque,Anuradhapura",
   ),
 ];
