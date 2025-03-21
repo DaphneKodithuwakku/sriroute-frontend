@@ -36,7 +36,7 @@ class SignupSuccessPage extends StatelessWidget {
               ),
               const SizedBox(height: 30),
 
-              // Done Button → Navigates to Home Page
+              // Done Button will navigate to Home Page
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -50,7 +50,7 @@ class SignupSuccessPage extends StatelessWidget {
                   Navigator.pushNamed(
                     context,
                     "/home",
-                  ); // Redirect to Home Page
+                  ); // Will go to the App Home Page
                 },
                 child: const Text(
                   "Done",
