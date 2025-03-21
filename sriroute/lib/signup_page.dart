@@ -166,7 +166,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  // Validation for Inputs
+  // Validation for the user inputs
   bool _validateInputs() {
     if (_usernameController.text.isEmpty ||
         _emailController.text.isEmpty ||
