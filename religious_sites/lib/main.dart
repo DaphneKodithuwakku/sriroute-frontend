@@ -132,3 +132,15 @@ class ReligiousSitesList extends StatelessWidget {
     );
   }
 }
+
+class ReligiousSite {
+  final String name;
+  final String religion;
+  final String district;
+
+  ReligiousSite({
+    required this.name,
+    required this.religion,
+    required this.district,
+  });
+}
