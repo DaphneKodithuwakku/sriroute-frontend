@@ -86,3 +86,43 @@ class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
     );
   }
 }
+
+class ReligiousSitesList extends StatelessWidget {
+  final String? religion;
+  final String? district;
+
+  const ReligiousSitesList({this.religion, this.district});
+
+  @override
+  Widget build(BuildContext context) {
+    final filteredSites =
+        religiousSites.where((site) {
+          final matchesReligion = religion == null || site.religion == religion;
+          final matchesDistrict = district == null || site.district == district;
+          return matchesReligion && matchesDistrict;
+        }).toList();
+
+    if (religion == null || district == null) {
+      return const Center(
+        child: Text("Please select both a religion and a district."),
+      );
+    }
+
+    if (filteredSites.isEmpty) {
+      return const Center(
+        child: Text("No sites found for the selected criteria."),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: filteredSites.length,
+      itemBuilder: (context, index) {
+        final site = filteredSites[index];
+        return ListTile(
+          title: Text(site.name),
+          subtitle: Text("${site.religion} - ${site.district}"),
+        );
+      },
+    );
+  }
+}
