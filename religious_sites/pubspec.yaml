@@ -35,10 +35,16 @@ flutter:
   # Ensures Material Icons are included for use in the app
   uses-material-design: true
 
-  # Uncomment and add assets here if you include images or other files
-  # assets:
-  #   - images/temple_icon.png
-  #   - images/church_icon.png
+  # Define all assets (images) used in the app
+  assets:
+    - assets/images/Gangaramaya_Temple.jpg  # This includes all images in the assets/images/ folder
+    # Alternatively, list all images explicitly (uncomment below if preferred):
+    # - assets/images/Gangaramaya_Temple.jpg
+    # - assets/images/Kelaniya_Raja_Maha_Vihara.jpg
+    # - assets/images/Asokaramaya_Temple.jpg
+    # - assets/images/Vajira_Sri_Temple.jpg
+    # - assets/images/Isipathanaramaya_Temple.jpg
+    # ... (add all other image paths from your ReligiousSite objects)
 
   # Uncomment and configure custom fonts here if you want to use local font files
   # fonts:
