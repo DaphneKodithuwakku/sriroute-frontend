@@ -5,8 +5,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: ReligiousSitesPage());
@@ -14,10 +12,7 @@ class MyApp extends StatelessWidget {
 }
 
 class ReligiousSitesPage extends StatefulWidget {
-  const ReligiousSitesPage({super.key});
-
   @override
-  // ignore: library_private_types_in_public_api
   _ReligiousSitesPageState createState() => _ReligiousSitesPageState();
 }
 
@@ -47,6 +42,7 @@ class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            // Religion Dropdown
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: "Select Religion"),
               value: selectedReligion,
@@ -64,6 +60,7 @@ class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
               },
             ),
             const SizedBox(height: 16.0),
+            // District Dropdown
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: "Select District"),
               value: selectedDistrict,
@@ -80,6 +77,14 @@ class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
                 });
               },
             ),
+            const SizedBox(height: 20.0),
+            // Results
+            Expanded(
+              child: ReligiousSitesList(
+                religion: selectedReligion,
+                district: selectedDistrict,
+              ),
+            ),
           ],
         ),
       ),
@@ -95,6 +100,7 @@ class ReligiousSitesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Filter sites based on selected religion and district
     final filteredSites =
         religiousSites.where((site) {
           final matchesReligion = religion == null || site.religion == religion;
@@ -126,64 +132,3 @@ class ReligiousSitesList extends StatelessWidget {
     );
   }
 }
-
-class ReligiousSite {
-  final String name;
-  final String religion;
-  final String district;
-
-  ReligiousSite({
-    required this.name,
-    required this.religion,
-    required this.district,
-  });
-}
-
-final List<ReligiousSite> religiousSites = [
-  ReligiousSite(
-    name: "Gangaramaya Temple",
-    religion: "Buddhism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "St. Anthony’s Shrine",
-    religion: "Christianity",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Sri Kailawasanathan Swami Devasthanam",
-    religion: "Hinduism",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Jami Ul-Alfar Mosque",
-    religion: "Islam",
-    district: "Colombo",
-  ),
-  ReligiousSite(
-    name: "Temple of the Tooth",
-    religion: "Buddhism",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "St. Paul’s Church",
-    religion: "Christianity",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Kandy Jumma Mosque",
-    religion: "Islam",
-    district: "Kandy",
-  ),
-  ReligiousSite(
-    name: "Nagadeepa Purana Vihara",
-    religion: "Buddhism",
-    district: "Jaffna",
-  ),
-];
-Expanded(
-  child: ReligiousSitesList(
-    religion: selectedReligion,
-    district: selectedDistrict,
-  ),
-),
