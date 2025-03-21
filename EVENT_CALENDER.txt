@@ -18,3 +18,26 @@ National Holidays
  - May DayDate: May 1, 2025Location: NationwideDescription: A global day for workers' rights.
 
 - Christmas DayDate: December 25, 2025Location: NationwideDescription: Celebration of the birth of Jesus Christ.
+
+
+Buddhist Observances (Poya Days)
+
+- Medin Full Moon Poya DayDate: February 13, 2025Location: NationwideDescription: A Buddhist observance.
+
+- Bak Full Moon Poya DayDate: April 12, 2025Location: NationwideDescription: A Buddhist observance.
+
+- Vesak Full Moon Poya DayDate: May 5, 2025Location: NationwideDescription: A significant Buddhist holiday in Sri Lanka.
+
+- Poson Full Moon Poya DayDate: June 10, 2025Location: NationwideDescription: A Buddhist observance.
+
+- Esala Full Moon Poya DayDate: July 10, 2025Location: NationwideDescription: A Buddhist observance.
+
+- Nikini Full Moon Poya DayDate: August 8, 2025Location: NationwideDescription: A Buddhist observance.
+
+- Binara Full Moon Poya DayDate: September 7, 2025Location: NationwideDescription: A Buddhist observance.
+
+- Vap Full Moon Poya DayDate: October 6, 2025Location: NationwideDescription: A Buddhist observance.
+
+- Ill Full Moon Poya DayDate: November 5, 2025Location: NationwideDescription: A Buddhist observance.
+
+- Unduvap Full Moon Poya DayDate: December 4, 2025Location: NationwideDescription: A Buddhist observance.
