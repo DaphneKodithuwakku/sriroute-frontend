@@ -144,3 +144,105 @@ class ReligiousSite {
     required this.district,
   });
 }
+final List<ReligiousSite> religiousSites = [
+  // Colombo
+  ReligiousSite(
+    name: "Gangaramaya Temple",
+    religion: "Buddhism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Kelaniya Raja Maha Vihara",
+    religion: "Buddhism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Asokaramaya Temple",
+    religion: "Buddhism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Vajira Sri Temple",
+    religion: "Buddhism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Isipathanaramaya Temple",
+    religion: "Buddhism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "St. Anthony’s Shrine",
+    religion: "Christianity",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Wolvendaal Church",
+    religion: "Christianity",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "St. Lucia’s Cathedral",
+    religion: "Christianity",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "All Saints’ Church",
+    religion: "Christianity",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "St. Andrew’s Scots Kirk",
+    religion: "Christianity",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Sri Kailawasanathan Swami Devasthanam",
+    religion: "Hinduism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "New Kathiresan Kovil",
+    religion: "Hinduism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Old Kathiresan Kovil",
+    religion: "Hinduism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Sri Ponnambalawaneswaram Kovil",
+    religion: "Hinduism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Sri Muthumariamman Kovil",
+    religion: "Hinduism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Jami Ul-Alfar Mosque",
+    religion: "Islam",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Dewatagaha Mosque",
+    religion: "Islam",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Colombo Grand Mosque",
+    religion: "Islam",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Kollupitiya Mosque",
+    religion: "Islam",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Maradana Mosque",
+    religion: "Islam",
+    district: "Colombo",
+  ),
