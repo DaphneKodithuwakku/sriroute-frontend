@@ -126,3 +126,58 @@ class ReligiousSitesList extends StatelessWidget {
     );
   }
 }
+
+class ReligiousSite {
+  final String name;
+  final String religion;
+  final String district;
+
+  ReligiousSite({
+    required this.name,
+    required this.religion,
+    required this.district,
+  });
+}
+
+final List<ReligiousSite> religiousSites = [
+  ReligiousSite(
+    name: "Gangaramaya Temple",
+    religion: "Buddhism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "St. Anthony’s Shrine",
+    religion: "Christianity",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Sri Kailawasanathan Swami Devasthanam",
+    religion: "Hinduism",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Jami Ul-Alfar Mosque",
+    religion: "Islam",
+    district: "Colombo",
+  ),
+  ReligiousSite(
+    name: "Temple of the Tooth",
+    religion: "Buddhism",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "St. Paul’s Church",
+    religion: "Christianity",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Kandy Jumma Mosque",
+    religion: "Islam",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Nagadeepa Purana Vihara",
+    religion: "Buddhism",
+    district: "Jaffna",
+  ),
+];
