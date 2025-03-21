@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-
-import 'signup_page.dart'; // Import Signup Page
-import 'completion_page.dart'; // Import Completion Page
-import 'signup_success_page.dart'; // Import Signup Success Page
+import 'signup_page.dart';
+import 'completion_page.dart';
+import 'signup_success_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -18,12 +17,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.green),
       home: const LoginPage(),
       routes: {
-        "/signup": (context) => const SignUpPage(), // Route for SignUp Page
+        "/signup": (context) => const SignUpPage(), // Route for the signUp page
         "/completion":
             (context) =>
-                const SignupCompletionPage(), // Route for Completion Page
+                const SignupCompletionPage(), // Route for the sign up completion page
         "/signup-success":
-            (context) => const SignupSuccessPage(), // ✅ Route for Success Page
+            (context) =>
+                const SignupSuccessPage(), // ✅ Route for the sign in success page
       },
     );
   }
@@ -43,22 +43,21 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Welcome Text
               const Text(
                 "Hello! Welcome to Sri Route!",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const Text(
-                "Let's get started.",
+                "Let's get started!",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
               const SizedBox(height: 40),
 
-              // Username Field
+              // Enter Username
               buildTextField(hintText: "Username", icon: Icons.person),
               const SizedBox(height: 15),
 
-              // Password Field
+              // Enter Password
               buildTextField(
                 hintText: "Password",
                 icon: Icons.lock,
@@ -112,7 +111,7 @@ class LoginPage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Navigation to Signup Page
+              // Navigation to the Signup page
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
