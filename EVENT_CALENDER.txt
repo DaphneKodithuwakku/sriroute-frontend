@@ -41,3 +41,10 @@ Buddhist Observances (Poya Days)
 - Ill Full Moon Poya DayDate: November 5, 2025Location: NationwideDescription: A Buddhist observance.
 
 - Unduvap Full Moon Poya DayDate: December 4, 2025Location: NationwideDescription: A Buddhist observance.
+
+
+Hindu Festivals
+
+- Maha Shivaratri DayDate: February 26, 2025Location: NationwideDescription: A Hindu festival.
+
+- Deepavali Festival DayDate: October 20, 2025Location: NationwideDescription: Celebration of the Hindu Festival of Lights.
