@@ -6,9 +6,13 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey =
+        GlobalKey<ScaffoldState>(); // Create Scaffold key
+
     return Scaffold(
+      key: _scaffoldKey, // Assign the key to Scaffold
       backgroundColor: Colors.white,
-      drawer: SidePanel(), // Add the Side Panel here
+      drawer: SidePanel(), // Attach the Side Panel
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -18,7 +22,8 @@ class HomeScreen extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.menu, color: Colors.white), // Three lines icon
               onPressed: () {
-                Scaffold.of(context).openDrawer(); // Open the drawer
+                _scaffoldKey.currentState
+                    ?.openDrawer(); // Use GlobalKey to open the drawer
               },
             ),
             flexibleSpace: FlexibleSpaceBar(
