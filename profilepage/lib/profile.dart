@@ -51,8 +51,8 @@ class ProfilePage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EditProfilePage())
-              )
+                MaterialPageRoute(builder: (context) => EditProfilePage()),
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
