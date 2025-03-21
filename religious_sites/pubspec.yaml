@@ -37,7 +37,7 @@ flutter:
 
   # Define all assets (images) used in the app
   assets:
-    - assets/images/Gangaramaya_Temple.jpg 
+    # Colombo
     - assets/images/Gangaramaya_Temple.jpg
     - assets/images/Kelaniya_Raja_Maha_Vihara.jpg
     - assets/images/Asokaramaya_Temple.jpg
@@ -52,33 +52,9 @@ flutter:
     - assets/images/New_Kathiresan_Kovil.jpg
     - assets/images/Old_Kathiresan_Kovil.jpg
     - assets/images/Sri_Ponnambalawaneswaram_Kovil.jpg
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-    -
-
-    -
-    -
-    -
-    
-  
-
-  # Uncomment and configure custom fonts here if you want to use local font files
-  # fonts:
-  #   - family: Poppins
-  #     fonts:
-  #       - asset: fonts/Poppins-Regular.ttf
-  #       - asset: fonts/Poppins-Bold.ttf
-  #         weight: 700
+    - assets/images/Sri_Muthumariamman_Kovil.jpg
+    - assets/images/Jami_Ul-Alfar_Mosque.jpg
+    - assets/images/Dewatagaha_Mosque.jpg
+    - assets/images/Colombo_Grand_Mosque.jpg
+    - assets/images/Kollupitiya_Mosque.jpg
+    - assets/images/Maradana_Mosque.jpg
