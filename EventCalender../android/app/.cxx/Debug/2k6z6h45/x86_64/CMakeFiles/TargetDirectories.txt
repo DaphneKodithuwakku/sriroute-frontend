@@ -1,0 +1,2 @@
+/Users/mohamedamhar/Desktop/EventCalender../android/app/.cxx/Debug/2k6z6h45/x86_64/CMakeFiles/edit_cache.dir
+/Users/mohamedamhar/Desktop/EventCalender../android/app/.cxx/Debug/2k6z6h45/x86_64/CMakeFiles/rebuild_cache.dir

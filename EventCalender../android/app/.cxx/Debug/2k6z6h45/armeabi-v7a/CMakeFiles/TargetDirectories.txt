@@ -1,0 +1,2 @@
+/Users/mohamedamhar/Desktop/EventCalender../android/app/.cxx/Debug/2k6z6h45/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/mohamedamhar/Desktop/EventCalender../android/app/.cxx/Debug/2k6z6h45/armeabi-v7a/CMakeFiles/rebuild_cache.dir
