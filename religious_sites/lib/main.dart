@@ -181,3 +181,9 @@ final List<ReligiousSite> religiousSites = [
     district: "Jaffna",
   ),
 ];
+Expanded(
+  child: ReligiousSitesList(
+    religion: selectedReligion,
+    district: selectedDistrict,
+  ),
+),
