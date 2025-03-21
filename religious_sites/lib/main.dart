@@ -342,4 +342,102 @@ final List<ReligiousSite> religiousSites = [
     district: "Kandy",
   ),
 
- 
+  // Jaffna
+  ReligiousSite(
+    name: "Nagadeepa Purana Vihara",
+    religion: "Buddhism",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Nallur Buddhist Temple",
+    religion: "Buddhism",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Jaffna Viharaya 1",
+    religion: "Buddhism",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Jaffna Viharaya 2",
+    religion: "Buddhism",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Jaffna Viharaya 3",
+    religion: "Buddhism",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "St. James’ Church",
+    religion: "Christianity",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "St. Mary’s Cathedral",
+    religion: "Christianity",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Jaffna Methodist Church",
+    religion: "Christianity",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Our Lady of Refuge Church",
+    religion: "Christianity",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "St. John’s Church",
+    religion: "Christianity",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Nallur Kandaswamy Temple",
+    religion: "Hinduism",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Naguleswaram Temple",
+    religion: "Hinduism",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Maviddapuram Kandaswamy Kovil",
+    religion: "Hinduism",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Keerimalai Naguleswaram Kovil",
+    religion: "Hinduism",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Vallipuram Kovil",
+    religion: "Hinduism",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Jaffna Jumma Mosque",
+    religion: "Islam",
+    district: "Jaffna",
+  ),
+  ReligiousSite(name: "Osmaniya Mosque", religion: "Islam", district: "Jaffna"),
+  ReligiousSite(
+    name: "Grand Mosque Jaffna",
+    religion: "Islam",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Chavakachcheri Mosque",
+    religion: "Islam",
+    district: "Jaffna",
+  ),
+  ReligiousSite(
+    name: "Point Pedro Mosque",
+    religion: "Islam",
+    district: "Jaffna",
+  ),
+
+  
