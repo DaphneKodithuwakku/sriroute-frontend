@@ -7,16 +7,36 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  TextEditingController nameController = TextEditingController(text: "Jenny Peters");
-  TextEditingController emailController = TextEditingController(text: "jenny@gmail.com");
-  TextEditingController passwordController = TextEditingController(text: "********");
-  TextEditingController dobController = TextEditingController(text: "23/05/1995");
+  TextEditingController nameController = TextEditingController(
+    text: "Jenny Peters",
+  );
+  TextEditingController emailController = TextEditingController(
+    text: "jenny@gmail.com",
+  );
+  TextEditingController passwordController = TextEditingController(
+    text: "********",
+  );
+  TextEditingController dobController = TextEditingController(
+    text: "23/05/1995",
+  );
 
   String selectedCountry = "Canada";
   String selectedReligion = "Christianity";
 
-  final List<String> countries = ["Sri Lanka", "India", "USA", "Canada", "UK", "Australia"];
-  final List<String> religions = ["Hinduism", "Islam", "Buddhism", "Christianity"];
+  final List<String> countries = [
+    "Sri Lanka",
+    "India",
+    "USA",
+    "Canada",
+    "UK",
+    "Australia",
+  ];
+  final List<String> religions = [
+    "Hinduism",
+    "Islam",
+    "Buddhism",
+    "Christianity",
+  ];
 
   Future<void> _selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
@@ -62,9 +82,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
                 Container(
                   padding: EdgeInsets.all(4),
-                  decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                  ),
                   child: Icon(Icons.camera_alt, color: Colors.white, size: 18),
-                )
+                ),
               ],
             ),
             SizedBox(height: 20),
@@ -72,7 +95,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _buildTextField("Email", emailController),
             _buildTextField("Password", passwordController, obscureText: true),
             _buildDateField("Date of Birth", dobController, context),
-            _buildDropdown("Country/Region", selectedCountry, countries, (value) {
+            _buildDropdown("Country/Region", selectedCountry, countries, (
+              value,
+            ) {
               setState(() {
                 selectedCountry = value!;
               });
@@ -87,10 +112,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 padding: EdgeInsets.symmetric(horizontal: 50, vertical: 12),
               ),
-              child: Text('Save changes', style: TextStyle(color: Colors.white, fontSize: 16)),
+              child: Text(
+                'Save changes',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
             ),
           ],
         ),
@@ -98,7 +128,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller, {bool obscureText = false}) {
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller, {
+    bool obscureText = false,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -115,7 +149,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildDateField(String label, TextEditingController controller, BuildContext context) {
+  Widget _buildDateField(
+    String label,
+    TextEditingController controller,
+    BuildContext context,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -127,7 +165,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             child: TextField(
               controller: controller,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 suffixIcon: Icon(Icons.calendar_today),
               ),
             ),
@@ -137,7 +177,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildDropdown(String label, String selectedValue, List<String> items, Function(String?) onChanged) {
+  Widget _buildDropdown(
+    String label,
+    String selectedValue,
+    List<String> items,
+    Function(String?) onChanged,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -146,9 +191,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
         DropdownButtonFormField<String>(
           value: selectedValue,
           onChanged: onChanged,
-          items: items.map((item) {
-            return DropdownMenuItem(value: item, child: Text(item));
-          }).toList(),
+          items:
+              items.map((item) {
+                return DropdownMenuItem(value: item, child: Text(item));
+              }).toList(),
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
