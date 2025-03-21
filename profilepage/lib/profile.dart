@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:profilepage/editprofile.dart';
+import 'homescreen.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -8,7 +9,12 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+          },
         ),
         title: Text(
           'Profile',
