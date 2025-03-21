@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(MyApp());
@@ -7,7 +8,14 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: ReligiousSitesPage());
+    return MaterialApp(
+      home: ReligiousSitesPage(),
+      theme: ThemeData(
+        primaryColor: Colors.teal,
+        scaffoldBackgroundColor: Colors.grey[100],
+        textTheme: GoogleFonts.poppinsTextTheme(),
+      ),
+    );
   }
 }
 
@@ -37,14 +45,39 @@ class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Religious Sites in Sri Lanka")),
+      appBar: AppBar(
+        title: Text(
+          "Religious Sites",
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.transparent, // No color behind the title
+        elevation: 0, // Flat look, no shadow
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             // Religion Dropdown
             DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: "Select Religion"),
+              decoration: InputDecoration(
+                labelText: "Select Religion",
+                labelStyle: const TextStyle(color: Colors.teal),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.account_balance,
+                  color: Colors.teal,
+                ),
+              ),
               value: selectedReligion,
               items:
                   religions.map((religion) {
@@ -62,7 +95,16 @@ class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
             const SizedBox(height: 16.0),
             // District Dropdown
             DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: "Select District"),
+              decoration: InputDecoration(
+                labelText: "Select District",
+                labelStyle: const TextStyle(color: Colors.teal),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(Icons.location_on, color: Colors.teal),
+              ),
               value: selectedDistrict,
               items:
                   districts.map((district) {
@@ -98,9 +140,24 @@ class ReligiousSitesList extends StatelessWidget {
 
   const ReligiousSitesList({this.religion, this.district});
 
+  // Religion-specific icons
+  IconData _getReligionIcon(String religion) {
+    switch (religion) {
+      case "Buddhism":
+        return Icons.temple_buddhist;
+      case "Christianity":
+        return Icons.church;
+      case "Hinduism":
+        return Icons.temple_hindu;
+      case "Islam":
+        return Icons.mosque;
+      default:
+        return Icons.place;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Filter sites based on selected religion and district
     final filteredSites =
         religiousSites.where((site) {
           final matchesReligion = religion == null || site.religion == religion;
@@ -109,14 +166,20 @@ class ReligiousSitesList extends StatelessWidget {
         }).toList();
 
     if (religion == null || district == null) {
-      return const Center(
-        child: Text("Please select both a religion and a district."),
+      return Center(
+        child: Text(
+          "Please select both a religion and a district.",
+          style: GoogleFonts.poppins(color: Colors.grey[600], fontSize: 16),
+        ),
       );
     }
 
     if (filteredSites.isEmpty) {
-      return const Center(
-        child: Text("No sites found for the selected criteria."),
+      return Center(
+        child: Text(
+          "No sites found for the selected criteria.",
+          style: GoogleFonts.poppins(color: Colors.grey[600], fontSize: 16),
+        ),
       );
     }
 
@@ -124,9 +187,40 @@ class ReligiousSitesList extends StatelessWidget {
       itemCount: filteredSites.length,
       itemBuilder: (context, index) {
         final site = filteredSites[index];
-        return ListTile(
-          title: Text(site.name),
-          subtitle: Text("${site.religion} - ${site.district}"),
+        return FadeTransition(
+          opacity: CurvedAnimation(
+            parent: ModalRoute.of(context)!.animation!,
+            curve: Curves.easeIn,
+          ),
+          child: Card(
+            elevation: 4.0,
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.teal.withOpacity(0.1),
+                child: Icon(
+                  _getReligionIcon(site.religion),
+                  color: Colors.teal,
+                ),
+              ),
+              title: Text(
+                site.name,
+                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                "${site.religion} - ${site.district}",
+                style: GoogleFonts.poppins(color: Colors.grey[600]),
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Colors.teal,
+              ),
+            ),
+          ),
         );
       },
     );
