@@ -30,13 +30,13 @@ class _SignUpPageState extends State<SignUpPage> {
             () =>
                 FocusScope.of(
                   context,
-                ).unfocus(), // Hide keyboard when tapping outside
+                ).unfocus(), // Hide the keyboard when tapping outside
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
+              // Header part
               const Center(
                 child: Column(
                   children: [
@@ -105,7 +105,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 20),
 
-              // Continue Button → **Navigates to Completion Page**
+              // Continue Button will navigates to completion page**
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
