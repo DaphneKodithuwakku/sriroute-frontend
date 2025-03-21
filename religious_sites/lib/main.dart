@@ -144,6 +144,7 @@ class ReligiousSite {
     required this.district,
   });
 }
+
 final List<ReligiousSite> religiousSites = [
   // Colombo
   ReligiousSite(
@@ -246,3 +247,99 @@ final List<ReligiousSite> religiousSites = [
     religion: "Islam",
     district: "Colombo",
   ),
+
+  // Kandy
+  ReligiousSite(
+    name: "Temple of the Tooth",
+    religion: "Buddhism",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Lankatilaka Vihara",
+    religion: "Buddhism",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Gadaladeniya Vihara",
+    religion: "Buddhism",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Embekka Devalaya",
+    religion: "Buddhism",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Degaldoruwa Raja Maha Vihara",
+    religion: "Buddhism",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "St. Paul’s Church",
+    religion: "Christianity",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Trinity College Chapel",
+    religion: "Christianity",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "St. Anthony’s Cathedral",
+    religion: "Christianity",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Church of Ceylon",
+    religion: "Christianity",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Kandy Methodist Church",
+    religion: "Christianity",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Kataragama Devale",
+    religion: "Hinduism",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Sri Maha Vishnu Devale",
+    religion: "Hinduism",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Pattini Devale",
+    religion: "Hinduism",
+    district: "Kandy",
+  ),
+  ReligiousSite(name: "Natha Devale", religion: "Hinduism", district: "Kandy"),
+  ReligiousSite(
+    name: "Sri Ganesh Kovil",
+    religion: "Hinduism",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Kandy Jumma Mosque",
+    religion: "Islam",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Meera Makam Mosque",
+    religion: "Islam",
+    district: "Kandy",
+  ),
+  ReligiousSite(name: "Hanafi Mosque", religion: "Islam", district: "Kandy"),
+  ReligiousSite(
+    name: "Katugastota Mosque",
+    religion: "Islam",
+    district: "Kandy",
+  ),
+  ReligiousSite(
+    name: "Peradeniya Mosque",
+    religion: "Islam",
+    district: "Kandy",
+  ),
+
+ 
