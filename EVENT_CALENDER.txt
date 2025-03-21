@@ -7,3 +7,14 @@ Event calender provides the upcoming cultural events in the srilanka
 Problem: Travelers miss important religious events.
 Solution: A smart, color-coded religious event calendar.
 Why We Stand Out: Multi-religion focus, smart alerts, and location-based notifications
+
+Sri Lanka Public and Religious Holidays - 2025
+
+
+National Holidays
+
+- Independence DayDate: February 4, 2025Location: NationwideDescription: Celebration of Sri Lanka's independence.
+
+ - May DayDate: May 1, 2025Location: NationwideDescription: A global day for workers' rights.
+
+- Christmas DayDate: December 25, 2025Location: NationwideDescription: Celebration of the birth of Jesus Christ.
