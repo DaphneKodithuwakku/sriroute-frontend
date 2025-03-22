@@ -14,10 +14,11 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  
+
   String? selectedLanguage = 'English'; // Default language
   bool agreeToTerms = false;
   bool _isLoading = false;
@@ -61,30 +62,33 @@ class _SignUpPageState extends State<SignUpPage> {
 
       try {
         // Step 1: Create the user account
-        final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        );
-        
+        final UserCredential userCredential = await _auth
+            .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+            );
+
         // Step 2: Save user details to SharedPreferences
         await UserService.saveUsername(_usernameController.text.trim());
-        
+
         // Step 3: Save language preference
         final prefs = await SharedPreferences.getInstance();
         if (selectedLanguage != null) {
           await prefs.setString('language', selectedLanguage!);
         }
-        
-        // Set onboarding as completed 
+
+        // Set onboarding as completed
         await prefs.setBool('showWelcome', false);
-        
+
         // Update Firebase profile with username
-        await userCredential.user?.updateDisplayName(_usernameController.text.trim());
+        await userCredential.user?.updateDisplayName(
+          _usernameController.text.trim(),
+        );
         await userCredential.user?.reload();
-        
+
         // Force data refresh
         await UserService.loadUserData();
-        
+
         if (mounted) {
           // Navigate to success page
           Navigator.pushReplacementNamed(context, "/signup-success");
@@ -158,7 +162,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                
+
                 // Error message
                 if (_errorMessage != null)
                   Container(
@@ -189,7 +193,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.person, color: Colors.black),
                     hintText: "Username",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -209,7 +215,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.email, color: Colors.black),
                     hintText: "Email address",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
@@ -230,10 +238,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.lock, color: Colors.black),
                     hintText: "Password",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                        _isPasswordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                         color: Colors.grey,
                       ),
                       onPressed: () {
@@ -255,22 +267,30 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                 ),
                 const SizedBox(height: 15),
-                
+
                 // Confirm Password Input
                 TextFormField(
                   controller: _confirmPasswordController,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock_outline, color: Colors.black),
+                    prefixIcon: const Icon(
+                      Icons.lock_outline,
+                      color: Colors.black,
+                    ),
                     hintText: "Confirm Password",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _isConfirmPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                        _isConfirmPasswordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                         color: Colors.grey,
                       ),
                       onPressed: () {
                         setState(() {
-                          _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                          _isConfirmPasswordVisible =
+                              !_isConfirmPasswordVisible;
                         });
                       },
                     ),
@@ -292,13 +312,16 @@ class _SignUpPageState extends State<SignUpPage> {
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.language, color: Colors.black),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     hintText: "Select language",
                   ),
                   value: selectedLanguage,
-                  items: languages.map((lang) {
-                    return DropdownMenuItem(value: lang, child: Text(lang));
-                  }).toList(),
+                  items:
+                      languages.map((lang) {
+                        return DropdownMenuItem(value: lang, child: Text(lang));
+                      }).toList(),
                   onChanged: (value) {
                     setState(() {
                       selectedLanguage = value;
@@ -306,3 +329,93 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                 ),
                 const SizedBox(height: 20),
+                // Terms & Conditions Checkbox
+                Row(
+                  children: [
+                    Checkbox(
+                      value: agreeToTerms,
+                      activeColor: Colors.green,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          agreeToTerms = value!;
+                        });
+                      },
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            agreeToTerms = !agreeToTerms;
+                          });
+                        },
+                        child: const Text("I agree with Terms & Conditions"),
+                      ),
+                    ),
+                  ],
+                ),
+                if (!agreeToTerms &&
+                    _formKey.currentState != null &&
+                    _formKey.currentState!.validate())
+                  const Padding(
+                    padding: EdgeInsets.only(left: 12.0),
+                    child: Text(
+                      'You must agree to the Terms & Conditions',
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
+                const SizedBox(height: 20),
+
+                // Sign Up Button
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: _signUp,
+                      child: const Text(
+                        "Create Account",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+
+                const SizedBox(height: 20),
+
+                // Already have an account?
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Already have an account? "),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        "Log In",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+}
