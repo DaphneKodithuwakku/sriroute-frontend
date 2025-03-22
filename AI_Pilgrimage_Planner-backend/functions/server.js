@@ -43,7 +43,7 @@ const locations = [
       costEstimate: 200,
       travelTime: 1,
       imageUrl: 'path/to/st-anthonys.jpg',
-      coordinates: { lat: 6.9271, lng: 79.8612 }
+      coordinates: { lat: 6.9271, lng: 79.8613 }
     }
 ];
 
