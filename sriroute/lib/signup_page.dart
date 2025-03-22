@@ -182,4 +182,127 @@ class _SignUpPageState extends State<SignUpPage> {
                       ],
                     ),
                   ),
-  }
+
+                // Username Input
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.person, color: Colors.black),
+                    hintText: "Username",
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a username';
+                    }
+                    if (value.length < 3) {
+                      return 'Username must be at least 3 characters';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+
+                // Email Input
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.email, color: Colors.black),
+                    hintText: "Email address",
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!_isValidEmail(value)) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+
+                // Password Input
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock, color: Colors.black),
+                    hintText: "Password",
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  obscureText: !_isPasswordVisible,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a password';
+                    }
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                
+                // Confirm Password Input
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock_outline, color: Colors.black),
+                    hintText: "Confirm Password",
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isConfirmPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  obscureText: !_isConfirmPasswordVisible,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please confirm your password';
+                    }
+                    if (value != _passwordController.text) {
+                      return 'Passwords do not match';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+
+                // Language Selection Dropdown
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.language, color: Colors.black),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    hintText: "Select language",
+                  ),
+                  value: selectedLanguage,
+                  items: languages.map((lang) {
+                    return DropdownMenuItem(value: lang, child: Text(lang));
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedLanguage = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
