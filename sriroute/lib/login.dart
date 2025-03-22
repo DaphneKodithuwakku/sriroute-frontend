@@ -44,49 +44,51 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  
+
   bool _isLoading = false;
   String? _errorMessage;
   bool _obscurePassword = true;
-  
+
   // Email & Password Sign In
   Future<void> _signInWithEmailAndPassword() async {
-    if (_emailController.text.trim().isEmpty || _passwordController.text.isEmpty) {
+    if (_emailController.text.trim().isEmpty ||
+        _passwordController.text.isEmpty) {
       setState(() {
         _errorMessage = "Please enter both email and password";
       });
       return;
     }
-    
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
-    
+
     try {
       final credential = await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-      
+
       debugPrint("User signed in: ${credential.user?.uid}");
-      
+
       // Get username from Firebase or set default
       String username = "User";
-      if (credential.user?.displayName != null && credential.user!.displayName!.isNotEmpty) {
+      if (credential.user?.displayName != null &&
+          credential.user!.displayName!.isNotEmpty) {
         username = credential.user!.displayName!;
       }
-      
+
       // Save the username
       await UserService.saveUsername(username);
-      
+
       // Mark welcome screens as completed
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('showWelcome', false);
-      
+
       // Force refresh user service data
       await UserService.loadUserData();
-      
+
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/home');
       }
@@ -106,12 +108,13 @@ class _LoginPageState extends State<LoginPage> {
           message = 'This user account has been disabled.';
           break;
         case 'too-many-requests':
-          message = 'Too many unsuccessful login attempts. Please try again later.';
+          message =
+              'Too many unsuccessful login attempts. Please try again later.';
           break;
         default:
           message = e.message ?? 'An error occurred during sign in.';
       }
-      
+
       setState(() {
         _errorMessage = message;
       });
@@ -129,18 +132,18 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
-  
+
   // Google Sign In
   Future<void> _signInWithGoogle() async {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
-    
+
     try {
       // Begin Google sign in process
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      
+
       if (googleUser == null) {
         // User cancelled the sign-in flow
         setState(() {
@@ -148,37 +151,39 @@ class _LoginPageState extends State<LoginPage> {
         });
         return;
       }
-      
+
       // Get authentication details from Google
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
       // Create credential for Firebase
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      
+
       // Sign in to Firebase with the Google credential
       final userCredential = await _auth.signInWithCredential(credential);
-      
+
       debugPrint("User signed in with Google: ${userCredential.user?.uid}");
-      
+
       // Save the username
       String username = "User";
-      if (userCredential.user?.displayName != null && userCredential.user!.displayName!.isNotEmpty) {
+      if (userCredential.user?.displayName != null &&
+          userCredential.user!.displayName!.isNotEmpty) {
         username = userCredential.user!.displayName!;
       }
-      
+
       // Save username to shared preferences
       await UserService.saveUsername(username);
-      
+
       // Mark welcome screens as completed
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('showWelcome', false);
-      
+
       // Force refresh user service data
       await UserService.loadUserData();
-      
+
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/home');
       }
@@ -190,13 +195,14 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       String errorMessage;
       if (e.toString().contains("ApiException: 10:")) {
-        errorMessage = 'Google Sign-In configuration error. Please check Firebase Console settings.';
+        errorMessage =
+            'Google Sign-In configuration error. Please check Firebase Console settings.';
       } else if (e.toString().contains("network_error")) {
         errorMessage = 'Network error. Please check your internet connection.';
       } else {
         errorMessage = 'Google sign in failed. Please try again.';
       }
-      
+
       setState(() {
         _errorMessage = errorMessage;
       });
@@ -212,93 +218,96 @@ class _LoginPageState extends State<LoginPage> {
 
   void _showResetPasswordDialog() {
     final TextEditingController resetEmailController = TextEditingController();
-    
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Reset Password"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              "Enter your email address to receive a password reset link.",
-              style: TextStyle(fontSize: 14),
+      builder:
+          (context) => AlertDialog(
+            title: const Text("Reset Password"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Enter your email address to receive a password reset link.",
+                  style: TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: resetEmailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    hintText: "Email",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: resetEmailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                hintText: "Email",
-                border: OutlineInputBorder(),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cancel"),
               ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
+              ElevatedButton(
+                onPressed: () async {
+                  if (resetEmailController.text.trim().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Please enter your email address"),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+
+                  try {
+                    await _auth.sendPasswordResetEmail(
+                      email: resetEmailController.text.trim(),
+                    );
+
+                    if (mounted) {
+                      Navigator.pop(context);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Password reset email sent. Please check your inbox.",
+                          ),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
+                  } on FirebaseAuthException catch (e) {
+                    String message;
+                    switch (e.code) {
+                      case 'user-not-found':
+                        message = 'No user found with this email address.';
+                        break;
+                      case 'invalid-email':
+                        message = 'The email address is not valid.';
+                        break;
+                      default:
+                        message = e.message ?? 'Failed to send reset email.';
+                    }
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(message),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Error: ${e.toString()}"),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+                child: const Text("Send Link"),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () async {
-              if (resetEmailController.text.trim().isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Please enter your email address"),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                return;
-              }
-              
-              try {
-                await _auth.sendPasswordResetEmail(
-                  email: resetEmailController.text.trim(),
-                );
-                
-                if (mounted) {
-                  Navigator.pop(context);
-                  
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Password reset email sent. Please check your inbox."),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                }
-              } on FirebaseAuthException catch (e) {
-                String message;
-                switch (e.code) {
-                  case 'user-not-found':
-                    message = 'No user found with this email address.';
-                    break;
-                  case 'invalid-email':
-                    message = 'The email address is not valid.';
-                    break;
-                  default:
-                    message = e.message ?? 'Failed to send reset email.';
-                }
-                
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(message),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Error: ${e.toString()}"),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            child: const Text("Send Link"),
-          ),
-        ],
-      ),
     );
   }
 
@@ -315,7 +324,6 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 60), // Space at top
-                
                 // Welcome Text
                 const Text(
                   "Hey! Welcome to Sri Route!",
@@ -326,7 +334,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 const SizedBox(height: 40),
-                
+
                 // Error message
                 if (_errorMessage != null)
                   Container(
@@ -358,7 +366,9 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.email, color: Colors.black),
                     hintText: "Email",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -370,10 +380,14 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.lock, color: Colors.black),
                     hintText: "Password",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                        _obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                         color: Colors.grey,
                       ),
                       onPressed: () {
@@ -399,23 +413,26 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 // Login Button
-                _isLoading 
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                _isLoading
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: _signInWithEmailAndPassword,
+                      child: const Text(
+                        "Log In",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    onPressed: _signInWithEmailAndPassword,
-                    child: const Text(
-                      "Log In",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
 
                 const SizedBox(height: 20),
                 const Row(
@@ -433,5 +450,102 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
 
+                // Updated Social Media Sign-in Buttons - matching login button style
+                _buildStyledSocialButton(
+                  icon: Icon(Icons.g_mobiledata, size: 24, color: Colors.red),
+                  text: "Continue with Google",
+                  onPressed: _signInWithGoogle,
+                ),
+
+                const SizedBox(height: 12),
+
+                _buildStyledSocialButton(
+                  icon: Icon(Icons.facebook, size: 24, color: Colors.blue),
+                  text: "Continue with Facebook",
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Facebook login coming soon!"),
+                        backgroundColor: Colors.blue,
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 12),
+
+                _buildStyledSocialButton(
+                  icon: Icon(Icons.apple, size: 24, color: Colors.black),
+                  text: "Continue with Apple",
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Apple login coming soon!"),
+                        backgroundColor: Colors.black,
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 20),
+
+                // Navigation to Signup Page
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Not a member? "),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/signup");
+                      },
+                      child: const Text(
+                        "Register Now",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // New method for styled social buttons matching main login button
+  Widget _buildStyledSocialButton({
+    required Widget icon,
+    required String text,
+    required VoidCallback onPressed,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
+        minimumSize: const Size(double.infinity, 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Colors.grey.shade300),
+        ),
+        elevation: 0,
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          icon,
+          const SizedBox(width: 12),
+          Text(text, style: const TextStyle(fontSize: 16)),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
