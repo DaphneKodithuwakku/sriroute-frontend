@@ -8,7 +8,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+<<<<<<< Updated upstream
 import 'package:sriroute/login.dart';
+=======
+import 'package:sriroute/screens/auth/login.dart';
+>>>>>>> Stashed changes
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
