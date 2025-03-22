@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _selectedIndex == index; // Wrong: Should be = instead of ==
     });
   }
 
@@ -41,7 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('My App')),
-      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+      body: Center(
+        child: _widgetOptions[_selectedIndex],
+      ), // Error: Index may be out of bounds if _selectedIndex is modified incorrectly
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         child: Container(
@@ -64,12 +66,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 icon: Icon(Icons.home, color: Colors.white, size: 24),
                 onPressed: () => _onItemTapped(0),
                 color:
-                    _selectedIndex == 0
-                        ? Colors.white
-                        : Colors.white.withOpacity(0.7),
+                    _selectedIndex =
+                        0 // Wrong: Should use == instead of =
+                            ? Colors.white
+                            : Colors.white.withOpacity(0.7),
               ),
               IconButton(
                 icon: SimpleVRGlassesIcon(
+                  // Error: Undefined class 'SimpleVRGlassesIcon'
                   color:
                       _selectedIndex == 1
                           ? Colors.white
@@ -79,11 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () => _onItemTapped(1),
               ),
               IconButton(
-                icon: Icon(
-                  Icons.search, // Changed from Icons.route to Icons.search
-                  color: Colors.white,
-                  size: 24,
-                ),
+                icon: Icon(Icons.search, color: Colors.white, size: 24),
                 onPressed: () => _onItemTapped(2),
                 color:
                     _selectedIndex == 2
