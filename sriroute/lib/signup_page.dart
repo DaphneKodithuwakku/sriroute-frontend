@@ -1,20 +1,123 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/user_service.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  String? selectedLanguage;
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  
+  String? selectedLanguage = 'English'; // Default language
   bool agreeToTerms = false;
+  bool _isLoading = false;
+  String? _errorMessage;
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   final List<String> languages = ["English", "Spanish", "French", "German"];
+
+  // Validate email format
+  bool _isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(email);
+  }
+
+  // Convert Firebase auth errors to user-friendly messages
+  String _getMessageFromErrorCode(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'email-already-in-use':
+        return 'An account already exists for that email. Please log in instead.';
+      case 'invalid-email':
+        return 'The email address is not valid.';
+      case 'operation-not-allowed':
+        return 'Email/password accounts are not enabled. Please contact support.';
+      case 'weak-password':
+        return 'The password provided is too weak. Please create a stronger password.';
+      case 'network-request-failed':
+        return 'Network error. Please check your connection and try again.';
+      default:
+        return e.message ?? 'An error occurred. Please try again.';
+    }
+  }
+
+  // Email/password signup
+  Future<void> _signUp() async {
+    if (_formKey.currentState!.validate() && agreeToTerms) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+
+      try {
+        // Step 1: Create the user account
+        final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
+        
+        // Step 2: Save user details to SharedPreferences
+        await UserService.saveUsername(_usernameController.text.trim());
+        
+        // Step 3: Save language preference
+        final prefs = await SharedPreferences.getInstance();
+        if (selectedLanguage != null) {
+          await prefs.setString('language', selectedLanguage!);
+        }
+        
+        // Set onboarding as completed 
+        await prefs.setBool('showWelcome', false);
+        
+        // Update Firebase profile with username
+        await userCredential.user?.updateDisplayName(_usernameController.text.trim());
+        await userCredential.user?.reload();
+        
+        // Force data refresh
+        await UserService.loadUserData();
+        
+        if (mounted) {
+          // Navigate to success page
+          Navigator.pushReplacementNamed(context, "/signup-success");
+        }
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          _errorMessage = _getMessageFromErrorCode(e);
+        });
+        debugPrint("Firebase Auth Error: ${e.code} - ${e.message}");
+      } catch (e) {
+        setState(() {
+          _errorMessage = "An error occurred. Please try again.";
+        });
+        debugPrint("Error during signup: $e");
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    } else {
+      // Show error for terms if everything else is valid
+      if (_formKey.currentState!.validate() && !agreeToTerms) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Please agree to the Terms & Conditions"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,163 +129,57 @@ class _SignUpPageState extends State<SignUpPage> {
         foregroundColor: Colors.white,
       ),
       body: GestureDetector(
-        onTap:
-            () =>
-                FocusScope.of(
-                  context,
-                ).unfocus(), // Hide the keyboard when tapping outside
-        child: Padding(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header part
-              const Center(
-                child: Column(
-                  children: [
-                    Text(
-                      "Almost there!",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                const Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        "Create Account",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      "Just a few more details to set up your account.",
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30),
-
-              // Username Input
-              buildTextField(
-                controller: _usernameController,
-                hintText: "Username",
-                icon: Icons.person,
-              ),
-              const SizedBox(height: 15),
-
-              // Email Input
-              buildTextField(
-                controller: _emailController,
-                hintText: "Email address",
-                icon: Icons.email,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 15),
-
-              // Password Input
-              buildTextField(
-                controller: _passwordController,
-                hintText: "Password",
-                icon: Icons.lock,
-                obscureText: true,
-              ),
-              const SizedBox(height: 15),
-
-              // Language Selection Dropdown
-              buildLanguageDropdown(),
-              const SizedBox(height: 20),
-
-              // Terms & Conditions Checkbox
-              Row(
-                children: [
-                  Checkbox(
-                    value: agreeToTerms,
-                    activeColor: Colors.green,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        agreeToTerms = value!;
-                      });
-                    },
+                      SizedBox(height: 5),
+                      Text(
+                        "Fill in your details to create an account",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                  const Text("I agree with Terms & Conditions"),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              // Continue Button will navigates to completion page**
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: () {
-                  if (_validateInputs()) {
-                    Navigator.pushNamed(context, "/completion");
-                  }
-                },
-                child: const Text("Continue"),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+                const SizedBox(height: 30),
+                
+                // Error message
+                if (_errorMessage != null)
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(bottom: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade100,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    width: double.infinity,
+                    child: Row(
+                      children: [
+                        Icon(Icons.error_outline, color: Colors.red.shade800),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            _errorMessage!,
+                            style: TextStyle(color: Colors.red.shade800),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
   }
-
-  // Widget for Input Fields
-  Widget buildTextField({
-    required TextEditingController controller,
-    required String hintText,
-    required IconData icon,
-    bool obscureText = false,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: Colors.black),
-        hintText: hintText,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-  }
-
-  // Widget for Language Selection Dropdown
-  Widget buildLanguageDropdown() {
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.language, color: Colors.black),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-      value: selectedLanguage,
-      items:
-          languages.map((lang) {
-            return DropdownMenuItem(value: lang, child: Text(lang));
-          }).toList(),
-      onChanged: (value) {
-        setState(() {
-          selectedLanguage = value;
-        });
-      },
-    );
-  }
-
-  // Validation for the user inputs
-  bool _validateInputs() {
-    if (_usernameController.text.isEmpty ||
-        _emailController.text.isEmpty ||
-        _passwordController.text.isEmpty ||
-        selectedLanguage == null ||
-        !agreeToTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Please fill all fields and agree to Terms & Conditions",
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return false;
-    }
-    return true;
-  }
-}
