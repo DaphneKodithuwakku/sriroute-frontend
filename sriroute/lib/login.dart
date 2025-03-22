@@ -44,51 +44,49 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
+  
   bool _isLoading = false;
   String? _errorMessage;
   bool _obscurePassword = true;
-
+  
   // Email & Password Sign In
   Future<void> _signInWithEmailAndPassword() async {
-    if (_emailController.text.trim().isEmpty ||
-        _passwordController.text.isEmpty) {
+    if (_emailController.text.trim().isEmpty || _passwordController.text.isEmpty) {
       setState(() {
         _errorMessage = "Please enter both email and password";
       });
       return;
     }
-
+    
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
-
+    
     try {
       final credential = await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-
+      
       debugPrint("User signed in: ${credential.user?.uid}");
-
+      
       // Get username from Firebase or set default
       String username = "User";
-      if (credential.user?.displayName != null &&
-          credential.user!.displayName!.isNotEmpty) {
+      if (credential.user?.displayName != null && credential.user!.displayName!.isNotEmpty) {
         username = credential.user!.displayName!;
       }
-
+      
       // Save the username
       await UserService.saveUsername(username);
-
+      
       // Mark welcome screens as completed
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('showWelcome', false);
-
+      
       // Force refresh user service data
       await UserService.loadUserData();
-
+      
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/home');
       }
@@ -108,13 +106,12 @@ class _LoginPageState extends State<LoginPage> {
           message = 'This user account has been disabled.';
           break;
         case 'too-many-requests':
-          message =
-              'Too many unsuccessful login attempts. Please try again later.';
+          message = 'Too many unsuccessful login attempts. Please try again later.';
           break;
         default:
           message = e.message ?? 'An error occurred during sign in.';
       }
-
+      
       setState(() {
         _errorMessage = message;
       });
@@ -132,7 +129,42 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
+  
+  // Google Sign In
+  Future<void> _signInWithGoogle() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    
+    try {
+      // Begin Google sign in process
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      
+      if (googleUser == null) {
+        // User cancelled the sign-in flow
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+      
+      // Get authentication details from Google
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      
+      // Create credential for Firebase
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      
+      // Sign in to Firebase with the Google credential
+      final userCredential = await _auth.signInWithCredential(credential);
+      
+      debugPrint("User signed in with Google: ${userCredential.user?.uid}");
+      
 
+  
   @override
   void dispose() {
     _emailController.dispose();
