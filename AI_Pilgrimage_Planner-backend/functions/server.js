@@ -23,7 +23,7 @@ const locations = [
       costEstimate: 300,
       travelTime: 1,
       imageUrl: 'path/to/jami-ul-alfar.jpg',
-      coordinates: { lat: 6.9389, lng: 79.8498 }
+      coordinates: { lat: 6.9389, lng: 79.8494 }
     },
     {
       name: 'Nallur Kandaswamy Kovil',
