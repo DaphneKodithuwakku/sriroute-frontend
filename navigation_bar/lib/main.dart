@@ -22,3 +22,94 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text('Home Screen'),
+    Text('VR Tour Screen'),
+    Text('Pilgrimage Planner Screen'),
+    Text('User Manual Screen'),
+    Text('Profile Screen'),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('My App')),
+      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(Icons.home, color: Colors.white, size: 24),
+                onPressed: () => _onItemTapped(0),
+                color:
+                    _selectedIndex == 0
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.7),
+              ),
+              IconButton(
+                icon: SimpleVRGlassesIcon(
+                  color:
+                      _selectedIndex == 1
+                          ? Colors.white
+                          : Colors.white.withOpacity(0.7),
+                  size: 34,
+                ),
+                onPressed: () => _onItemTapped(1),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.search, // Changed from Icons.route to Icons.search
+                  color: Colors.white,
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(2),
+                color:
+                    _selectedIndex == 2
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.7),
+              ),
+              IconButton(
+                icon: Icon(Icons.menu_book, color: Colors.white, size: 24),
+                onPressed: () => _onItemTapped(3),
+                color:
+                    _selectedIndex == 3
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.7),
+              ),
+              IconButton(
+                icon: Icon(Icons.person, color: Colors.white, size: 24),
+                onPressed: () => _onItemTapped(4),
+                color:
+                    _selectedIndex == 4
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.7),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
