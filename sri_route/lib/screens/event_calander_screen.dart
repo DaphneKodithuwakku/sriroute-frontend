@@ -37,6 +37,7 @@ class Event {
       'isFavorite': isFavorite,
     };
   }
+
   // Create from a Firestore document
   factory Event.fromFirestore(Map<String, dynamic> doc) {
     return Event(
@@ -161,6 +162,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
       }
     }
   }
+
   // Toggle favorite status and update Firestore
   Future<void> _toggleFavorite(Event event) async {
     final user = _auth.currentUser;
@@ -406,6 +408,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
     );
   }
 }
+
 class EventDetailScreen extends StatelessWidget {
   final Event event;
   final Function(Event) onFavoriteToggled;
@@ -543,9 +546,8 @@ class EventDetailScreen extends StatelessWidget {
         ),
       ),
     );
-
-    
   }
+
   Future<void> _setReminder(BuildContext context) async {
     try {
       // Get the event date and check if it's more than 24 hours in the future
