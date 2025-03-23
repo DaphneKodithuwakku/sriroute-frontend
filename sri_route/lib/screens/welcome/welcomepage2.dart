@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'welcomepage2.dart';
+import 'welcomepage3.dart';
 
-
-class WelcomePage1 extends StatelessWidget {
-  const WelcomePage1({super.key});
+class WelcomePage2 extends StatelessWidget {
+  const WelcomePage2({super.key});
 
   Future<void> _completeOnboarding(BuildContext context) async {
     // Mark welcome screens as completed
@@ -23,7 +22,7 @@ class WelcomePage1 extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/welcomepage1.png',
+              'assets/welcomepage2.png',
               fit: BoxFit.fitWidth,
               alignment: Alignment.topCenter,
             ),
@@ -45,7 +44,7 @@ class WelcomePage1 extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Discover Sri Lanka's Sacred Places",
+                    "Explore Sri Lanka’s Buddhist Heritage",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Inter',
@@ -58,7 +57,7 @@ class WelcomePage1 extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      "Explore Sri Lanka’s sacred sites and stay updated on spiritual events.",
+                      "Discover ancient temples, sacred stupas, and the path of enlightenment.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         height: 1.2,
@@ -78,7 +77,7 @@ class WelcomePage1 extends StatelessWidget {
                         child: Icon(
                           Icons.circle,
                           size: 10,
-                          color: index == 0 ? Colors.black : Colors.grey,
+                          color: index == 1 ? Colors.black : Colors.grey,
                         ),
                       );
                     }),
@@ -113,7 +112,7 @@ class WelcomePage1 extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => WelcomePage2(),
+                              builder: (context) => WelcomePage3(),
                             ),
                           );
                         },
