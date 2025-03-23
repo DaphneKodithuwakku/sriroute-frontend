@@ -28,8 +28,12 @@ class MyApp extends StatelessWidget {
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Colors.white
-              .withValues(red: 255, green: 255, blue: 255, alpha: 230),
+          fillColor: Colors.white.withValues(
+            red: 255,
+            green: 255,
+            blue: 255,
+            alpha: 230,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,
@@ -103,8 +107,12 @@ class _MyHomePageState extends State<MyHomePage> {
             borderRadius: BorderRadius.circular(30),
             boxShadow: [
               BoxShadow(
-                color: Colors.black
-                    .withValues(red: 0, green: 0, blue: 0, alpha: 77),
+                color: Colors.black.withValues(
+                  red: 0,
+                  green: 0,
+                  blue: 0,
+                  alpha: 77,
+                ),
                 blurRadius: 10,
                 offset: const Offset(0, 5),
               ),
@@ -116,20 +124,30 @@ class _MyHomePageState extends State<MyHomePage> {
               IconButton(
                 icon: Icon(
                   Icons.home,
-                  color: _selectedIndex == 0
-                      ? Colors.white
-                      : Colors.white.withValues(
-                          red: 255, green: 255, blue: 255, alpha: 179),
+                  color:
+                      _selectedIndex == 0
+                          ? Colors.white
+                          : Colors.white.withValues(
+                            red: 255,
+                            green: 255,
+                            blue: 255,
+                            alpha: 179,
+                          ),
                   size: 24,
                 ),
                 onPressed: () => _onItemTapped(0),
               ),
               IconButton(
                 icon: SimpleVRGlassesIcon(
-                  color: _selectedIndex == 1
-                      ? Colors.white
-                      : Colors.white.withValues(
-                          red: 255, green: 255, blue: 255, alpha: 179),
+                  color:
+                      _selectedIndex == 1
+                          ? Colors.white
+                          : Colors.white.withValues(
+                            red: 255,
+                            green: 255,
+                            blue: 255,
+                            alpha: 179,
+                          ),
                   size: 34,
                 ),
                 onPressed: () => _onItemTapped(1),
@@ -137,10 +155,15 @@ class _MyHomePageState extends State<MyHomePage> {
               IconButton(
                 icon: Icon(
                   Icons.search,
-                  color: _selectedIndex == 2
-                      ? Colors.white
-                      : Colors.white.withValues(
-                          red: 255, green: 255, blue: 255, alpha: 179),
+                  color:
+                      _selectedIndex == 2
+                          ? Colors.white
+                          : Colors.white.withValues(
+                            red: 255,
+                            green: 255,
+                            blue: 255,
+                            alpha: 179,
+                          ),
                   size: 24,
                 ),
                 onPressed: () => _onItemTapped(2),
@@ -148,10 +171,15 @@ class _MyHomePageState extends State<MyHomePage> {
               IconButton(
                 icon: Icon(
                   Icons.menu_book,
-                  color: _selectedIndex == 3
-                      ? Colors.white
-                      : Colors.white.withValues(
-                          red: 255, green: 255, blue: 255, alpha: 179),
+                  color:
+                      _selectedIndex == 3
+                          ? Colors.white
+                          : Colors.white.withValues(
+                            red: 255,
+                            green: 255,
+                            blue: 255,
+                            alpha: 179,
+                          ),
                   size: 24,
                 ),
                 onPressed: () => _onItemTapped(3),
@@ -159,10 +187,15 @@ class _MyHomePageState extends State<MyHomePage> {
               IconButton(
                 icon: Icon(
                   Icons.person,
-                  color: _selectedIndex == 4
-                      ? Colors.white
-                      : Colors.white.withValues(
-                          red: 255, green: 255, blue: 255, alpha: 179),
+                  color:
+                      _selectedIndex == 4
+                          ? Colors.white
+                          : Colors.white.withValues(
+                            red: 255,
+                            green: 255,
+                            blue: 255,
+                            alpha: 179,
+                          ),
                   size: 24,
                 ),
                 onPressed: () => _onItemTapped(4),
@@ -198,11 +231,12 @@ class _SimpleVRGlassesPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5
-      ..strokeCap = StrokeCap.round;
+    final Paint paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5
+          ..strokeCap = StrokeCap.round;
 
     canvas.drawRect(
       Rect.fromLTRB(
@@ -302,8 +336,11 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
   void initState() {
     super.initState();
     // Initialize with default location
-    userLocation =
-        LocationModel(latitude: 6.9271, longitude: 79.8612, name: 'Colombo');
+    userLocation = LocationModel(
+      latitude: 6.9271,
+      longitude: 79.8612,
+      name: 'Colombo',
+    );
 
     // Attempt to get user's current location when the screen loads
     _getCurrentLocation();
@@ -336,8 +373,11 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       final position = await locationService.getCurrentLocation();
 
       if (position != null) {
-        final placeName = await locationService.getAddressFromCoordinates(
-                position.latitude, position.longitude) ??
+        final placeName =
+            await locationService.getAddressFromCoordinates(
+              position.latitude,
+              position.longitude,
+            ) ??
             'Current Location';
 
         if (mounted) {
@@ -474,30 +514,32 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
     if (difference.inMinutes > 30) {
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Location might be outdated'),
-          content: const Text(
-              'Your location data is more than 30 minutes old. Would you like to refresh it before continuing?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                getCurrentLocation().then(() {
-                  // Only navigate if we're still mounted
-                  if (mounted) _actuallyNavigateToRecommendations();
-                });
-              },
-              child: const Text('REFRESH'),
+        builder:
+            (context) => AlertDialog(
+              title: const Text('Location might be outdated'),
+              content: const Text(
+                'Your location data is more than 30 minutes old. Would you like to refresh it before continuing?',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _getCurrentLocation().then((_) {
+                      // Only navigate if we're still mounted
+                      if (mounted) _actuallyNavigateToRecommendations();
+                    });
+                  },
+                  child: const Text('REFRESH'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _actuallyNavigateToRecommendations();
+                  },
+                  child: const Text('CONTINUE ANYWAY'),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _actuallyNavigateToRecommendations();
-              },
-              child: const Text('CONTINUE ANYWAY'),
-            ),
-          ],
-        ),
       );
     } else {
       _actuallyNavigateToRecommendations();
@@ -509,13 +551,14 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RecommendationsScreen(
-          religion: selectedReligion,
-          dateRange: daysController.text,
-          region: selectedRegion,
-          locationName: userLocation!.name,
-          userLocation: userLocation!,
-        ),
+        builder:
+            (context) => RecommendationsScreen(
+              religion: selectedReligion,
+              dateRange: daysController.text,
+              region: selectedRegion,
+              locationName: userLocation!.name,
+              userLocation: userLocation!,
+            ),
       ),
     );
   }
@@ -597,12 +640,15 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  items: regions
-                      .map((region) => DropdownMenuItem(
-                            value: region,
-                            child: Text(region),
-                          ))
-                      .toList(),
+                  items:
+                      regions
+                          .map(
+                            (region) => DropdownMenuItem(
+                              value: region,
+                              child: Text(region),
+                            ),
+                          )
+                          .toList(),
                   onChanged: (value) {
                     if (value != null) {
                       setState(() {
@@ -647,20 +693,20 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                           ),
                           _isLoadingLocation
                               ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
-                                )
-                              : TextButton.icon(
-                                  onPressed: _getCurrentLocation,
-                                  icon: const Icon(Icons.my_location),
-                                  label: const Text('Get Current'),
-                                  style: TextButton.styleFrom(
-                                    backgroundColor:
-                                        Colors.teal.withOpacity(0.1),
-                                  ),
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
                                 ),
+                              )
+                              : TextButton.icon(
+                                onPressed: _getCurrentLocation,
+                                icon: const Icon(Icons.my_location),
+                                label: const Text('Get Current'),
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.teal.withOpacity(0.1),
+                                ),
+                              ),
                         ],
                       ),
                       if (userLocation != null)
@@ -720,20 +766,21 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
   // Simple religion selector with radio buttons
   Widget _buildReligionSelector() {
     return Column(
-      children: religions.map((religion) {
-        return RadioListTile<String>(
-          title: Text(religion),
-          value: religion,
-          groupValue: selectedReligion,
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                selectedReligion = value;
-              });
-            }
-          },
-        );
-      }).toList(),
+      children:
+          religions.map((religion) {
+            return RadioListTile<String>(
+              title: Text(religion),
+              value: religion,
+              groupValue: selectedReligion,
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() {
+                    selectedReligion = value;
+                  });
+                }
+              },
+            );
+          }).toList(),
     );
   }
 }
