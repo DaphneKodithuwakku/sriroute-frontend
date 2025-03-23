@@ -451,5 +451,58 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ],
     );
   }
+Widget _buildDateField(
+    String label,
+    TextEditingController controller,
+    BuildContext context,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 10),
+        Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+        GestureDetector(
+          onTap: () => _selectDate(context),
+          child: AbsorbPointer(
+            child: TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                suffixIcon: Icon(Icons.calendar_today),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDropdown(
+    String label,
+    String selectedValue,
+    List<String> items,
+    Function(String?) onChanged,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 10),
+        Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+        DropdownButtonFormField<String>(
+          value: selectedValue,
+          onChanged: onChanged,
+          items: items.map((item) {
+            return DropdownMenuItem(value: item, child: Text(item));
+          }).toList(),
+          decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+      ],
+    );
+  }
+}
 
       
