@@ -185,4 +185,104 @@ class RecommendationDetailsScreen extends StatelessWidget {
                     ],
                   ),
 
-                  
+                  // Add timestamp at the bottom
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      'Travel info calculated at: ${DateTime.now().toString().substring(0, 19)}',
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Content sections
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  _buildInfoSection(
+                    'Description',
+                    recommendation.description,
+                  ),
+                  const SizedBox(height: 16),
+                  _buildInfoSection(
+                    'Historical Significance',
+                    recommendation.historicalSignificance,
+                  ),
+                  const SizedBox(height: 16),
+                  _buildInfoRow(
+                    'Best Time to Visit',
+                    recommendation.bestTimeToVisit,
+                    Icons.calendar_today,
+                  ),
+                  const SizedBox(height: 8),
+                  _buildInfoRow(
+                    'Estimated Duration',
+                    recommendation.estimatedDuration,
+                    Icons.access_time,
+                  ),
+                  const SizedBox(height: 24),
+                  _buildMapSection(context),
+                  const SizedBox(height: 24),
+                  // Action buttons at the bottom
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildActionButton(
+                        'Navigate',
+                        Icons.directions,
+                        () => _launchMapsUrl(),
+                      ),
+                      _buildActionButton(
+                        'Share',
+                        Icons.share,
+                        () => _sharePlace(),
+                      ),
+                      _buildActionButton(
+                        'Save',
+                        Icons.bookmark_border,
+                        () => _savePlace(context),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoSection(String title, String content) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.teal,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          content,
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.black87,
+            height: 1.5,
+          ),
+        ),
+      ],
+    );
+  }
