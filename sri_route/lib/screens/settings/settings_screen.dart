@@ -180,4 +180,132 @@ class _SettingsScreenState extends State<SettingsScreen> {
       // Continue with account deletion even if picture deletion fails
     }
   }
-  
+  // Method to show reauthentication dialog
+  void _showReauthenticateDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Reauthentication Required'),
+          content: const Text(
+              'For security reasons, please log out and log back in before deleting your account.'),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () async {
+                await _auth.signOut();
+                Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Helper method to show error messages
+  void _showErrorSnackbar(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    }
+  }
+
+  Future<void> _launchReportProblemForm() async {
+    // Google Form URL
+    final Uri url = Uri.parse('https://forms.gle/Y2Mb46FVFKArq2DJ8');
+    
+    try {
+      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Could not open the form. Please try again later.')),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.grey[100]!, Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: _isLoading || _isDeleting
+        ? const Center(child: CircularProgressIndicator())
+        : ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            // User info section
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.grey[300],
+                      // Use saved profile image or Firebase profile photo, or fallback to icon
+                      backgroundImage: _profileImageUrl != null 
+                          ? NetworkImage(_profileImageUrl!) 
+                          : null,
+                      child: _profileImageUrl == null 
+                          ? Icon(Icons.person, size: 40, color: Colors.grey[700])
+                          : null,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      _username,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      _email ?? 'No email',
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            _buildSection(
+              title: 'ACCOUNT',
+              items: [
+                _buildListTile(
+                  icon: Icons.person,
+                  title: 'Edit Profile',
+                  onTap: () async {
+                    // Navigate to the EditProfilePage and wait for result
+                    final result = await Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => EditProfilePage()),
+                    );
+                    
+                    // If profile was updated, refresh the data
+                    if (result == true) {
+                      _loadUserData();
+                    }
+                  },
+                ),
+                
