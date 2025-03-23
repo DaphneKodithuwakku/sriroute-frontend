@@ -100,3 +100,51 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       );
     }
   }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Favorites'),
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _favoriteEvents.isEmpty
+              ? const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.favorite_border,
+                        size: 64,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'No favorites yet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Add events to your favorites from the Event Calendar',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _favoriteEvents.length,
+                  itemBuilder: (context, index) {
+                    final event = _favoriteEvents[index];
+                    return _buildEventCard(event);
+                  },
+                ),
+    );
+  }
