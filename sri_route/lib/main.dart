@@ -78,3 +78,78 @@ void main() async {
 
   runApp(MyApp(showWelcome: showWelcome));
 }
+
+class MyApp extends StatelessWidget {
+  final bool showWelcome;
+  const MyApp({super.key, required this.showWelcome});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Sri Route',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        useMaterial3: true,
+      ),
+      debugShowCheckedModeBanner: false,
+      home: _handleStartupNavigation(),
+      routes: {
+        '/welcome': (context) => const WelcomePage1(),
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignUpPage(),
+        '/completion': (context) => const SignupCompletionPage(),
+        '/signup-success': (context) => const SignupSuccessPage(),
+        '/home': (context) => const MainScreen(),
+        '/notifications': (context) => const NotificationsScreen(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/details') {
+          return MaterialPageRoute(
+            builder:
+                (context) =>
+                    TempleDetailScreen.fromArguments(settings.arguments),
+          );
+        }
+        if (settings.name == '/panorama') {
+          return MaterialPageRoute(
+            builder:
+                (context) =>
+                    PanoramaScreen(storagePath: settings.arguments as String?),
+          );
+        }
+        return null;
+      },
+      navigatorObservers: [NavigationObserver()],
+    );
+  }
+
+  Widget _handleStartupNavigation() {
+    // Check if user has seen welcome screens
+    if (showWelcome) {
+      return const WelcomePage1();
+    }
+
+    // Check if user is already logged in
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (snapshot.hasData) {
+          // User is logged in - debug print to verify
+          debugPrint("User is logged in: ${snapshot.data?.uid}");
+          return const MainScreen();
+        }
+
+        // User is not logged in - debug print to verify
+        debugPrint("No user logged in, redirecting to login");
+        return const LoginPage();
+      },
+    );
+  }
+}
