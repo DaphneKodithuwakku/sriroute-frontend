@@ -281,4 +281,79 @@ class _ReligionSelectionScreenState extends State<ReligionSelectionScreen> {
               ),
             ),
           ),
-          
+
+          // Main content
+          SliverList(
+            delegate: SliverChildListDelegate([
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: _defaultPadding, 
+                  right: _defaultPadding,
+                  top: 20,
+                  bottom: 10
+                ),
+                child: Text(
+                  'Virtual Religious Sites',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ),
+              // Religious places cards
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: _defaultPadding),
+                child: Column(
+                  children: [
+                    _buildReligiousPlace(
+                      context,
+                      'Sri Dalada Maligawa',
+                      'Buddhism',
+                      '28,467 reviews • 4.7',
+                      'assets/sri_dalada_maligawa.jpg',
+                      storagePath: 'places/Sri Dalada Maligawa',
+                    ),
+                    const SizedBox(height: 16),
+                    _buildReligiousPlace(
+                      context,
+                      'Jami Ul-Alfar Mosque',
+                      'Islam',
+                      '456 reviews • 4.4',
+                      'assets/jami_ul_alfar.jpg',
+                      storagePath: 'places/Red Mosque',
+                    ),
+                    const SizedBox(height: 16),
+                    _buildReligiousPlace(
+                      context,
+                      'Ruhunu Maha Kataragama Devalaya',
+                      'Hinduism',
+                      '1,286 reviews • 4.8',
+                      'assets/kataragama_devalaya.jpeg',
+                      storagePath: 'places/Ruhunu Maha Kataragama Devalaya - Kandy',
+                    ),
+                    const SizedBox(height: 16),
+                    _buildReligiousPlace(
+                      context,
+                      'Sambodhi Pagoda Temple',
+                      'Buddhism',
+                      '599 reviews • 4.6',
+                      'assets/sambodhi_pagoda.jpg',
+                      storagePath: 'places/Sri Sambodhi Viharaya',
+                    ),
+                    const SizedBox(height: 16),
+                    _buildReligiousPlace(
+                      context,
+                      'Sacred Heart of Jesus Church',
+                      'Christianity',
+                      '325 reviews • 4.5',
+                      'assets/sacred_heart_church.jpeg',
+                      storagePath: 'places/Sacred Heart of Jesus - Rajagiriya',
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ]),
+          ),
+        ],
+      ),
+    );
+  }
+  
