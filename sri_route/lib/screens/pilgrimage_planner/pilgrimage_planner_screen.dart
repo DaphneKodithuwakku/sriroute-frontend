@@ -497,3 +497,186 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       _actuallyNavigateToRecommendations();
     }
   }
+
+  // The actual navigation method
+  void _actuallyNavigateToRecommendations() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RecommendationsScreen(
+          religion: selectedReligion,
+          dateRange: daysController.text,
+          region: selectedRegion,
+          locationName: userLocation!.name,
+          userLocation: userLocation!,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Plan Your Pilgrimage',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.teal[800],
+          ),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.teal[800]),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Religion Selection
+                const Text(
+                  'Select Religion',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                _buildReligionSelector(),
+                const SizedBox(height: 24),
+                
+                // Date Range Selection
+                const Text(
+                  'Select Date Range',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: daysController,
+                  readOnly: true,
+                  onTap: () => _selectDateRange(context),
+                  decoration: InputDecoration(
+                    hintText: 'Select date range',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    suffixIcon: const Icon(Icons.calendar_month),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                
+                // Region Selection
+                const Text(
+                  'Select Region',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<String>(
+                  value: selectedRegion,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  items: regions.map((region) => DropdownMenuItem(
+                    value: region,
+                    child: Text(region),
+                  )).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        selectedRegion = value;
+                      });
+                    }
+                  },
+                ),
+                const SizedBox(height: 24),
+                
+                // Location Section
+                const Text(
+                  'Starting Location',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.location_on, color: Colors.teal[700]),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              userLocation?.name ?? 'Unknown location',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                          ),
+                          _isLoadingLocation
+                              ? const SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : TextButton.icon(
+                                  onPressed: _getCurrentLocation,
+                                  icon: const Icon(Icons.my_location),
+                                  label: const Text('Get Current'),
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Colors.teal.withOpacity(0.1),
+                                  ),
+                                ),
+                        ],
+                      ),
+                      if (userLocation != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            'GPS: ${userLocation!.latitude.toStringAsFixed(4)}, ${userLocation!.longitude.toStringAsFixed(4)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ),
+                      if (_locationError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            _locationError!,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 32),
+                
