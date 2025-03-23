@@ -108,3 +108,19 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
+
+
+  // Function to open Google Maps to Sri Lanka
+  Future<void> _launchGoogleMaps() async {
+    // Coordinates for Sri Lanka (approximate center)
+    const double latitude = 7.8731;
+    const double longitude = 80.7718;
+    // Zoom level 7 is appropriate for viewing the entire country
+    const int zoom = 7;
+    final Uri url = Uri.parse('https://www.google.com/maps/@$latitude,$longitude,${zoom}z');
+    
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+  
