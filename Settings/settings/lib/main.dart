@@ -158,7 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 16),
             _buildSection(
               title: 'ACTIONS',
               items: [
