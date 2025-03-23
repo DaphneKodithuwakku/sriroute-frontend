@@ -426,3 +426,19 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       return _buildIslamVisualGuide();
     }
   }
+  Widget _buildBuddhismVisualGuide() {
+    return Container(
+      height: 120,
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildInteractiveGuideIcon(
+            icon: Icons.person_outline,
+            label: 'Bow to Monks',
+            color: Colors.brown[700]!,
+            onTap: () => _showInfoDialog('Bow to Monks'),
+          ),
