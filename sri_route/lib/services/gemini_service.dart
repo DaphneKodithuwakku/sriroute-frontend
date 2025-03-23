@@ -69,7 +69,7 @@ Do not include any explanatory text before or after the JSON array.
         // Parse the response
         final Map<String, dynamic> data = jsonDecode(response.body);
 
-        // Verify the expected structure exists before accessing nested keys
+        // Verifying the expected structure exists before accessing nested keys
         if (data['candidates'] is List &&
             data['candidates'].isNotEmpty &&
             data['candidates'][0]['content']?['parts'] is List &&
@@ -99,19 +99,19 @@ Do not include any explanatory text before or after the JSON array.
       } else {
         debugPrint('API request failed with status: ${response.statusCode}');
         debugPrint('Response body: ${response.body}');
-        // Return sample data as fallback
+        // Returning sample data as fallback
         return _getSampleRecommendations(
             religion, region, locationName, userLatitude, userLongitude);
       }
     } catch (e) {
       debugPrint('Error getting recommendations: $e');
-      // Return sample data as fallback
+      // Returning sample data as fallback
       return _getSampleRecommendations(
           religion, region, locationName, userLatitude, userLongitude);
     }
   }
 
-  // Sample data for testing or when API fails
+  // Sample data for testing
   List<PilgrimageRecommendation> _getSampleRecommendations(String religion,
       String region, String locationName, double userLat, double userLng) {
     if (religion == 'Buddhism') {
@@ -285,7 +285,7 @@ Do not include any explanatory text before or after the JSON array.
         ),
       ];
     } else {
-      // Default fallback
+      // Fallback default
       return [
         PilgrimageRecommendation(
           name: 'Sample Religious Site',
