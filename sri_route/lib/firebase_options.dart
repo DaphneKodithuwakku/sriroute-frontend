@@ -57,3 +57,40 @@ class DefaultFirebaseOptions {
     projectId: 'sri-route',
     storageBucket: 'sri-route.firebasestorage.app',
   );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyA3ycsj2lDRDU2LM-LPraxwCL0YDbF6MIo',
+    appId: '1:898585044292:ios:eb715aec347ce765212311',
+    messagingSenderId: '898585044292',
+    projectId: 'sri-route',
+    storageBucket: 'sri-route.firebasestorage.app',
+    androidClientId:
+        '898585044292-obti78eqbs24bii6cqm2rdd1ucdf13ov.apps.googleusercontent.com',
+    iosClientId:
+        '898585044292-3dquge9berqptau07i8c17gob44lhnl7.apps.googleusercontent.com',
+    iosBundleId: 'com.example.flutter360ImageDemo',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyA3ycsj2lDRDU2LM-LPraxwCL0YDbF6MIo',
+    appId: '1:898585044292:ios:eb715aec347ce765212311',
+    messagingSenderId: '898585044292',
+    projectId: 'sri-route',
+    storageBucket: 'sri-route.firebasestorage.app',
+    androidClientId:
+        '898585044292-obti78eqbs24bii6cqm2rdd1ucdf13ov.apps.googleusercontent.com',
+    iosClientId:
+        '898585044292-3dquge9berqptau07i8c17gob44lhnl7.apps.googleusercontent.com',
+    iosBundleId: 'com.example.flutter360ImageDemo',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDxCmygu7PXlGFB0cXSEVGzyfgoE-LJ3uY',
+    appId: '1:898585044292:web:9e20878be3b55932212311',
+    messagingSenderId: '898585044292',
+    projectId: 'sri-route',
+    authDomain: 'sri-route.firebaseapp.com',
+    storageBucket: 'sri-route.firebasestorage.app',
+    measurementId: 'G-EVJHGPH2ND',
+  );
+}
