@@ -543,4 +543,50 @@ class EventDetailScreen extends StatelessWidget {
         ),
       ),
     );
+
+    
   }
+  Future<void> _setReminder(BuildContext context) async {
+    try {
+      // Get the event date and check if it's more than 24 hours in the future
+      final now = DateTime.now();
+      final dayBeforeEvent = event.date.subtract(const Duration(hours: 24));
+      
+      if (dayBeforeEvent.isBefore(now)) {
+        // Event is less than 24 hours away or already past
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Cannot set reminder - event is less than 24 hours away'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        return;
+      }
+      
+      // Create a unique ID for this event using its title (or use another identifier)
+      final eventId = event.title;
+      
+      // Add the event reminder with the 24-hour notification
+      await NotificationService.addEventReminder(
+        eventId, 
+        event.title, 
+        event.date
+      );
+      
+      // Updated success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Reminder set - you will be notified the day before the event'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to set reminder: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+}
