@@ -79,3 +79,72 @@ class _MyHomePageState extends State<MyHomePage> {
       _selectedIndex = index;
     });
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.home,
+                  color: _selectedIndex == 0 ? Colors.white : Colors.white70,
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(0),
+              ),
+              IconButton(
+                icon: SimpleVRGlassesIcon(
+                  color: _selectedIndex == 1 ? Colors.white : Colors.white70,
+                  size: 34,
+                ),
+                onPressed: () => _onItemTapped(1),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: _selectedIndex == 2 ? Colors.white : Colors.white70,
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(2),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.menu_book,
+                  color: _selectedIndex == 3 ? Colors.white : Colors.white70,
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(3),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.person,
+                  color: _selectedIndex == 4 ? Colors.white : Colors.white70,
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(4),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
