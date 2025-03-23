@@ -430,3 +430,63 @@ class _ReligionSelectionScreenState extends State<ReligionSelectionScreen> {
     );
   }
   
+  // Extract religion tag to a method
+  Widget _buildReligionTag(String religion) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 4,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        religion,
+        style: TextStyle(
+          color: Colors.grey[700],
+          fontSize: 12,
+        ),
+      ),
+    );
+  }
+  
+  // Extract bottom row with reviews to a method
+  Widget _buildBottomRowWithReviews(String reviews) {
+    return Row(
+      children: [
+        const Icon(
+          Icons.star,
+          size: 16,
+          color: Colors.amber,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          reviews,
+          style: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 12,
+          ),
+        ),
+        const Spacer(),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 6,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: const Text(
+            'Start',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
