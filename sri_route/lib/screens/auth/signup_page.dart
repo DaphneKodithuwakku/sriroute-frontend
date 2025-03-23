@@ -15,10 +15,11 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  
+
   String? selectedLanguage = 'English'; // Default language
   bool agreeToTerms = false;
   bool _isLoading = false;
@@ -62,17 +63,18 @@ class _SignUpPageState extends State<SignUpPage> {
 
       try {
         // Use the helper to create the user account
-        final UserCredential? userCredential = await FirebaseAuthHelper.signUpWithEmailPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-          username: _usernameController.text.trim(),
-          language: selectedLanguage,
-        );
-        
+        final UserCredential? userCredential =
+            await FirebaseAuthHelper.signUpWithEmailPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+              username: _usernameController.text.trim(),
+              language: selectedLanguage,
+            );
+
         // Check if current user exists despite possible null userCredential
         // This handles the case when our error recovery flow was used
         final currentUser = FirebaseAuth.instance.currentUser;
-        
+
         if (userCredential == null && currentUser == null) {
           setState(() {
             _isLoading = false;
@@ -80,23 +82,23 @@ class _SignUpPageState extends State<SignUpPage> {
           });
           return;
         }
-        
+
         // User was created successfully - either through userCredential or recovery flow
         // Save user details locally
         await UserService.saveUsername(_usernameController.text.trim());
-        
+
         // Save language preference
         final prefs = await SharedPreferences.getInstance();
         if (selectedLanguage != null) {
           await prefs.setString('language', selectedLanguage!);
         }
-        
-        // Set onboarding as completed 
+
+        // Set onboarding as completed
         await prefs.setBool('showWelcome', false);
-        
+
         // Force data refresh
         await UserService.loadUserData();
-        
+
         if (mounted) {
           // Navigate to success page
           Navigator.pushReplacementNamed(context, "/signup-success");
@@ -108,13 +110,16 @@ class _SignUpPageState extends State<SignUpPage> {
         debugPrint("Firebase Auth Error: ${e.code} - ${e.message}");
       } catch (e) {
         String message = "An error occurred. Please try again.";
-        
+
         // Check for the specific type casting error
-        if (e.toString().contains("type 'List<Object?>") && 
-            e.toString().contains("is not a subtype of type 'PigeonUserDetails?'")) {
-          message = "There's a compatibility issue with our authentication system. Please try again or contact support.";
+        if (e.toString().contains("type 'List<Object?>") &&
+            e.toString().contains(
+              "is not a subtype of type 'PigeonUserDetails?'",
+            )) {
+          message =
+              "There's a compatibility issue with our authentication system. Please try again or contact support.";
         }
-        
+
         setState(() {
           _errorMessage = message;
         });
@@ -178,7 +183,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                
+
                 // Error message
                 if (_errorMessage != null)
                   Container(
@@ -202,3 +207,237 @@ class _SignUpPageState extends State<SignUpPage> {
                       ],
                     ),
                   ),
+
+                // Username Input
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.person, color: Colors.black),
+                    hintText: "Username",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a username';
+                    }
+                    if (value.length < 3) {
+                      return 'Username must be at least 3 characters';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+
+                // Email Input
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.email, color: Colors.black),
+                    hintText: "Email address",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!_isValidEmail(value)) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+
+                // Password Input
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock, color: Colors.black),
+                    hintText: "Password",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  obscureText: !_isPasswordVisible,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a password';
+                    }
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+
+                // Confirm Password Input
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(
+                      Icons.lock_outline,
+                      color: Colors.black,
+                    ),
+                    hintText: "Confirm Password",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isConfirmPasswordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isConfirmPasswordVisible =
+                              !_isConfirmPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  obscureText: !_isConfirmPasswordVisible,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please confirm your password';
+                    }
+                    if (value != _passwordController.text) {
+                      return 'Passwords do not match';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+
+                // Language Selection Dropdown
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.language, color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    hintText: "Select language",
+                  ),
+                  value: selectedLanguage,
+                  items:
+                      languages.map((lang) {
+                        return DropdownMenuItem(value: lang, child: Text(lang));
+                      }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedLanguage = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                // Terms & Conditions Checkbox
+                Row(
+                  children: [
+                    Checkbox(
+                      value: agreeToTerms,
+                      activeColor: Colors.green,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          agreeToTerms = value!;
+                        });
+                      },
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            agreeToTerms = !agreeToTerms;
+                          });
+                        },
+                        child: const Text("I agree with Terms & Conditions"),
+                      ),
+                    ),
+                  ],
+                ),
+                if (!agreeToTerms &&
+                    _formKey.currentState != null &&
+                    _formKey.currentState!.validate())
+                  const Padding(
+                    padding: EdgeInsets.only(left: 12.0),
+                    child: Text(
+                      'You must agree to the Terms & Conditions',
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
+                const SizedBox(height: 20),
+
+                // Sign Up Button
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: _signUp,
+                      child: const Text(
+                        "Create Account",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+
+                const SizedBox(height: 20),
+
+                // Already have an account?
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Already have an account? "),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        "Log In",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+}
