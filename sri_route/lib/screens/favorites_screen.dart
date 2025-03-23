@@ -27,6 +27,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     setState(() {
       _isLoading = true;
     });
+
     try {
       final user = _auth.currentUser;
       if (user == null) {
