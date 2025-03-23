@@ -358,3 +358,59 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
                   ),
                 ],
               ),
+
+               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Row(
+                children: [
+                  Icon(
+                    guidelines[selectedReligion]!['icon'] as IconData,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: selectedReligion,
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.white,
+                      ),
+                      dropdownColor: Colors.blueGrey[800],
+                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedReligion = newValue!;
+                        });
+                      },
+                      items:
+                          ['Buddhism', 'Christianity', 'Hinduism', 'Islam']
+                              .map(
+                                (religion) => DropdownMenuItem(
+                                  value: religion,
+                                  child: Text(religion),
+                                ),
+                              )
+                              .toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            _buildVisualGuide(),
+            const SizedBox(height: 24),
+            ...['dress_code', 'photo_rules', 'behavior', 'offerings'].map(
+              (key) => _buildGuideItem(
+                guidelines[selectedReligion]![key]['icon'] as IconData,
+                guidelines[selectedReligion]![key]['title'] as String,
+                guidelines[selectedReligion]![key]['content'] as String,
+                guidelines[selectedReligion]!['color'] as Color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
