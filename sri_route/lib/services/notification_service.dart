@@ -32,3 +32,51 @@ class NotificationService {
           }).toList();
         });
   }
+  // Get unread notification count
+  static Stream<int> getUnreadCount() {
+    return getNotifications().map((notifications) {
+      return notifications.where((notification) => !notification.isRead).length;
+    });
+  }
+  
+  // Add an event reminder for 24 hours before event
+  static Future<void> addEventReminder(
+    String eventId, 
+    String eventTitle, 
+    DateTime eventDate,
+  ) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw Exception('User not logged in');
+    }
+    
+    // Calculate notification time (24 hours before event)
+    final notificationTime = eventDate.subtract(const Duration(hours: 24));
+    final now = DateTime.now();
+    
+    // Only allow if the notification time is in the future
+    if (notificationTime.isBefore(now)) {
+      throw Exception('Cannot set reminder for past events or events less than 24 hours away');
+    }
+    
+    // Check for duplicate notifications
+    final existingQuery = await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('notifications')
+        .where('eventId', isEqualTo: eventId)
+        .get();
+        
+    if (existingQuery.docs.isNotEmpty) {
+      // Update existing notification instead of creating a new one
+      await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('notifications')
+          .doc(existingQuery.docs.first.id)
+          .update({
+            'createdAt': now,
+            'isRead': false, // Mark as unread since it's being re-added
+          });
+      return;
+    }
