@@ -434,4 +434,110 @@ class ImagePreloader {
         return _buildErrorWidget(error.toString());
       },
     );
-  }   
+  }  
+   // Helper to build error widget
+  static Widget _buildErrorWidget(String error) {
+    return Container(
+      color: Colors.grey[300],
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const SizedBox(height: 8),
+            Text(
+              'Failed to load image',
+              style: TextStyle(color: Colors.red[800]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  // Batch preload multiple images
+  static Future<List<String>> preloadImages(
+    List<String> urls, {
+    bool highPriority = false, 
+    bool isPanorama = true,
+    void Function(double progress)? onProgress,
+  }) async {
+    final loadedUrls = <String>[];
+    final failedUrls = <String>[];
+    
+    for (int i = 0; i < urls.length; i++) {
+      try {
+        await preloadImage(
+          urls[i], 
+          highPriority: highPriority, 
+          isPanorama: isPanorama,
+          onProgress: (progress) {
+            onProgress?.call((i + progress) / urls.length);
+          },
+        );
+        loadedUrls.add(urls[i]);
+      } catch (e) {
+        failedUrls.add(urls[i]);
+      }
+      
+      if (onProgress != null) {
+        onProgress((i + 1) / urls.length);
+      }
+    }
+    
+    return loadedUrls;
+  }
+  
+  // Cache management methods
+  static void removeFromCache(String url) {
+    _cache.remove(url);
+    debugPrint('Removed from cache: $url');
+  }
+  
+  static bool isImageCached(String url) => _cache.containsKey(url);
+  
+  static int get cacheSize => _cache.length;
+  
+  static Future<void> clearCache() async {
+    try {
+      await _cacheManager.emptyCache();
+      
+      if (_panoramaCacheManager != null) {
+        await _panoramaCacheManager!.emptyCache();
+      }
+      
+      debugPrint('Image cache cleared');
+    } catch (e) {
+      debugPrint('Error clearing cache: $e');
+    }
+    
+    _cache.clear();
+    _loadedUrls.clear();
+  }
+  
+  // Consolidate low memory handlers into one method
+  static void handleLowMemory() {
+    _cache.clear();
+    debugPrint('Low memory: cleared image cache');
+  }
+
+  // Prioritize loading of specific images
+  static Future<void> prioritizeImages(List<String> urls) async {
+    final notLoadedUrls = urls.where((url) => !isImageLoaded(url)).toList();
+    
+    if (notLoadedUrls.isEmpty) return;
+    
+    if (notLoadedUrls.isNotEmpty) {
+      try {
+        await preloadImage(notLoadedUrls.first, highPriority: true);
+      } catch (e) {
+        debugPrint('Error prioritizing image: $e');
+      }
+    }
+    
+    for (var i = 1; i < notLoadedUrls.length; i++) {
+      preloadImage(notLoadedUrls[i]).catchError((e) => debugPrint('Background load error: $e'));
+    }
+  }
+}
+ 
