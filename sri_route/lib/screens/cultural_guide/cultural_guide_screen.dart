@@ -442,3 +442,25 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
             color: Colors.brown[700]!,
             onTap: () => _showInfoDialog('Bow to Monks'),
           ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.directions_walk,
+            label: 'Sit Lower',
+            color: Colors.brown[700]!,
+            onTap: () => _showInfoDialog('Sit Lower'),
+          ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.self_improvement,
+            label: 'Mindful Silence',
+            color: Colors.brown[700]!,
+            onTap: () => _showInfoDialog('Mindful Silence'),
+          ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.handshake,
+            label: 'No Handshakes',
+            color: Colors.brown[700]!,
+            onTap: () => _showInfoDialog('No Handshakes'),
+          ),
+        ],
+      ),
+    );
+  }
