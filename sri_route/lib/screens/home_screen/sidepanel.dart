@@ -221,3 +221,82 @@ class _SidePanelState extends State<SidePanel> {
       }
     }
   }
+
+// Helper method to handle tab selection
+  void _selectTab(int index) {
+    // Close the drawer
+    Navigator.pop(context);
+    
+    // Use the callback if provided
+    if (widget.onTabSelected != null) {
+      widget.onTabSelected!(index);
+    } else {
+      // Fallback: Navigate to MainScreen with selected tab
+      Navigator.of(context).pushReplacementNamed('/home', arguments: index);
+    }
+  }
+
+  Widget _buildMenuItem(
+    BuildContext context, 
+    IconData icon, 
+    String title, 
+    Color color, 
+    VoidCallback onTap
+  ) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: color.withOpacity(0.2),
+        child: Icon(icon, color: color),
+      ),
+      title: Text(title),
+      onTap: onTap,
+    );
+  }
+  
+  // Special menu item for notifications with badge
+  Widget _buildNotificationMenuItem(
+    BuildContext context,
+    String title,
+    Color color,
+    int badgeCount,
+    VoidCallback onTap
+  ) {
+    return ListTile(
+      leading: Stack(
+        children: [
+          CircleAvatar(
+            backgroundColor: color.withOpacity(0.2),
+            child: Icon(Icons.notifications, color: color),
+          ),
+          if (badgeCount > 0)
+            Positioned(
+              right: 0,
+              top: 0,
+              child: Container(
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                constraints: const BoxConstraints(
+                  minWidth: 16,
+                  minHeight: 16,
+                ),
+                child: Text(
+                  badgeCount > 9 ? '9+' : badgeCount.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+        ],
+      ),
+      title: Text(title),
+      onTap: onTap,
+    );
+  }
+}
