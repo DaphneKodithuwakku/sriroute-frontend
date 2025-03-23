@@ -767,3 +767,99 @@ class _PanoramaScreenState extends State<PanoramaScreen> with SingleTickerProvid
       ),
     );
   }
+  // Loading view
+  Widget _buildLoadingView(String message) {
+    return Container(
+      color: Colors.black87,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircularProgressIndicator(color: Colors.white),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  // Error overlay
+  Widget _buildErrorOverlay() {
+    return Container(
+      color: Colors.black87,
+      padding: const EdgeInsets.all(32),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(
+              'Error loading image:\n${_errorMessage ?? "Unknown error"}',
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _retryAfterError,
+              child: const Text('Retry'),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () {
+                ImagePreloader.clearCache();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close Tour'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  // Error view
+  Widget _buildErrorView(String error) {
+    return Container(
+      color: Colors.black87,
+      padding: const EdgeInsets.all(32),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(
+              'Error loading tour:\n$error',
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _isLoading = true;
+                  _errorRetryCount = 0;
+                  _tourPointsFuture = _loadTourPoints();
+                });
+              },
+              child: const Text('Retry'),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () {
+                ImagePreloader.clearCache();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
