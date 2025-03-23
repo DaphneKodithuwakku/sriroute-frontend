@@ -406,3 +406,12 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
     );
   }
 }
+class EventDetailScreen extends StatelessWidget {
+  final Event event;
+  final Function(Event) onFavoriteToggled;
+
+  const EventDetailScreen({
+    required this.event, 
+    required this.onFavoriteToggled,
+    Key? key,
+  }) : super(key: key);
