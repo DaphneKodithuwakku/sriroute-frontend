@@ -60,7 +60,7 @@ class MapsService {
   Map<String, String> estimateTravelInfo(
       double startLat, double startLng, double endLat, double endLng) {
     try {
-      // Calculate straight-line distance (Haversine formula)
+      // Calculating straight-line distance (Haversine formula)
       const double earthRadius = 6371; // kilometers
 
       final double latDiff = _toRadians(endLat - startLat);
@@ -78,23 +78,22 @@ class MapsService {
       // Add 30% to account for roads not being straight lines
       final double roadDistance = distance * 1.3;
 
-      // Estimate travel time with variable speed based on distance
-      // Shorter distances typically have slower average speeds due to local roads
+      // Estimating travel time with variable speed based on distance
       double avgSpeedKmh;
       if (roadDistance < 5) {
-        avgSpeedKmh = 25; // City center/local roads
+        avgSpeedKmh = 25;
       } else if (roadDistance < 20) {
-        avgSpeedKmh = 35; // Main city roads
+        avgSpeedKmh = 35;
       } else if (roadDistance < 50) {
-        avgSpeedKmh = 50; // Highways with some traffic
+        avgSpeedKmh = 50;
       } else {
-        avgSpeedKmh = 60; // Highways/expressways
+        avgSpeedKmh = 60;
       }
 
       final double travelTimeHours = roadDistance / avgSpeedKmh;
       final int travelTimeMinutes = (travelTimeHours * 60).round();
 
-      // Format the results
+      // Formating the results
       String distanceText;
       if (roadDistance < 1) {
         distanceText = '${(roadDistance * 1000).round()} m';
