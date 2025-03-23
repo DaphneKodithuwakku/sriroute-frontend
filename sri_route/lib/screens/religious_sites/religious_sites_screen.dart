@@ -232,6 +232,7 @@ class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
     "Galle",
     "Anuradhapura",
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
