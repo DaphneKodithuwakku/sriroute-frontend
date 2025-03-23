@@ -40,3 +40,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _isLoading = true;
     });
+
+    try {
+      // Get email from Firebase Auth
+      final user = _auth.currentUser;
+      if (user != null && mounted) {
+        setState(() {
+          _email = user.email;
+        });
+      }
+      
+      // Get username from UserService
+      final username = UserService.username;
+      
+      // Get profile image URL from UserService
+      final profileImageUrl = await UserService.getProfileImageUrl();
+      
+      if (mounted) {
+        setState(() {
+          _username = username;
+          _profileImageUrl = profileImageUrl;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error loading user data: $e");
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
