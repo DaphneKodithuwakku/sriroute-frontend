@@ -504,3 +504,79 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Navigate to temple detail page
+  void _navigateToTempleDetail(String templeName, String storagePath) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        settings: RouteSettings(name: 'temple_detail/$templeName'),
+        builder: (context) => TempleDetailScreen(
+          templeName: templeName, 
+          storagePath: storagePath,
+        ),
+      ),
+    );
+  }
+
+
+  // Category Item Widget with optional onTap handler
+  Widget categoryItem(String title, IconData icon, Color color, {VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 35,
+            backgroundColor: color,
+            child: Icon(
+              icon,
+              color: const Color.fromARGB(255, 0, 0, 0),
+              size: 35,
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Updated tourCard Widget with onTap functionality
+  Widget tourCard(String title, String location, String image, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 120,
+        margin: const EdgeInsets.only(right: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                image,
+                height: 80,
+                width: 120,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(location, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
