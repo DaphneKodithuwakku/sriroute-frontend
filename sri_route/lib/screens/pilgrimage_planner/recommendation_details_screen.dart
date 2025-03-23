@@ -1,3 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../models/pilgrimage_models.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 class RecommendationDetailsScreen extends StatelessWidget {
   final PilgrimageRecommendation recommendation;
 
@@ -188,7 +193,6 @@ class RecommendationDetailsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   // Add timestamp at the bottom
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
