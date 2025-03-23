@@ -306,3 +306,55 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       'Ramadan Dates': 'offerings',
     },
   };
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Check if we're in a MainScreen context
+            if (ModalRoute.of(context)?.settings.name == '/home') {
+              // If in MainScreen, just navigate back to home tab
+              Navigator.of(context).pushReplacementNamed('/home', arguments: 0);
+            } else if (Navigator.canPop(context)) {
+              // If we can pop (we're on a separate route), just pop back
+              Navigator.of(context).pop();
+            } else {
+              // Otherwise, navigate to home as fallback
+              Navigator.of(context).pushReplacementNamed('/home');
+            }
+          },
+        ),
+        title: Text(
+          guidelines[selectedReligion]!['title']!,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    guidelines[selectedReligion]!['color'] as Color,
+                    (guidelines[selectedReligion]!['color'] as Color)
+                        .withOpacity(0.8),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
