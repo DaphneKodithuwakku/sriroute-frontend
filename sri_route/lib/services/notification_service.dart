@@ -80,3 +80,13 @@ class NotificationService {
           });
       return;
     }
+    // Create notification content with updated message
+    final notification = EventNotification(
+      id: '', // Will be set by Firestore
+      title: 'Event Reminder',
+      body: 'Your event "$eventTitle" is happening on ${_formatEventDate(eventDate)}',
+      eventDate: eventDate,
+      eventId: eventId,
+      createdAt: now,
+      scheduledFor: notificationTime, // Store scheduled time
+    );
