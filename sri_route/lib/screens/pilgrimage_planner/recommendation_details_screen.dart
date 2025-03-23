@@ -1,6 +1,6 @@
 class RecommendationDetailsScreen extends StatelessWidget {
   final PilgrimageRecommendation recommendation;
-  
+
   const RecommendationDetailsScreen({
     required this.recommendation,
     Key? key,
@@ -98,7 +98,8 @@ class RecommendationDetailsScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Icon(Icons.route, color: Colors.teal, size: 28),
+                            const Icon(Icons.route,
+                                color: Colors.teal, size: 28),
                             const SizedBox(height: 4),
                             const Text(
                               'TRAVEL DISTANCE',
@@ -129,7 +130,8 @@ class RecommendationDetailsScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Icon(Icons.directions_car, color: Colors.teal, size: 28),
+                            const Icon(Icons.directions_car,
+                                color: Colors.teal, size: 28),
                             const SizedBox(height: 4),
                             const Text(
                               'TRAVEL TIME',
@@ -142,7 +144,8 @@ class RecommendationDetailsScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              recommendation.travelTimeByCarFromStart ?? 'Unknown',
+                              recommendation.travelTimeByCarFromStart ??
+                                  'Unknown',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -160,7 +163,8 @@ class RecommendationDetailsScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Icon(Icons.timelapse, color: Colors.teal, size: 28),
+                            const Icon(Icons.timelapse,
+                                color: Colors.teal, size: 28),
                             const SizedBox(height: 4),
                             const Text(
                               'VISIT TIME',
@@ -286,3 +290,105 @@ class RecommendationDetailsScreen extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildInfoRow(String title, String content, IconData icon) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.teal),
+        const SizedBox(width: 8),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+            ),
+            Text(
+              content,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMapSection(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: GoogleMap(
+          initialCameraPosition: CameraPosition(
+            target: LatLng(
+              recommendation.latitude,
+              recommendation.longitude,
+            ),
+            zoom: 14,
+          ),
+          markers: {
+            Marker(
+              markerId: MarkerId(recommendation.name),
+              position: LatLng(
+                recommendation.latitude,
+                recommendation.longitude,
+              ),
+              infoWindow: InfoWindow(title: recommendation.name),
+            ),
+          },
+          zoomControlsEnabled: false, // hide the default zoom controls
+          mapToolbarEnabled: false, // hide the default map toolbar
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(
+      String label, IconData icon, VoidCallback onPressed) {
+    return ElevatedButton.icon(
+      icon: Icon(icon, size: 18),
+      label: Text(label),
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.teal,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+    );
+  }
+
+  // Action methods
+  void _launchMapsUrl() async {
+    final url =
+        'https://www.google.com/maps/search/?api=1&query=${recommendation.latitude},${recommendation.longitude}';
+    if (await canLaunch(url)) {
+      await launch(url);
+    }
+  }
+
+  void _sharePlace() {
+    // Implementation for sharing
+    // This would use a share plugin to share details about this location
+  }
+
+  void _savePlace(BuildContext context) {
+    // Implementation for saving to favorites
+    // This would save the place to a local database or cloud service
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Added to favorites'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+}
