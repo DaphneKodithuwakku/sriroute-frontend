@@ -480,3 +480,25 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
             color: Colors.blueGrey[600]!,
             onTap: () => _showInfoDialog('Genuflect'),
           ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.music_note,
+            label: 'Join Hymns',
+            color: Colors.blueGrey[600]!,
+            onTap: () => _showInfoDialog('Join Hymns'),
+          ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.local_florist,
+            label: 'No Lent Flowers',
+            color: Colors.blueGrey[600]!,
+            onTap: () => _showInfoDialog('No Lent Flowers'),
+          ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.no_meals,
+            label: 'No Communion',
+            color: Colors.blueGrey[600]!,
+            onTap: () => _showInfoDialog('No Communion'),
+          ),
+        ],
+      ),
+    );
+  }
