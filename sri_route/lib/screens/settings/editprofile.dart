@@ -330,5 +330,126 @@ class _EditProfilePageState extends State<EditProfilePage> {
       },
     );
   }
+@override
+  Widget build(BuildContext context) {
+    // ...existing code...
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Edit Profile',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 1.0,
+      ),
+      body: _isLoading 
+        ? Center(child: CircularProgressIndicator())
+        : SingleChildScrollView(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.grey[300],
+                    // Show selected image, else user's photo, else icon
+                    backgroundImage: _imageFile != null 
+                      ? FileImage(_imageFile!) 
+                      : (_profileImageUrl != null 
+                        ? NetworkImage(_profileImageUrl!) as ImageProvider 
+                        : null),
+                    child: (_imageFile == null && _profileImageUrl == null) 
+                      ? Icon(Icons.person, size: 50, color: Colors.grey[700]) 
+                      : null,
+                  ),
+                  GestureDetector(
+                    onTap: _showImagePickerOptions,
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.camera_alt, color: Colors.white, size: 18),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              _buildTextField("Username", nameController),
+              _buildTextField("Email", emailController, enabled: false), // Email shouldn't be editable
+              _buildTextField("Password", passwordController, obscureText: true, enabled: false), // Password handled separately
+              _buildDateField("Date of Birth", dobController, context),
+              _buildDropdown("Country/Region", selectedCountry, countries, (value) {
+                setState(() {
+                  selectedCountry = value!;
+                });
+              }),
+              _buildDropdown("Religion", selectedReligion, religions, (value) {
+                setState(() {
+                  selectedReligion = value!;
+                });
+              }),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _isSaving ? null : _saveUserData,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  elevation: 1.0,
+                  shadowColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 12),
+                ),
+                child: _isSaving
+                  ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Text(
+                      'Save changes',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+              ),
+            ],
+          ),
+        ),
+    );
+  }
+
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller, {
+    bool obscureText = false,
+    bool enabled = true,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 10),
+        Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+        TextField(
+          controller: controller,
+          obscureText: obscureText,
+          enabled: enabled,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+      ],
+    );
+  }
 
       
