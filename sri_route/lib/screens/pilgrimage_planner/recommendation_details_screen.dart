@@ -380,14 +380,11 @@ class RecommendationDetailsScreen extends StatelessWidget {
     }
   }
 
-  void _sharePlace() {
-    // Implementation for sharing
-    // This would use a share plugin to share details about this location
-  }
+// Implementation for sharing
+  void _sharePlace() {}
 
+// Implementation for saving to favorites
   void _savePlace(BuildContext context) {
-    // Implementation for saving to favorites
-    // This would save the place to a local database or cloud service
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Added to favorites'),
