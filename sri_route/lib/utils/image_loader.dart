@@ -218,3 +218,128 @@ class ImagePreloader {
       }
     }
   }
+// Check if an image is already successfully loaded
+  static bool isImageLoaded(String url) => _loadedUrls.contains(url);
+
+  // Get all loaded URLs
+  static Set<String> get loadedUrls => Set.from(_loadedUrls);
+
+  // Load image with size constraints
+  static Future<void> _loadConstrainedImage(
+    String url,
+    File file,
+    Completer<void> completer,
+    int maxWidth,
+    int maxHeight,
+  ) async {
+    try {
+      if (!await file.exists()) {
+        completer.completeError('File does not exist: ${file.path}');
+        _loadingCompleters.remove(url);
+        _retryCount.remove(url);
+        return;
+      }
+      
+      final bytes = await file.readAsBytes();
+      
+      final codec = await ui.instantiateImageCodec(
+        bytes,
+        targetWidth: maxWidth,
+        targetHeight: maxHeight,
+      );
+      
+      final frameInfo = await codec.getNextFrame();
+      final image = frameInfo.image;
+      
+      final imageProvider = MemoryImage(bytes);
+      _cache[url] = Image(image: imageProvider);
+      
+      // Clean up
+      image.dispose();
+      codec.dispose();
+      
+      debugPrint('Successfully loaded: $url');
+      _loadedUrls.add(url);
+      completer.complete();
+      _loadingEventController.add(
+        ImageLoadingEvent(
+          url: url, 
+          status: ImageLoadingStatus.completed,
+          progress: 1.0,
+        ),
+      );
+      _loadingCompleters.remove(url);
+      _retryCount.remove(url);
+      
+    } catch (e) {
+      debugPrint('Error processing image $url: $e');
+      completer.completeError(e);
+      _loadingEventController.add(
+        ImageLoadingEvent(
+          url: url, 
+          status: ImageLoadingStatus.error,
+          error: e.toString(),
+        ),
+      );
+      _loadingCompleters.remove(url);
+      _retryCount.remove(url);
+    }
+  }
+  
+  // Load a downsampled version of the image - this should remain
+  static Future<void> _loadDownsampledImage(
+    String url,
+    File file,
+    Completer<void> completer,
+    int maxWidth,
+    int maxHeight,
+  ) async {
+    try {
+      if (!await file.exists()) {
+        completer.completeError('File does not exist: ${file.path}');
+        _loadingCompleters.remove(url);
+        _retryCount.remove(url);
+        return;
+      }
+      
+      final bytes = await compute(_resizeImageData, {
+        'path': file.path,
+        'maxWidth': maxWidth,
+        'maxHeight': maxHeight,
+      });
+      
+      final imageProvider = MemoryImage(bytes);
+      _cache[url] = Image(image: imageProvider);
+      
+      debugPrint('Loaded downsampled image: $url');
+      _loadedUrls.add(url);
+      completer.complete();
+      _loadingEventController.add(
+        ImageLoadingEvent(
+          url: url, 
+          status: ImageLoadingStatus.completed,
+          progress: 1.0,
+        ),
+      );
+      _loadingCompleters.remove(url);
+      _retryCount.remove(url);
+      
+    } catch (e) {
+      debugPrint('Error downsampling image $url: $e');
+      await _loadConstrainedImage(url, file, completer, maxWidth, maxHeight);
+    }
+  }
+
+  // Get a cached image if available, otherwise create a new one
+  static Image getImage(
+    String url, {
+    Key? key,
+    bool usePlaceholder = true,
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.cover,
+  }) {
+    if (_cache.containsKey(url)) {
+      return _cache[url]!;
+    }
+    
