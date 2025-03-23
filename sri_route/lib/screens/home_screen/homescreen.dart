@@ -462,3 +462,45 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     const SizedBox(height: 25),
 
+                    // Maps Section
+                    GestureDetector(
+                      onTap: () {
+                        // Launch Google Maps instead of navigating to MapScreen
+                        _launchGoogleMaps();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Maps',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: const DecorationImage(
+                                  image: AssetImage('assets/map.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 30), // Prevent bottom cut-off
+                  ]),
+                ),
+              ],
+            ),
+    );
+  }
+
