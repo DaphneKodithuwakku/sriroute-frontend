@@ -158,7 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 15),
             _buildSection(
               title: 'ACTIONS',
               items: [
@@ -210,17 +210,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
               IconButton(
                 icon: Icon(Icons.home, color: Colors.white, size: 24),
                 onPressed: () => _onItemTapped(0),
-                color:
-                    _selectedIndex == 0
-                        ? Colors.white
-                        : Colors.white.withOpacity(0.7),
+                color: _selectedIndex == 0
+                    ? Colors.white
+                    : Colors.white.withOpacity(0.7),
               ),
               IconButton(
                 icon: SimpleVRGlassesIcon(
-                  color:
-                      _selectedIndex == 1
-                          ? Colors.white
-                          : Colors.white.withOpacity(0.7),
+                  color: _selectedIndex == 1
+                      ? Colors.white
+                      : Colors.white.withOpacity(0.7),
                   size: 34,
                 ),
                 onPressed: () => _onItemTapped(1),
@@ -228,26 +226,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
               IconButton(
                 icon: Icon(Icons.search, color: Colors.white, size: 24),
                 onPressed: () => _onItemTapped(2),
-                color:
-                    _selectedIndex == 2
-                        ? Colors.white
-                        : Colors.white.withOpacity(0.7),
+                color: _selectedIndex == 2
+                    ? Colors.white
+                    : Colors.white.withOpacity(0.7),
               ),
               IconButton(
                 icon: Icon(Icons.menu_book, color: Colors.white, size: 24),
                 onPressed: () => _onItemTapped(3),
-                color:
-                    _selectedIndex == 3
-                        ? Colors.white
-                        : Colors.white.withOpacity(0.7),
+                color: _selectedIndex == 3
+                    ? Colors.white
+                    : Colors.white.withOpacity(0.7),
               ),
               IconButton(
                 icon: Icon(Icons.person, color: Colors.white, size: 24),
                 onPressed: () => _onItemTapped(4),
-                color:
-                    _selectedIndex == 4
-                        ? Colors.white
-                        : Colors.white.withOpacity(0.7),
+                color: _selectedIndex == 4
+                    ? Colors.white
+                    : Colors.white.withOpacity(0.7),
               ),
             ],
           ),
@@ -391,55 +386,54 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
                     SizedBox(height: 8),
                     favoriteEvents.isEmpty
                         ? Text(
-                          'No favorited events yet.',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
-                        )
+                            'No favorited events yet.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                            ),
+                          )
                         : Column(
-                          children:
-                              favoriteEvents.map((event) {
-                                return ListTile(
-                                  leading: Icon(
-                                    Icons.favorite,
-                                    color: Colors.deepPurple,
-                                    size: 28,
+                            children: favoriteEvents.map((event) {
+                              return ListTile(
+                                leading: Icon(
+                                  Icons.favorite,
+                                  color: Colors.deepPurple,
+                                  size: 28,
+                                ),
+                                title: Text(
+                                  event.title,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[800],
                                   ),
-                                  title: Text(
-                                    event.title,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey[800],
-                                    ),
+                                ),
+                                subtitle: Text(
+                                  '${event.description} - ${event.date.day}/${event.date.month}/${event.date.year}',
+                                  style: TextStyle(color: Colors.grey[600]),
+                                ),
+                                trailing: IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.grey[400],
                                   ),
-                                  subtitle: Text(
-                                    '${event.description} - ${event.date.day}/${event.date.month}/${event.date.year}',
-                                    style: TextStyle(color: Colors.grey[600]),
-                                  ),
-                                  trailing: IconButton(
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: Colors.grey[400],
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        favoriteEvents.remove(event);
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              '${event.title} removed from favourites',
-                                            ),
+                                  onPressed: () {
+                                    setState(() {
+                                      favoriteEvents.remove(event);
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            '${event.title} removed from favourites',
                                           ),
-                                        );
-                                      });
-                                    },
-                                  ),
-                                );
-                              }).toList(),
-                        ),
+                                        ),
+                                      );
+                                    });
+                                  },
+                                ),
+                              );
+                            }).toList(),
+                          ),
                   ],
                 ),
               ),
@@ -488,10 +482,9 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
                             isFavorited
                                 ? Icons.favorite
                                 : Icons.favorite_border,
-                            color:
-                                isFavorited
-                                    ? Colors.deepPurple
-                                    : Colors.grey[400],
+                            color: isFavorited
+                                ? Colors.deepPurple
+                                : Colors.grey[400],
                           ),
                           onPressed: () {
                             setState(() {
@@ -1090,20 +1083,19 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                         SizedBox(height: 8),
                         DropdownButtonFormField<String>(
                           value: _problemType,
-                          items:
-                              [
-                                    'App Issue',
-                                    'Content Error',
-                                    'VR Tour Problem',
-                                    'Other',
-                                  ]
-                                  .map(
-                                    (type) => DropdownMenuItem(
-                                      value: type,
-                                      child: Text(type),
-                                    ),
-                                  )
-                                  .toList(),
+                          items: [
+                            'App Issue',
+                            'Content Error',
+                            'VR Tour Problem',
+                            'Other',
+                          ]
+                              .map(
+                                (type) => DropdownMenuItem(
+                                  value: type,
+                                  child: Text(type),
+                                ),
+                              )
+                              .toList(),
                           onChanged: (value) {
                             setState(() {
                               _problemType = value!;
@@ -1223,12 +1215,11 @@ class _SimpleVRGlassesPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint =
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5
-          ..strokeCap = StrokeCap.round;
+    final Paint paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5
+      ..strokeCap = StrokeCap.round;
 
     canvas.drawRect(
       Rect.fromLTRB(
