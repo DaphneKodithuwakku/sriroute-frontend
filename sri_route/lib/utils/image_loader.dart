@@ -342,4 +342,96 @@ class ImagePreloader {
     if (_cache.containsKey(url)) {
       return _cache[url]!;
     }
+   // Start preloading this image
+    preloadImage(url);
     
+    return Image(
+      key: key,
+      image: ResizeImage(
+        NetworkImage(url),
+        width: width?.toInt(),
+        height: height?.toInt(),
+      ),
+      fit: fit,
+      filterQuality: FilterQuality.medium,
+      errorBuilder: (context, error, stackTrace) {
+        return _buildErrorWidget(error.toString());
+      },
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) return child;
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: frame != null 
+            ? child 
+            : Container(
+                width: width,
+                height: height,
+                color: Colors.grey[300],
+                child: const Center(child: CircularProgressIndicator()),
+              ),
+        );
+      },
+    );
+  }
+  
+  // Get a panorama image with progressive loading
+  static Image getPanoramaImage(
+    String url, {
+    Key? key,
+    ImageLoadingBuilder? loadingBuilder,
+    ImageErrorWidgetBuilder? errorBuilder,
+  }) {
+    if (!_cache.containsKey(url)) {
+      preloadImage(url, isPanorama: true);
+    }
+    
+    return Image.network(
+      url,
+      key: key,
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) return child;
+        return AnimatedOpacity(
+          opacity: frame != null ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+          child: child,
+        );
+      },
+      loadingBuilder: loadingBuilder ?? (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                    : null,
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+              const SizedBox(height: 10),
+              if (loadingProgress.expectedTotalBytes != null)
+                Text(
+                  '${((loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)) * 100).toStringAsFixed(0)}%',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black,
+                        offset: Offset(1, 1),
+                        blurRadius: 3,
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+      errorBuilder: errorBuilder ?? (context, error, stackTrace) {
+        return _buildErrorWidget(error.toString());
+      },
+    );
+  }   
