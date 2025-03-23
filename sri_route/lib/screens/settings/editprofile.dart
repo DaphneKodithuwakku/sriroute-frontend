@@ -186,3 +186,38 @@ class _EditProfilePageState extends State<EditProfilePage> {
       return null;  // Return null if upload fails
     }
   }
+  Future<void> _saveUserData() async {
+    if (!mounted) return;
+    
+    setState(() {
+      _isSaving = true;
+    });
+    
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw Exception("No user signed in");
+      }
+      
+      // Step 1: Try to upload profile picture if a new one was selected
+      String? photoURL = _profileImageUrl;  // Keep current if no new image
+      if (_imageFile != null) {
+        try {
+          photoURL = await _uploadProfilePicture();
+        } catch (uploadError) {
+          debugPrint("Profile picture upload failed: $uploadError");
+          // Continue with saving other data even if image upload fails
+        }
+      }
+      
+      // Step 2: Update Firebase Auth user display name
+      try {
+        await user.updateDisplayName(nameController.text);
+        if (photoURL != null) {
+          await user.updatePhotoURL(photoURL);
+        }
+      } catch (authUpdateError) {
+        debugPrint("Auth profile update failed: $authUpdateError");
+        // Continue with Firestore update even if Auth update fails
+      }
+   
