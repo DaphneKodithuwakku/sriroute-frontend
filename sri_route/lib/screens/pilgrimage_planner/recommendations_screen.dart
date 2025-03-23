@@ -99,3 +99,156 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Header with search criteria
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.teal.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Pilgrimage Sites for ${widget.religion}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.teal[800],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.calendar_today, size: 16, color: Colors.teal[600]),
+                        const SizedBox(width: 8),
+                        Text('Date: ${widget.dateRange}', style: TextStyle(color: Colors.teal[700])),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Icon(Icons.location_on, size: 16, color: Colors.teal[600]),
+                        const SizedBox(width: 8),
+                        Text('Region: ${widget.region}', style: TextStyle(color: Colors.teal[700])),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: FutureBuilder<List<PilgrimageRecommendation>>(
+                  future: _recommendationsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(color: Colors.teal),
+                            SizedBox(height: 16),
+                            Text(
+                              'Generating AI recommendations...',
+                              style: TextStyle(color: Colors.teal),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.error_outline, size: 60, color: Colors.red),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Error: ${snapshot.error}',
+                              style: const TextStyle(color: Colors.red),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _recommendationsFuture = _loadRecommendations();
+                                });
+                              },
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.search_off, size: 60, color: Colors.grey),
+                            SizedBox(height: 16),
+                            Text(
+                              'No recommendations found',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      final recommendations = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: recommendations.length,
+                        itemBuilder: (context, index) {
+                          final recommendation = recommendations[index];
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RecommendationDetailsScreen(
+                                      recommendation: recommendation,
+                                    ),
+                                  ),
+                                );
+                              },
+                              borderRadius: BorderRadius.circular(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Map
+                                  Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(12),
+                                          topRight: Radius.circular(12),
+                                        ),
+                                        child: SizedBox(
+                                          height: 180,
+                                          width: double.infinity,
+                                          child: GoogleMap(
+                                            initialCameraPosition: CameraPosition(
+                                              target: LatLng(
+                                                recommendation.latitude,
+                                                recommendation.longitude,
+                                              ),
+                                              zoom: 14,
+                                            ),
+                                            zoomControlsEnabled: false,
+                                            mapToolbarEnabled: false,
+                                            myLocationButtonEnabled: false,
+                                            markers: {
+                                              Marker(
+                                                markerId: MarkerId(recommendation.name),
+                                                position: LatLng(recommendation.latitude, recommendation.longitude),
+                                                infoWindow: InfoWindow(title: recommendation.name),
+                                              ),
+                                            },
+                                          ),
+                                        ),
+                                      ),
