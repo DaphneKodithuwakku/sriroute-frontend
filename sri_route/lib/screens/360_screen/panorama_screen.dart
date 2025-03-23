@@ -93,3 +93,53 @@ class _PanoramaScreenState extends State<PanoramaScreen> with SingleTickerProvid
     _preloadTimer?.cancel();
     super.dispose();
   }
+ // Start background preloading of nearby images
+  void _startBackgroundPreloading() {
+    _preloadTimer?.cancel();
+    _preloadTimer = Timer.periodic(_preloadingTimerDuration, (_) async {
+      try {
+        final points = await _tourPointsFuture;
+        if (points.isEmpty || _currentPoint == null) return;
+        
+        // Find adjacent points to preload
+        final currentIndex = points.indexWhere((p) => p.id == _currentPoint!.id);
+        if (currentIndex == -1) return;
+        
+        final urlsToPreload = <String>[];
+        
+        // Always preload next point first
+        if (currentIndex + 1 < points.length) {
+          urlsToPreload.add(points[currentIndex + 1].imageUrl);
+        }
+        
+        // Then preload previous point
+        if (currentIndex - 1 >= 0) {
+          urlsToPreload.add(points[currentIndex - 1].imageUrl);
+        }
+        
+        // Also preload two steps ahead if available
+        if (currentIndex + 2 < points.length) {
+          urlsToPreload.add(points[currentIndex + 2].imageUrl);
+        }
+        
+        // Prioritize loading these images
+        await ImagePreloader.prioritizeImages(urlsToPreload);
+        
+        // Update loaded status
+        _updateLoadedStatus(points);
+      } catch (e) {
+        debugPrint('Error in background preloading: $e');
+      }
+    });
+  }
+  
+  // Update which points are preloaded
+  void _updateLoadedStatus(List<TourPoint> points) {
+    final loadedUrls = ImagePreloader.loadedUrls;
+    
+    setState(() {
+      for (final point in points) {
+        _loadedPoints[point.id] = loadedUrls.contains(point.imageUrl);
+      }
+    });
+  }
