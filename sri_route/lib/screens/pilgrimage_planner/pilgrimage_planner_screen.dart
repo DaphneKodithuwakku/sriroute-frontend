@@ -54,3 +54,116 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _widgetOptions = <Widget>[
+    const Text('Home Screen'),
+    const Text('VR Tour Screen'),
+    const PilgrimagePlannerScreen(),
+    const Text('User Manual Screen'),
+    const Text('Profile Screen'),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(elevation: 0),
+      body: SafeArea(
+        child: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.black87,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black
+                    .withValues(red: 0, green: 0, blue: 0, alpha: 77),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.home,
+                  color: _selectedIndex == 0
+                      ? Colors.white
+                      : Colors.white.withValues(
+                          red: 255, green: 255, blue: 255, alpha: 179),
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(0),
+              ),
+              IconButton(
+                icon: SimpleVRGlassesIcon(
+                  color: _selectedIndex == 1
+                      ? Colors.white
+                      : Colors.white.withValues(
+                          red: 255, green: 255, blue: 255, alpha: 179),
+                  size: 34,
+                ),
+                onPressed: () => _onItemTapped(1),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: _selectedIndex == 2
+                      ? Colors.white
+                      : Colors.white.withValues(
+                          red: 255, green: 255, blue: 255, alpha: 179),
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(2),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.menu_book,
+                  color: _selectedIndex == 3
+                      ? Colors.white
+                      : Colors.white.withValues(
+                          red: 255, green: 255, blue: 255, alpha: 179),
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(3),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.person,
+                  color: _selectedIndex == 4
+                      ? Colors.white
+                      : Colors.white.withValues(
+                          red: 255, green: 255, blue: 255, alpha: 179),
+                  size: 24,
+                ),
+                onPressed: () => _onItemTapped(4),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
