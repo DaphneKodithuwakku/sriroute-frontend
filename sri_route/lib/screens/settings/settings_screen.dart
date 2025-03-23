@@ -308,4 +308,97 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     }
                   },
                 ),
-                
+                // Add Favorites item before Notifications
+                _buildListTile(
+                  icon: Icons.favorite,
+                  title: 'Favorites',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FavoritesScreen(),
+                      ),
+                    );
+                  },
+                ),
+                _buildListTile(
+                  icon: Icons.notifications,
+                  title: 'Notifications',
+                  onTap: () {
+                    // Navigate to notifications screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                _buildListTile(
+                  icon: Icons.lock,
+                  title: 'Privacy',
+                  onTap: () {
+                    // Show privacy policy or navigate to privacy screen
+                    _showPrivacyDialog();
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildSection(
+              title: 'SUPPORT & ABOUT',
+              items: [
+                _buildListTile(
+                  icon: Icons.help,
+                  title: 'Help & Support',
+                  onTap: () {
+                    // Show help & support dialog or navigate to help screen
+                    _showHelpSupportDialog();
+                  },
+                ),
+                _buildListTile(
+                  icon: Icons.description,
+                  title: 'Terms and Policies',
+                  onTap: () {
+                    // Show terms and policies dialog
+                    _showTermsDialog();
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildSection(
+              title: 'ACTIONS',
+              items: [
+                _buildListTile(
+                  icon: Icons.report,
+                  title: 'Report a Problem',
+                  onTap: _launchReportProblemForm,
+                ),
+                _buildListTile(
+                  icon: Icons.no_accounts,
+                  title: 'Deactivate Account',
+                  onTap: () => _showDeleteAccountConfirmation(),
+                ),
+                _buildListTile(
+                  icon: Icons.logout,
+                  title: 'Log Out',
+                  onTap: () async {
+                    try {
+                      await _auth.signOut();
+                      if (mounted) {
+                        Navigator.pushReplacementNamed(context, '/login');
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error signing out: $e')),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+    );
+  }
