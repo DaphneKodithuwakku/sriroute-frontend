@@ -36,4 +36,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             ],
           ),
         ],
-      ),
+      ),body: StreamBuilder<List<EventNotification>>(
+        stream: NotificationService.getNotifications(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
