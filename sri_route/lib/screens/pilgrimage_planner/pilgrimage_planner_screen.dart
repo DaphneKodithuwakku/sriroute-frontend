@@ -372,3 +372,128 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       }
     }
   }
+  // Update region based on current location
+  void _updateRegionBasedOnLocation() {
+    if (userLocation == null) return;
+    
+    // Find nearest region by comparing coordinates
+    // Here's a simplified version - in a real app you would have more precise region boundaries
+    if (userLocation!.latitude > 7.8 && userLocation!.latitude < 9.8) {
+      // Northern regions
+      if (userLocation!.longitude < 80.2) {
+        selectedRegion = 'Jaffna District';
+      } else {
+        selectedRegion = 'Trincomalee District';
+      }
+    } else if (userLocation!.latitude > 7.0 && userLocation!.latitude < 7.8) {
+      // Central regions
+      selectedRegion = 'Kandy District';
+    } else if (userLocation!.latitude > 6.5 && userLocation!.latitude < 7.0) {
+      // Western regions
+      if (userLocation!.longitude < 80.0) {
+        selectedRegion = 'Colombo District';
+      } else {
+        selectedRegion = 'Kegalle District';
+      }
+    } else {
+      // Southern regions
+      if (userLocation!.longitude < 80.3) {
+        selectedRegion = 'Galle District';
+      } else {
+        selectedRegion = 'Hambantota District';
+      }
+    }
+  }
+
+  Future<void> _selectDateRange(BuildContext context) async {
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      initialDateRange: DateTimeRange(
+        start: DateTime.now(),
+        end: DateTime.now().add(const Duration(days: 2)),
+      ),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.teal,
+            colorScheme: const ColorScheme.light(primary: Colors.teal),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null && mounted) {
+      setState(() {
+        String formattedStart = DateFormat('MMM d').format(picked.start);
+        String formattedEnd = DateFormat('MMM d, yyyy').format(picked.end);
+        daysController.text = '$formattedStart - $formattedEnd';
+      });
+    }
+  }
+
+  // Add this method to verify location before navigation
+  void _navigateToRecommendations() {
+    // Validate date range
+    if (daysController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a date range'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    
+    // Check if we have a valid location
+    if (userLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please set your starting location'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    
+    // If location is too old, suggest refreshing
+    final now = DateTime.now();
+    final locationTimestamp = userLocation!.timestamp ?? now;
+    final difference = now.difference(locationTimestamp);
+    
+    if (difference.inMinutes > 30) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Location might be outdated'),
+          content: const Text('Your location data is more than 30 minutes old. Would you like to refresh it before continuing?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                getCurrentLocation().then(() {
+                  // Only navigate if we're still mounted
+                  if (mounted) _actuallyNavigateToRecommendations();
+                });
+              },
+              child: const Text('REFRESH'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _actuallyNavigateToRecommendations();
+              }, 
+              child: const Text('CONTINUE ANYWAY'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      _actuallyNavigateToRecommendations();
+    }
+  }
