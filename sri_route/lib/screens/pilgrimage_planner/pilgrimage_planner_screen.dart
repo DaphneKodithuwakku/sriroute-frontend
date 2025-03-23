@@ -1,3 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'recommendations_screen.dart'; // Add this import statement
+import '../../services/location_service.dart';
+import '../../models/location_model.dart';
+import 'package:geolocator/geolocator.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -295,24 +302,22 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
   void initState() {
     super.initState();
     // Initialize with default location
-    userLocation = LocationModel(
-      latitude: 6.9271, 
-      longitude: 79.8612,
-      name: 'Colombo'
-    );
-    
+    userLocation =
+        LocationModel(latitude: 6.9271, longitude: 79.8612, name: 'Colombo');
+
     // Attempt to get user's current location when the screen loads
     _getCurrentLocation();
   }
+
   // Add method to get current location
   Future<void> _getCurrentLocation() async {
     setState(() {
       _isLoadingLocation = true;
       _locationError = null;
     });
-    
+
     debugPrint('PilgrimagePlanner: Getting current location...');
-    
+
     try {
       // Show feedback if it takes time
       Future.delayed(const Duration(seconds: 2), () {
@@ -325,17 +330,16 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
           );
         }
       });
-      
+
       // Use the LocationService to get location
       final locationService = LocationService();
       final position = await locationService.getCurrentLocation();
-      
+
       if (position != null) {
         final placeName = await locationService.getAddressFromCoordinates(
-          position.latitude, 
-          position.longitude
-        ) ?? 'Current Location';
-        
+                position.latitude, position.longitude) ??
+            'Current Location';
+
         if (mounted) {
           setState(() {
             userLocation = LocationModel(
@@ -345,11 +349,11 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
               timestamp: DateTime.now(), // Explicitly add timestamp
             );
             _isLoadingLocation = false;
-            
+
             // Update the region based on location
             _updateRegionBasedOnLocation();
           });
-          
+
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -363,7 +367,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       }
     } catch (e) {
       debugPrint('Error getting location: $e');
-      
+
       if (mounted) {
         setState(() {
           _locationError = e.toString();
@@ -372,10 +376,11 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       }
     }
   }
+
   // Update region based on current location
   void _updateRegionBasedOnLocation() {
     if (userLocation == null) return;
-    
+
     // Find nearest region by comparing coordinates
     // Here's a simplified version - in a real app you would have more precise region boundaries
     if (userLocation!.latitude > 7.8 && userLocation!.latitude < 9.8) {
@@ -449,7 +454,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       );
       return;
     }
-    
+
     // Check if we have a valid location
     if (userLocation == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -460,18 +465,19 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       );
       return;
     }
-    
+
     // If location is too old, suggest refreshing
     final now = DateTime.now();
     final locationTimestamp = userLocation!.timestamp ?? now;
     final difference = now.difference(locationTimestamp);
-    
+
     if (difference.inMinutes > 30) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Location might be outdated'),
-          content: const Text('Your location data is more than 30 minutes old. Would you like to refresh it before continuing?'),
+          content: const Text(
+              'Your location data is more than 30 minutes old. Would you like to refresh it before continuing?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -487,7 +493,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
                 _actuallyNavigateToRecommendations();
-              }, 
+              },
               child: const Text('CONTINUE ANYWAY'),
             ),
           ],
@@ -549,7 +555,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                 const SizedBox(height: 8),
                 _buildReligionSelector(),
                 const SizedBox(height: 24),
-                
+
                 // Date Range Selection
                 const Text(
                   'Select Date Range',
@@ -573,7 +579,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                
+
                 // Region Selection
                 const Text(
                   'Select Region',
@@ -591,10 +597,12 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  items: regions.map((region) => DropdownMenuItem(
-                    value: region,
-                    child: Text(region),
-                  )).toList(),
+                  items: regions
+                      .map((region) => DropdownMenuItem(
+                            value: region,
+                            child: Text(region),
+                          ))
+                      .toList(),
                   onChanged: (value) {
                     if (value != null) {
                       setState(() {
@@ -604,7 +612,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
-                
+
                 // Location Section
                 const Text(
                   'Starting Location',
@@ -641,14 +649,16 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                               ? const SizedBox(
                                   width: 24,
                                   height: 24,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
                                 )
                               : TextButton.icon(
                                   onPressed: _getCurrentLocation,
                                   icon: const Icon(Icons.my_location),
                                   label: const Text('Get Current'),
                                   style: TextButton.styleFrom(
-                                    backgroundColor: Colors.teal.withOpacity(0.1),
+                                    backgroundColor:
+                                        Colors.teal.withOpacity(0.1),
                                   ),
                                 ),
                         ],
@@ -679,4 +689,51 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                
+
+                // Action Buttons
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: _navigateToRecommendations,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'Get Recommendations',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Simple religion selector with radio buttons
+  Widget _buildReligionSelector() {
+    return Column(
+      children: religions.map((religion) {
+        return RadioListTile<String>(
+          title: Text(religion),
+          value: religion,
+          groupValue: selectedReligion,
+          onChanged: (value) {
+            if (value != null) {
+              setState(() {
+                selectedReligion = value;
+              });
+            }
+          },
+        );
+      }).toList(),
+    );
+  }
+}
