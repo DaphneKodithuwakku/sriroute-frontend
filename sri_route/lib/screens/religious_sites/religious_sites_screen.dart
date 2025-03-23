@@ -114,6 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -231,3 +232,136 @@ class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
     "Galle",
     "Anuradhapura",
   ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Religious Sites",
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: "Select Religion",
+                labelStyle: const TextStyle(color: Colors.teal),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(
+                  Icons.account_balance,
+                  color: Colors.teal,
+                ),
+              ),
+              value: selectedReligion,
+              items:
+                  religions.map((religion) {
+                    return DropdownMenuItem<String>(
+                      value: religion,
+                      child: Text(religion),
+                    );
+                  }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedReligion = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16.0),
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: "Select District",
+                labelStyle: const TextStyle(color: Colors.teal),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: const Icon(Icons.location_on, color: Colors.teal),
+              ),
+              value: selectedDistrict,
+              items:
+                  districts.map((district) {
+                    return DropdownMenuItem<String>(
+                      value: district,
+                      child: Text(district),
+                    );
+                  }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedDistrict = value;
+                });
+              },
+            ),
+            const SizedBox(height: 20.0),
+            Expanded(
+              child: ReligiousSitesList(
+                religion: selectedReligion,
+                district: selectedDistrict,
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(Icons.home, color: Colors.white, size: 24),
+                onPressed: null, // No action
+              ),
+              IconButton(
+                icon: SimpleVRGlassesIcon(
+                  color: Colors.white.withOpacity(0.7),
+                  size: 34,
+                ),
+                onPressed: null, // No action
+              ),
+              IconButton(
+                icon: Icon(Icons.search, color: Colors.white, size: 24),
+                onPressed: null, // No action
+              ),
+              IconButton(
+                icon: Icon(Icons.menu_book, color: Colors.white, size: 24),
+                onPressed: null, // No action
+              ),
+              IconButton(
+                icon: Icon(Icons.person, color: Colors.white, size: 24),
+                onPressed: null, // No action
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
