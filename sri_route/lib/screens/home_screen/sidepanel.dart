@@ -52,3 +52,132 @@ class _SidePanelState extends State<SidePanel> {
       }
     }
   }
+  void _listenForNotifications() {
+    NotificationService.getUnreadCount().listen((count) {
+      if (mounted) {
+        setState(() {
+          _unreadNotifications = count;
+        });
+      }
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: _isLoading 
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+        children: [
+          // User header with tappable profile image
+          InkWell(
+            onTap: () async {
+              // Close the drawer first
+              Navigator.pop(context);
+              
+              // Navigate to EditProfilePage and refresh data if needed
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditProfilePage()),
+              );
+              
+              if (result == true) {
+                _loadUserData(); // Reload data if profile was updated
+              }
+            },
+            child: UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.blueGrey,
+              ),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                backgroundImage: _profileImageUrl != null 
+                    ? NetworkImage(_profileImageUrl!) 
+                    : null,
+                child: _profileImageUrl == null
+                    ? Icon(Icons.person, color: Colors.grey[700])
+                    : null,
+              ),
+              accountName: Text(_username),
+              accountEmail: Text(FirebaseAuth.instance.currentUser?.email ?? 'Guest User'),
+            ),
+          ),
+          
+          // Menu items with proper tab index values
+          _buildMenuItem(
+            context, 
+            Icons.home, 
+            "Home", 
+            Colors.blue, 
+            () => _selectTab(TabIndex.home)
+          ),
+          
+          _buildMenuItem(
+            context, 
+            Icons.vrpano, 
+            "Virtual Tours", 
+            Colors.orange, 
+            () => _selectTab(TabIndex.virtualTours)
+          ),
+          
+          _buildMenuItem(
+            context, 
+            Icons.map, 
+            "Pilgrimage Planner", 
+            Colors.green, 
+            () => _selectTab(TabIndex.pilgrimagePlanner)
+          ),
+          
+          _buildMenuItem(
+            context, 
+            Icons.menu_book, 
+            "Cultural Guide", 
+            Colors.amber, 
+            () => _selectTab(TabIndex.culturalGuide)
+          ),
+          
+          // Add a Favorites menu item
+          _buildMenuItem(
+            context, 
+            Icons.favorite, 
+            "Favorites", 
+            Colors.red, 
+            () => _selectTab(TabIndex.favorites)
+          ),
+          
+          // Add a Notifications menu item with badge
+          _buildNotificationMenuItem(
+            context, 
+            "Notifications", 
+            Colors.purple, 
+            _unreadNotifications, 
+            () {
+              Navigator.pop(context); // Close drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const NotificationsScreen()),
+              );
+            }
+          ),
+          
+          const Divider(),
+          
+          _buildMenuItem(
+            context, 
+            Icons.settings, 
+            "Settings", 
+            Colors.grey, 
+            () => _selectTab(TabIndex.settings)
+          ),
+          
+          _buildMenuItem(
+            context, 
+            Icons.logout, 
+            "Logout", 
+            Colors.redAccent, 
+            _handleLogout
+          ),
+        ],
+      ),
+    );
+  }
