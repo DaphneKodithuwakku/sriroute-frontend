@@ -31,3 +31,19 @@ class EventNotification {
       'isRead': isRead,
     };
   }
+  
+  factory EventNotification.fromMap(String id, Map<String, dynamic> map) {
+    return EventNotification(
+      id: id,
+      title: map['title'] ?? '',
+      body: map['body'] ?? '',
+      eventDate: (map['eventDate'] as Timestamp).toDate(),
+      eventId: map['eventId'] ?? '',
+      createdAt: (map['createdAt'] as Timestamp).toDate(),
+      scheduledFor: map['scheduledFor'] != null 
+          ? (map['scheduledFor'] as Timestamp).toDate() 
+          : null,
+      isRead: map['isRead'] ?? false,
+    );
+  }
+}
