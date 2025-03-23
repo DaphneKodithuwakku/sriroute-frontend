@@ -279,3 +279,30 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       },
     },
   };
+
+  final Map<String, Map<String, String>> iconToGuideline = {
+    'Buddhism': {
+      'Bow to Monks': 'behavior',
+      'Sit Lower': 'behavior',
+      'Mindful Silence': 'behavior',
+      'No Handshakes': 'behavior',
+    },
+    'Christianity': {
+      'Genuflect': 'behavior',
+      'Join Hymns': 'behavior',
+      'No Lent Flowers': 'offerings',
+      'No Communion': 'behavior',
+    },
+    'Hinduism': {
+      'Clockwise Walk': 'behavior',
+      'Accept Tilak': 'behavior',
+      'Marigolds': 'offerings',
+      'No Alcohol': 'behavior',
+    },
+    'Islam': {
+      'Prayer Space': 'behavior',
+      'Salam Greeting': 'behavior',
+      'Gender Separate': 'behavior',
+      'Ramadan Dates': 'offerings',
+    },
+  };
