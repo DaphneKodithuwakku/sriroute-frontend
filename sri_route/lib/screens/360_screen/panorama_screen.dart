@@ -1,3 +1,14 @@
+import 'dart:async';
+import 'dart:math' as math;
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:panorama/panorama.dart';
+import '../../models/tour_models.dart';
+import '../../services/tour_service.dart';
+import '../../utils/image_loader.dart';
+import '../../widgets/panorama_hotspot.dart';
+import '../../widgets/transition_panorama.dart';
+
 class PanoramaScreen extends StatefulWidget {
   final String? storagePath;
   final TourLocation? location;
