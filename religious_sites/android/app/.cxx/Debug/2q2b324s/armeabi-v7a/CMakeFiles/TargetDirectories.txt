@@ -1,2 +1,0 @@
-D:/sriroute-frontend/religious_sites/android/app/.cxx/Debug/2q2b324s/armeabi-v7a/CMakeFiles/edit_cache.dir
-D:/sriroute-frontend/religious_sites/android/app/.cxx/Debug/2q2b324s/armeabi-v7a/CMakeFiles/rebuild_cache.dir
