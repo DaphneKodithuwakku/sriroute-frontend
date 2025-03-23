@@ -114,3 +114,120 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Home Screen'),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => ReligiousSitesPage()),
+              );
+            },
+            child: const Text('Go to Religious Sites'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SimpleVRGlassesIcon extends StatelessWidget {
+  final Color color;
+  final double size;
+
+  const SimpleVRGlassesIcon({required this.color, this.size = 24});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      child: CustomPaint(painter: _SimpleVRGlassesPainter(color: color)),
+    );
+  }
+}
+
+class _SimpleVRGlassesPainter extends CustomPainter {
+  final Color color;
+
+  _SimpleVRGlassesPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5
+          ..strokeCap = StrokeCap.round;
+
+    canvas.drawRect(
+      Rect.fromLTRB(
+        size.width * 0.15,
+        size.height * 0.35,
+        size.width * 0.85,
+        size.height * 0.65,
+      ),
+      paint,
+    );
+
+    canvas.drawLine(
+      Offset(size.width * 0.5, size.height * 0.35),
+      Offset(size.width * 0.5, size.height * 0.65),
+      paint,
+    );
+
+    canvas.drawOval(
+      Rect.fromLTRB(
+        size.width * 0.2,
+        size.height * 0.4,
+        size.width * 0.45,
+        size.height * 0.6,
+      ),
+      paint,
+    );
+
+    canvas.drawOval(
+      Rect.fromLTRB(
+        size.width * 0.55,
+        size.height * 0.4,
+        size.width * 0.8,
+        size.height * 0.6,
+      ),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class ReligiousSitesPage extends StatefulWidget {
+  @override
+  _ReligiousSitesPageState createState() => _ReligiousSitesPageState();
+}
+
+class _ReligiousSitesPageState extends State<ReligiousSitesPage> {
+  String? selectedReligion;
+  String? selectedDistrict;
+
+  final List<String> religions = [
+    "Buddhism",
+    "Christianity",
+    "Hinduism",
+    "Islam",
+  ];
+  final List<String> districts = [
+    "Colombo",
+    "Kandy",
+    "Jaffna",
+    "Galle",
+    "Anuradhapura",
+  ];
