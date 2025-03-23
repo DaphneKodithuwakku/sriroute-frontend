@@ -1,3 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/user_service.dart';
+import '../../services/notification_service.dart';
+import 'homescreen.dart' hide Text, MyApp;
+import '../settings/settings_screen.dart';
+import '../360_screen/360_home_screen.dart';
+import '../cultural_guide/cultural_guide_screen.dart';
+import '../pilgrimage_planner/pilgrimage_planner_screen.dart';
+import '../favorites_screen.dart';
+import '../notifications/notifications_screen.dart';
+import '../settings/editprofile.dart';
+
 // Ensure these tab indices match the order in MainScreen's _widgetOptions list
 class TabIndex {
   static const int home = 0;
@@ -52,6 +66,7 @@ class _SidePanelState extends State<SidePanel> {
       }
     }
   }
+
   void _listenForNotifications() {
     NotificationService.getUnreadCount().listen((count) {
       if (mounted) {
@@ -181,6 +196,7 @@ class _SidePanelState extends State<SidePanel> {
       ),
     );
   }
+  
   // Handle logout separately to maintain proper flow
   void _handleLogout() async {
     // First close the drawer
@@ -221,8 +237,8 @@ class _SidePanelState extends State<SidePanel> {
       }
     }
   }
-
-// Helper method to handle tab selection
+  
+  // Helper method to handle tab selection
   void _selectTab(int index) {
     // Close the drawer
     Navigator.pop(context);
