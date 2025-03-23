@@ -93,3 +93,109 @@ class TourService {
       await ImagePreloader.preloadImage(point.imageUrl);
     }
   }
+  // Generate tour points automatically from a storage path
+  Future<List<TourPoint>> generateTourFromStoragePath(String storagePath) async {
+    try {
+      // Add debug logging
+      debugPrint('Generating tour from storage path: $storagePath');
+      
+      final storageRef = _storage.ref(storagePath);
+      List<Reference> items = [];
+      
+      try {
+        final listResult = await storageRef.listAll();
+        
+        // Filter for image files
+        items = listResult.items.where((item) => 
+          item.name.toLowerCase().endsWith('.jpg') || 
+          item.name.toLowerCase().endsWith('.jpeg') ||
+          item.name.toLowerCase().endsWith('.png')
+        ).toList();
+        
+        debugPrint('Found ${items.length} image files in $storagePath');
+      } catch (e) {
+        debugPrint('Error listing files in storage: $e');
+        throw Exception('Could not access storage location: $e');
+      }
+      
+      if (items.isEmpty) {
+        throw Exception('No panorama images found in $storagePath');
+      }
+      
+      // Sort items to ensure consistent order
+      items.sort((a, b) => a.name.compareTo(b.name));
+      
+      // Get URLs for all panorama images
+      List<String> urls = [];
+      List<String> names = [];
+      
+      for (var item in items) {
+        try {
+          final url = await item.getDownloadURL();
+          urls.add(url);
+          names.add(item.name);
+          debugPrint('Got URL for ${item.name}: $url');
+        } catch (e) {
+          debugPrint('Error getting URL for ${item.name}: $e');
+          // Continue with other images
+        }
+      }
+
+      if (urls.isEmpty) {
+        throw Exception('Failed to load any images from storage');
+      }
+      
+      // Create tour points with hotspots
+      List<TourPoint> tourPoints = [];
+      
+      // First point (Entrance)
+      if (urls.length >= 1) {
+        tourPoints.add(TourPoint(
+          id: 'point_0',
+          name: 'Entrance View (${names[0]})',
+          imageUrl: urls[0],
+          storagePath: '${storagePath}/${names[0]}',
+          hotspots: urls.length > 1 ? [
+            TourHotspot(
+              id: 'hotspot_0_to_1',
+              longitude: 30.0, 
+              latitude: 0.0, 
+              targetPointId: 'point_1',
+              label: 'Enter',
+              icon: Icons.arrow_forward,
+              color: Colors.blue,
+            ),
+          ] : [],
+        ));
+      }
+      
+      // Middle points
+      for (int i = 1; i < urls.length - 1; i++) {
+        tourPoints.add(TourPoint(
+          id: 'point_$i',
+          name: 'View ${i+1} (${names[i]})',
+          imageUrl: urls[i],
+          storagePath: '${storagePath}/${names[i]}',
+          hotspots: [
+            TourHotspot(
+              id: 'hotspot_${i}_to_${i+1}',
+              longitude: 30.0, 
+              latitude: 0.0, 
+              targetPointId: 'point_${i+1}',
+              label: 'Next',
+              icon: Icons.arrow_forward,
+              color: Colors.blue,
+            ),
+            TourHotspot(
+              id: 'hotspot_${i}_to_${i-1}',
+              longitude: -150.0, 
+              latitude: 0.0, 
+              targetPointId: 'point_${i-1}',
+              label: 'Back',
+              icon: Icons.arrow_back,
+              color: Colors.orange,
+            ),
+          ],
+        ));
+      }
+      
