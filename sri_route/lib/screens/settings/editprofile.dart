@@ -220,4 +220,84 @@ class _EditProfilePageState extends State<EditProfilePage> {
         debugPrint("Auth profile update failed: $authUpdateError");
         // Continue with Firestore update even if Auth update fails
       }
-   
+
+      
+      // Step 3: Prepare user data for Firestore
+      final userData = {
+        'username': nameController.text,
+        'email': emailController.text,
+        'dob': dobController.text,
+        'country': selectedCountry,
+        'religion': selectedReligion,
+        'lastUpdated': FieldValue.serverTimestamp(),
+      };
+
+      // Add profile URL if available
+      if (photoURL != null) {
+        userData['photoURL'] = photoURL;
+      }
+      
+      // Step 4: Save to Firestore with retry
+      bool firestoreSaved = false;
+      for (int attempt = 0; attempt < 3 && !firestoreSaved; attempt++) {
+        try {
+          await _firestore.collection('users').doc(user.uid).set(
+            userData, 
+            SetOptions(merge: true)
+          );
+          firestoreSaved = true;
+        } catch (firestoreError) {
+          debugPrint("Firestore save attempt ${attempt + 1} failed: $firestoreError");
+          await Future.delayed(Duration(seconds: 1));  // Wait before retry
+        }
+      }
+
+      // Step 5: Save to SharedPreferences for offline access
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('username', nameController.text);
+      if (photoURL != null) {
+        await prefs.setString('profileImageUrl', photoURL);
+      }
+      
+      // Make sure UserService knows about the updated data
+      UserService.saveUsername(nameController.text);
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Profile updated successfully!')),
+        );
+        
+        // Pop with result so parent knows to refresh
+        Navigator.pop(context, true);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error updating profile: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    }
+  }
+  
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(1995, 5, 23),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null) {
+      setState(() {
+        dobController.text = DateFormat('dd/MM/yyyy').format(picked);
+      });
+    }
+  }
+
+      
