@@ -190,7 +190,6 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
             'Offer lotus flowers, incense sticks, or small candles—avoid artificial items. Present offerings with both hands, palms up, as a sign of respect. Join locals in chanting or bowing if invited, but don’t interrupt meditations.',
       },
     },
-
     'Christianity': {
       'title': 'Christian Cultural Sensitivity',
       'icon': Icons.church,
@@ -358,7 +357,6 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
                   ),
                 ],
               ),
-
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Row(
                 children: [
@@ -544,45 +542,6 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
     );
   }
 
-  Widget _buildHinduismVisualGuide() {
-    return Container(
-      height: 120,
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildInteractiveGuideIcon(
-            icon: Icons.donut_large,
-            label: 'Clockwise Walk',
-            color: Colors.deepOrange[700]!,
-            onTap: () => _showInfoDialog('Clockwise Walk'),
-          ),
-          _buildInteractiveGuideIcon(
-            icon: Icons.front_hand,
-            label: 'Accept Tilak',
-            color: Colors.deepOrange[700]!,
-            onTap: () => _showInfoDialog('Accept Tilak'),
-          ),
-          _buildInteractiveGuideIcon(
-            icon: Icons.local_florist,
-            label: 'Marigolds',
-            color: Colors.deepOrange[700]!,
-            onTap: () => _showInfoDialog('Marigolds'),
-          ),
-          _buildInteractiveGuideIcon(
-            icon: Icons.no_drinks,
-            label: 'No Alcohol',
-            color: Colors.deepOrange[700]!,
-            onTap: () => _showInfoDialog('No Alcohol'),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildIslamVisualGuide() {
     return Container(
       height: 120,
@@ -616,43 +575,6 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
             label: 'Ramadan Dates',
             color: Colors.teal[800]!,
             onTap: () => _showInfoDialog('Ramadan Dates'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInteractiveGuideIcon({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: color.withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Icon(icon, color: color, size: 28),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
           ),
         ],
       ),
