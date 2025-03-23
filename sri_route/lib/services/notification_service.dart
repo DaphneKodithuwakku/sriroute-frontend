@@ -97,3 +97,106 @@ class NotificationService {
         .collection('notifications')
         .add(notification.toMap());
   }
+  // Helper method to format event date in a readable format
+  static String _formatEventDate(DateTime date) {
+    // Format date as "Month Day, Year" (e.g., "January 15, 2025")
+    return "${date.month}/${date.day}/${date.year}";
+  }
+
+  // Mark notification as read
+  static Future<void> markAsRead(String notificationId) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+    
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('notifications')
+        .doc(notificationId)
+        .update({'isRead': true});
+  }
+  
+  // Mark all notifications as read
+  static Future<void> markAllAsRead() async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+    
+    final batch = _firestore.batch();
+    final notifications = await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('notifications')
+        .where('isRead', isEqualTo: false)
+        .get();
+        
+    for (var doc in notifications.docs) {
+      batch.update(doc.reference, {'isRead': true});
+    }
+    
+    await batch.commit();
+  }
+  
+  // Delete a notification
+  static Future<void> deleteNotification(String notificationId) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+    
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('notifications')
+        .doc(notificationId)
+        .delete();
+  }
+  
+  // Delete all notifications
+  static Future<void> deleteAllNotifications() async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+    
+    final batch = _firestore.batch();
+    final notifications = await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('notifications')
+        .get();
+        
+    for (var doc in notifications.docs) {
+      batch.delete(doc.reference);
+    }
+    
+    await batch.commit();
+  }
+  
+  // Clean up old notifications (older than 30 days)
+  static Future<void> cleanupOldNotifications() async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+    
+    final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
+    
+    final oldNotifications = await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('notifications')
+        .where('createdAt', isLessThan: thirtyDaysAgo)
+        .get();
+        
+    final batch = _firestore.batch();
+    for (var doc in oldNotifications.docs) {
+      batch.delete(doc.reference);
+    }
+    
+    await batch.commit();
+  }
+}
