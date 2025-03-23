@@ -1,2 +1,0 @@
-/Users/mohamedamhar/Desktop/flutter/eventcalenderdesigned/android/app/.cxx/Debug/353i2k2b/arm64-v8a/CMakeFiles/edit_cache.dir
-/Users/mohamedamhar/Desktop/flutter/eventcalenderdesigned/android/app/.cxx/Debug/353i2k2b/arm64-v8a/CMakeFiles/rebuild_cache.dir
