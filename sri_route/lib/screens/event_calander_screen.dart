@@ -161,3 +161,248 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
       }
     }
   }
+  // Toggle favorite status and update Firestore
+  Future<void> _toggleFavorite(Event event) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You must be logged in to save favorites'))
+      );
+      return;
+    }
+
+    final eventRef = _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('favoriteEvents')
+        .doc(event.title);
+
+    setState(() {
+      event.isFavorite = !event.isFavorite;
+    });
+
+    try {
+      if (event.isFavorite) {
+        // Add to favorites
+        await eventRef.set(event.toMap());
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Added "${event.title}" to favorites'))
+        );
+      } else {
+        // Remove from favorites
+        await eventRef.delete();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Removed "${event.title}" from favorites'))
+        );
+      }
+    } catch (e) {
+      // Revert UI if operation failed
+      setState(() {
+        event.isFavorite = !event.isFavorite;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating favorites: $e'))
+      );
+    }
+  }
+
+  // Get events for the selected month
+  List<Event> _getEventsForSelectedMonth() {
+    return events.where((event) => 
+      event.date.year == _selectedMonth.year && 
+      event.date.month == _selectedMonth.month
+    ).toList()
+      ..sort((a, b) => a.date.day.compareTo(b.date.day)); // Sort by day
+  }
+
+  // Get upcoming events based on the current date
+  List<Event> _getUpcomingEvents() {
+    final now = DateTime.now();
+    return events
+        .where((event) => event.date.isAfter(now))
+        .toList()
+        ..sort((a, b) => a.date.compareTo(b.date)); // Sort by date
+  }
+
+  // Format the month and year for display
+  String _formatMonthYear(DateTime date) {
+    return DateFormat('MMMM yyyy').format(date);
+  }
+
+  // Change to previous month
+  void _previousMonth() {
+    setState(() {
+      _selectedMonth = DateTime(_selectedMonth.year, _selectedMonth.month - 1);
+    });
+  }
+
+  // Change to next month
+  void _nextMonth() {
+    setState(() {
+      _selectedMonth = DateTime(_selectedMonth.year, _selectedMonth.month + 1);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text("Event Calendar", 
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: _isLoading 
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  // Month selector
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.chevron_left),
+                          onPressed: _previousMonth,
+                        ),
+                        Text(
+                          _formatMonthYear(_selectedMonth),
+                          style: TextStyle(
+                            fontSize: 22, 
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.chevron_right),
+                          onPressed: _nextMonth,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Events for selected month
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Events in ${DateFormat('MMMM').format(_selectedMonth)}",
+                          style: TextStyle(
+                            fontSize: 18, 
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+
+                        // Display events for selected month
+                        if (_getEventsForSelectedMonth().isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Center(
+                              child: Text(
+                                "No events for this month",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                        // List of events for selected month
+                        for (var event in _getEventsForSelectedMonth())
+                          _buildEventCard(event),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Upcoming events section
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Upcoming Events",
+                          style: TextStyle(
+                            fontSize: 18, 
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+
+                        // Display upcoming events
+                        for (var event in _getUpcomingEvents().take(5))
+                          _buildEventCard(event),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+    );
+  }
+
+  Widget _buildEventCard(Event event) {
+    return Card(
+      margin: EdgeInsets.only(bottom: 10),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              DateFormat('dd').format(event.date),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+            ),
+            Text(
+              DateFormat('MMM').format(event.date),
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+          ],
+        ),
+        title: Text(
+          event.title,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(event.location),
+        trailing: IconButton(
+          icon: Icon(
+            event.isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: event.isFavorite ? Colors.red : Colors.grey,
+          ),
+          onPressed: () => _toggleFavorite(event),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventDetailScreen(event: event, onFavoriteToggled: _toggleFavorite),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
