@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'recommendations_screen.dart'; // Add this import statement
+import 'recommendations_screen.dart';
 import '../../services/location_service.dart';
 import '../../models/location_model.dart';
 import 'package:geolocator/geolocator.dart';
@@ -293,7 +293,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
     'Islam',
   ];
 
-  // Complete list of Sri Lanka districts
+  // Districts of Sri Lanka
   final List<String> regions = [
     'Ampara District',
     'Anuradhapura District',
@@ -336,11 +336,11 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       name: 'Colombo',
     );
 
-    // Attempt to get user's current location when the screen loads
+    // Attempt to get user's current location
     _getCurrentLocation();
   }
 
-  // Add method to get current location
+  // Adding a method to get current location of user
   Future<void> _getCurrentLocation() async {
     setState(() {
       _isLoadingLocation = true;
@@ -362,7 +362,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
         }
       });
 
-      // Use the LocationService to get location
+      // Use the LocationService to get user location
       final locationService = LocationService();
       final position = await locationService.getCurrentLocation();
 
@@ -379,15 +379,15 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
               latitude: position.latitude,
               longitude: position.longitude,
               name: placeName,
-              timestamp: DateTime.now(), // Explicitly add timestamp
+              timestamp: DateTime.now(),
             );
             _isLoadingLocation = false;
 
-            // Update the region based on location
+            // Updating the region based on location
             _updateRegionBasedOnLocation();
           });
 
-          // Show success message
+          // Showing success message
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Location updated: $placeName'),
@@ -410,12 +410,11 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
     }
   }
 
-  // Update region based on current location
+  // Updating region based on current user location
   void _updateRegionBasedOnLocation() {
     if (userLocation == null) return;
 
     // Find nearest region by comparing coordinates
-    // Here's a simplified version - in a real app you would have more precise region boundaries
     if (userLocation!.latitude > 7.8 && userLocation!.latitude < 9.8) {
       // Northern regions
       if (userLocation!.longitude < 80.2) {
@@ -477,7 +476,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
 
   // Add this method to verify location before navigation
   void _navigateToRecommendations() {
-    // Validate date range
+    // Validating date range
     if (daysController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -488,7 +487,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       return;
     }
 
-    // Check if we have a valid location
+    // Checking if we have a valid location
     if (userLocation == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -499,7 +498,7 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
       return;
     }
 
-    // If location is too old, suggest refreshing
+    // If location is too old, suggesting refresh
     final now = DateTime.now();
     final locationTimestamp = userLocation!.timestamp ?? now;
     final difference = now.difference(locationTimestamp);
