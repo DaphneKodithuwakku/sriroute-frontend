@@ -356,4 +356,77 @@ class _ReligionSelectionScreenState extends State<ReligionSelectionScreen> {
       ),
     );
   }
+
+  // Religious place card builder - using the existing method
+  Widget _buildReligiousPlace(
+    BuildContext context,
+    String name,
+    String religion,
+    String reviews,
+    String imagePath,
+    {String? storagePath}
+  ) {
+    // ...existing code...
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context, 
+          '/details', 
+          arguments: {
+            'name': name,
+            'storagePath': storagePath,
+          }
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(_cardBorderRadius),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(_cardBorderRadius),
+              ),
+              child: Image.asset(
+                imagePath,
+                height: _placeImageHeight,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildReligionTag(religion),
+                  const SizedBox(height: 8),
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  _buildBottomRowWithReviews(reviews),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   
