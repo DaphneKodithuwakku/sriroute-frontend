@@ -415,3 +415,132 @@ class EventDetailScreen extends StatelessWidget {
     required this.onFavoriteToggled,
     Key? key,
   }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(event.title),
+        actions: [
+          // Add notification button
+          IconButton(
+            icon: const Icon(Icons.notifications_active),
+            onPressed: () => _setReminder(context),
+            tooltip: 'Set reminder',
+          ),
+          // Existing favorite button
+          IconButton(
+            icon: Icon(
+              event.isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: event.isFavorite ? Colors.red : null,
+            ),
+            onPressed: () => onFavoriteToggled(event),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.calendar_today, color: Colors.blue),
+                        SizedBox(width: 8),
+                        Text(
+                          DateFormat('EEEE, MMMM d, yyyy').format(event.date),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Icon(Icons.location_on, color: Colors.red),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            event.location,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Divider(),
+                    SizedBox(height: 8),
+                    Text(
+                      'About this event:',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      event.description,
+                      style: TextStyle(fontSize: 16, height: 1.5),
+                    ),
+                    // Add reminder button
+                    SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: () => _setReminder(context),
+                      icon: Icon(Icons.notifications_active),
+                      label: Text('Set Reminder'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            // Additional information can be added here
+            Card(
+              elevation: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'What to know:',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    ListTile(
+                      leading: Icon(Icons.info_outline),
+                      title: Text('This is a national holiday in Sri Lanka'),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.access_time),
+                      title: Text('Events typically start in the morning'),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.people),
+                      title: Text('Expected to be crowded at popular venues'),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
