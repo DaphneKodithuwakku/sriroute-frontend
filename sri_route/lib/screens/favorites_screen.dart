@@ -33,22 +33,24 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         throw Exception('User not logged in');
       }
 
-      final snapshot = await _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('favoriteEvents')
-          .get();
+      final snapshot =
+          await _firestore
+              .collection('users')
+              .doc(user.uid)
+              .collection('favoriteEvents')
+              .get();
 
-      final favorites = snapshot.docs.map((doc) {
-        final data = doc.data();
-        return Event(
-          title: data['title'] ?? '',
-          date: (data['date'] as Timestamp).toDate(),
-          location: data['location'] ?? '',
-          description: data['description'] ?? '',
-          isFavorite: true,
-        );
-      }).toList();
+      final favorites =
+          snapshot.docs.map((doc) {
+            final data = doc.data();
+            return Event(
+              title: data['title'] ?? '',
+              date: (data['date'] as Timestamp).toDate(),
+              location: data['location'] ?? '',
+              description: data['description'] ?? '',
+              isFavorite: true,
+            );
+          }).toList();
 
       // Sort by date
       favorites.sort((a, b) => a.date.compareTo(b.date));
@@ -64,6 +66,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       });
     }
   }
+
   Future<void> _toggleFavorite(Event event) async {
     final user = _auth.currentUser;
     if (user == null) {
@@ -95,56 +98,99 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       setState(() {
         event.isFavorite = !event.isFavorite;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating favorite: $e'))
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error updating favorite: $e')));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favorites'),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _favoriteEvents.isEmpty
+      appBar: AppBar(title: const Text('Favorites')),
+      body:
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : _favoriteEvents.isEmpty
               ? const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.favorite_border,
-                        size: 64,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        'No favorites yet',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Add events to your favorites from the Event Calendar',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _favoriteEvents.length,
-                  itemBuilder: (context, index) {
-                    final event = _favoriteEvents[index];
-                    return _buildEventCard(event);
-                  },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.favorite_border, size: 64, color: Colors.grey),
+                    SizedBox(height: 16),
+                    Text(
+                      'No favorites yet',
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Add events to your favorites from the Event Calendar',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ],
                 ),
+              )
+              : ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: _favoriteEvents.length,
+                itemBuilder: (context, index) {
+                  final event = _favoriteEvents[index];
+                  return _buildEventCard(event);
+                },
+              ),
     );
   }
+
+  Widget _buildEventCard(Event event) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 10),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              DateFormat('dd').format(event.date),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+            ),
+            Text(
+              DateFormat('MMM').format(event.date),
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+          ],
+        ),
+        title: Text(
+          event.title,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(event.location),
+        trailing: IconButton(
+          icon: Icon(
+            event.isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: event.isFavorite ? Colors.red : Colors.grey,
+          ),
+          onPressed: () => _toggleFavorite(event),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => EventDetailScreen(
+                    event: event,
+                    onFavoriteToggled: _toggleFavorite,
+                  ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
