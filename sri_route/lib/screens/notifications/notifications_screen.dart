@@ -72,3 +72,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               ),
             );
           }
+          return ListView.builder(
+            itemCount: notifications.length,
+            itemBuilder: (context, index) {
+              final notification = notifications[index];
+              return _buildNotificationItem(notification);
+            },
+          );
+        },
+      ),
+    );
+  }
