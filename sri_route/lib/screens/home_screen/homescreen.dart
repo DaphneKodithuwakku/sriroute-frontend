@@ -108,8 +108,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
-
-
   // Function to open Google Maps to Sri Lanka
   Future<void> _launchGoogleMaps() async {
     // Coordinates for Sri Lanka (approximate center)
@@ -123,4 +121,344 @@ class _HomeScreenState extends State<HomeScreen> {
       throw Exception('Could not launch $url');
     }
   }
-  
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey, // Keep the scaffold key
+      // Remove the drawer here since it's now managed by MainScreen
+      backgroundColor: Colors.white,
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : CustomScrollView(
+              slivers: [
+                // Header with user info
+                SliverAppBar(
+                  expandedHeight: 200,
+                  floating: false,
+                  pinned: true,
+                  automaticallyImplyLeading: false, // Don't automatically add back button
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        // Background Image with Curved Corners
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30),
+                          ),
+                          child: Image.asset(
+                            'assets/header_bg.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+
+                        // Dark Overlay for better visibility
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withAlpha(153), // 0.6 * 255 = ~153
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                            ),
+                          ),
+                        ),
+
+                        // Header Content (User greeting + Icons + Search)
+                        SafeArea(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 40),
+
+                                // FIX: Modify the Row with username to handle overflow
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    // Wrap Column in Expanded to allow text truncation
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Hi, $_username',
+                                            style: const TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                            // Add overflow handling
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                          const SizedBox(height: 5),
+                                          const Text(
+                                            'Sri Lanka',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white70,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    // Add a small SizedBox to ensure spacing
+                                    const SizedBox(width: 10),
+                                    // Notification and profile section
+                                    Row(
+                                      children: [
+                                        // Notification icon with badge
+                                        Stack(
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.notifications,
+                                                color: Colors.white,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => const NotificationsScreen(),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            if (_unreadNotifications > 0)
+                                              Positioned(
+                                                right: 0,
+                                                top: 0,
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(2),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                  constraints: const BoxConstraints(
+                                                    minWidth: 18,
+                                                    minHeight: 18,
+                                                  ),
+                                                  child: Text(
+                                                    _unreadNotifications > 9 ? '9+' : _unreadNotifications.toString(),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 10,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        const SizedBox(width: 10),
+                                        // Make profile image tappable to navigate to edit profile
+                                        GestureDetector(
+                                          onTap: () async {
+                                            // Navigate to EditProfilePage and refresh data if profile was updated
+                                            final result = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => EditProfilePage()),
+                                            );
+                                            
+                                            // Refresh profile data if needed
+                                            if (result == true) {
+                                              _refreshProfileData();
+                                            }
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 22,
+                                            backgroundColor: Colors.grey[300],
+                                            backgroundImage: _profileImageUrl != null 
+                                                ? NetworkImage(_profileImageUrl!) 
+                                                : null,
+                                            child: _profileImageUrl == null
+                                                ? Icon(Icons.person, size: 22, color: Colors.grey[700])
+                                                : null,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 15),
+
+                                // Search Bar inside the header
+                                TextField(
+                                  decoration: InputDecoration(
+                                    hintText: 'Search for places...',
+                                    prefixIcon: const Icon(Icons.search),
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 10,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // Add hamburger menu on top of everything
+                        Positioned(
+                          top: MediaQuery.of(context).padding.top + 10,
+                          left: 16,
+                          child: GestureDetector(
+                            onTap: () {
+                              Scaffold.of(context).openDrawer();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.3),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.menu,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Main content body
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    const SizedBox(height: 20),
+                    
+                    // Categories
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        'Categories',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+
+                    // Grid of Categories
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 3,
+                      childAspectRatio: 1.20,
+                      children: [
+                        categoryItem('Religious Sites', Icons.place, Colors.red, onTap: () {
+                          // Navigate to Religious Sites screen when clicked
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => const ReligiousSitesScreen()),
+                          );
+                        }),
+                        categoryItem('Virtual Tours', Icons.vrpano, Colors.orange, onTap: () {
+                          // Navigate to VR Tour screen when clicked
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => const ReligionSelectionScreen()),
+                          );
+                        }),
+                        categoryItem(
+                          'Pilgrimage Planner',
+                          Icons.event,
+                          Colors.yellow,
+                          onTap: () {
+                            // Navigate to Pilgrimage Planner screen
+                            Navigator.push(
+                              context, 
+                              MaterialPageRoute(builder: (context) => const PilgrimagePlannerScreen()),
+                            );
+                          },
+                        ),
+                        categoryItem(
+                          'Event Calendar',
+                          Icons.calendar_month,
+                          Colors.green,
+                          onTap: () {
+                            // Navigate to Event Calendar screen
+                            Navigator.push(
+                              context, 
+                              MaterialPageRoute(builder: (context) => const EventCalendarScreen()),
+                            );
+                          },
+                        ),
+                        categoryItem(
+                          'Cultural Guide',
+                          Icons.menu_book,
+                          Colors.lightGreen,
+                          onTap: () {
+                            // Navigate to Cultural Guide screen
+                            Navigator.push(
+                              context, 
+                              MaterialPageRoute(builder: (context) => const CulturalSensitivityPage()),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 5),
+                    
+                    // Popular Virtual Tours
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        'Popular (Virtual Tours)',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    SizedBox(
+                      height: 130,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.only(left: 16),
+                        children: [
+                          tourCard(
+                            'Sri Dalada Maligawa',
+                            'Kandy',
+                            'assets/sri_dalada.png',
+                            onTap: () => _navigateToTempleDetail('Sri Dalada Maligawa', 'buddhism/sri_dalada_maligawa'),
+                          ),
+                          tourCard(
+                            'Jami Ul-Alfar Mosque',
+                            'Colombo',
+                            'assets/red_mosque.png',
+                            onTap: () => _navigateToTempleDetail('Jami Ul-Alfar Mosque', 'islam/jami_ul_alfar'),
+                          ),
+                          tourCard(
+                            'Sambodhi Pagoda Temple',
+                            'Colombo',
+                            'assets/sambodhi_pagoda.jpg',
+                            onTap: () => _navigateToTempleDetail('Sambodhi Pagoda Temple', 'buddhism/sambodhi_pagoda'),
+                          ),
+                          tourCard(
+                            'Sacred Heart Church',
+                            'Rajagiriya',
+                            'assets/sacred_heart_church.jpeg',
+                            onTap: () => _navigateToTempleDetail('Sacred Heart of Jesus Church', 'christianity/sacred_heart'),
+                          ),
+                          tourCard(
+                            'Kataragama Devalaya',
+                            'Kandy',
+                            'assets/kataragama_devalaya.jpeg',
+                            onTap: () => _navigateToTempleDetail('Ruhunu Maha Kataragama Devalaya', 'hinduism/kataragama_devalaya'),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 25),
+
