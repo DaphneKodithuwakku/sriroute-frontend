@@ -191,7 +191,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       },
     },
 
-     'Christianity': {
+    'Christianity': {
       'title': 'Christian Cultural Sensitivity',
       'icon': Icons.church,
       'color': Colors.blueGrey[600],
@@ -359,7 +359,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
                 ],
               ),
 
-               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Row(
                 children: [
                   Icon(
@@ -426,6 +426,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       return _buildIslamVisualGuide();
     }
   }
+
   Widget _buildBuddhismVisualGuide() {
     return Container(
       height: 120,
@@ -464,6 +465,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
+
   Widget _buildChristianityVisualGuide() {
     return Container(
       height: 120,
@@ -502,6 +504,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
+
   Widget _buildHinduismVisualGuide() {
     return Container(
       height: 120,
@@ -540,6 +543,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
+
   Widget _buildHinduismVisualGuide() {
     return Container(
       height: 120,
@@ -578,6 +582,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
+
   Widget _buildIslamVisualGuide() {
     return Container(
       height: 120,
@@ -616,6 +621,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
+
   Widget _buildInteractiveGuideIcon({
     required IconData icon,
     required String label,
@@ -652,6 +658,7 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
+
   Widget _buildInteractiveGuideIcon({
     required IconData icon,
     required String label,
@@ -711,3 +718,50 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
           ),
     );
   }
+
+  Widget _buildGuideItem(
+    IconData icon,
+    String title,
+    String text,
+    Color color,
+  ) {
+    return Card(
+      elevation: 3,
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: color, size: 28),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(text, style: const TextStyle(fontSize: 16, height: 1.5)),
+          ],
+        ),
+      ),
+    );
+  }
+}
