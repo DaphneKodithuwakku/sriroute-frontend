@@ -143,3 +143,138 @@ class _PanoramaScreenState extends State<PanoramaScreen> with SingleTickerProvid
       }
     });
   }
+   // Load tour points either from a TourLocation or generate from a storage path
+  Future<List<TourPoint>> _loadTourPoints() async {
+    setState(() {
+      _isLoading = true;
+      _statusMessage = 'Loading tour data...';
+      _hasError = false;
+      _errorMessage = null;
+    });
+    
+    try {
+      List<TourPoint> points;
+      
+      if (widget.location != null) {
+        // If we have a location object, use its tour points
+        points = widget.location!.tourPoints;
+        
+        setState(() {
+          _statusMessage = 'Preparing initial view...';
+        });
+        
+        if (points.isNotEmpty) {
+          try {
+            await ImagePreloader.preloadImage(points.first.imageUrl);
+          } catch (e) {
+            debugPrint('Error preloading first image: $e');
+          }
+          
+          // Preload next image in the background
+          if (points.length > 1) {
+            _preloadNextImagesInBackground(points, 0);
+          }
+        }
+      } else if (widget.storagePath != null) {
+        // Generate tour points from storage path
+        setState(() {
+          _statusMessage = 'Generating tour from images...';
+        });
+        
+        points = await _timeoutFuture(
+          _tourService.generateTourFromStoragePath(widget.storagePath!),
+          _tourTimeoutDuration,
+          'Tour generation took too long',
+        );
+        
+        // Preload the first image immediately
+        if (points.isNotEmpty) {
+          try {
+            await ImagePreloader.preloadImage(points.first.imageUrl);
+          } catch (e) {
+            debugPrint('Error preloading first image: $e');
+          }
+          
+          // Preload next image in the background
+          if (points.length > 1) {
+            _preloadNextImagesInBackground(points, 0);
+          }
+        }
+      } else {
+        throw Exception('Either location or storagePath must be provided');
+      }
+      
+      // Set initial view point
+      if (_currentPointId == null && points.isNotEmpty) {
+        _currentPointId = points.first.id;
+        _currentPoint = points.first;
+        _longitude = _currentPoint?.initialLongitude ?? 0;
+        _latitude = _currentPoint?.initialLatitude ?? 0;
+      } else if (_currentPointId != null) {
+        _currentPoint = points.firstWhere(
+          (p) => p.id == _currentPointId,
+          orElse: () => points.first,
+        );
+        _longitude = _currentPoint?.initialLongitude ?? 0;
+        _latitude = _currentPoint?.initialLatitude ?? 0;
+      }
+      
+      // Update loaded status
+      _updateLoadedStatus(points);
+      
+      setState(() {
+        _isLoading = false;
+        _statusMessage = '';
+      });
+      
+      // Start showing the content
+      _transitionController.forward();
+      
+      return points;
+    } catch (e) {
+      debugPrint('Error loading tour points: $e');
+      setState(() {
+        _isLoading = false;
+        _hasError = true;
+        _errorMessage = e.toString();
+      });
+      
+      // Return a fallback tour point
+      return [
+        TourPoint(
+          id: 'fallback',
+          name: 'Sample View',
+          imageUrl: 'https://360rumors.com/wp-content/uploads/2018/12/VIRB-360-sample-13.jpg',
+          hotspots: [],
+        ),
+      ];
+    }
+  }
+  
+  // Helper to preload next images in background
+  Future<void> _preloadNextImagesInBackground(List<TourPoint> points, int currentIndex) async {
+    try {
+      // Determine next points to preload
+      final nextIndices = [];
+      if (currentIndex + 1 < points.length) nextIndices.add(currentIndex + 1);
+      if (currentIndex - 1 >= 0) nextIndices.add(currentIndex - 1);
+      
+      for (final index in nextIndices) {
+        // Don't await, let this happen in the background
+        ImagePreloader.preloadImage(points[index].imageUrl)
+          .catchError((e) => debugPrint('Background preload error: $e'));
+      }
+      
+      // Update loaded status after preloading
+      _updateLoadedStatus(points);
+    } catch (e) {
+      debugPrint('Error in background preloading: $e');
+    }
+  }
+  
+  // Helper to add timeout to futures
+  Future<T> _timeoutFuture<T>(Future<T> future, Duration timeout, String timeoutMessage) {
+    return future.timeout(timeout, onTimeout: () {
+      throw timeoutMessage;
+    });
+  }
