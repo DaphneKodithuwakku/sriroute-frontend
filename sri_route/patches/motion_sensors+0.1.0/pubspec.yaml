@@ -1,0 +1,20 @@
+name: motion_sensors
+description: Flutter plugin for accessing the Android and iOS accelerometer, gyroscope, magnetometer and orientation sensors.
+version: 0.1.0
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=1.12.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.pravera.motion_sensors
+        pluginClass: MotionSensorsPlugin
+      ios:
+        pluginClass: MotionSensorsPlugin
