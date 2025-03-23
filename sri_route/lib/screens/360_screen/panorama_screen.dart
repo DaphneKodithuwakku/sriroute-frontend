@@ -462,3 +462,308 @@ class _PanoramaScreenState extends State<PanoramaScreen> with SingleTickerProvid
       ),
     );
   }
+  // Close button in top right
+  Widget _buildCloseButton() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black.withAlpha(150),
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        icon: const Icon(Icons.close, color: Colors.white, size: 24),
+        onPressed: () async {
+          await _cleanupBeforeExit();
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
+        },
+      ),
+    );
+  }
+  
+  // Extract panorama view to a separate method using TransitionPanorama
+  Widget _buildPanoramaView(List<TourPoint> tourPoints, TourPoint currentPoint) {
+    return AnimatedBuilder(
+      animation: _fadeAnimation,
+      builder: (context, child) {
+        return Opacity(
+          opacity: _fadeAnimation.value,
+          child: child,
+        );
+      },
+      child: _hasError 
+          ? _buildImageErrorDisplay()
+          : TransitionPanorama(
+              imageUrl: currentPoint.imageUrl,
+              previousImageUrl: _previousImageUrl,
+              longitude: _longitude,
+              latitude: _latitude,
+              onLongitudeChanged: (value) => _longitude = value,
+              onLatitudeChanged: (value) => _latitude = value,
+              hotspots: _buildHotspots(currentPoint, tourPoints),
+            ),
+    );
+  }
+  
+  // Extract hotspot building to a separate method
+  List<Hotspot> _buildHotspots(TourPoint currentPoint, List<TourPoint> tourPoints) {
+    return currentPoint.hotspots.map((hotspot) => 
+      Hotspot(
+        latitude: hotspot.latitude,
+        longitude: hotspot.longitude,
+        width: _hotspotRadius * 2, 
+        height: _hotspotRadius * 2,
+        widget: PanoramaHotspotWidget(
+          label: hotspot.label,
+          icon: hotspot.icon ?? Icons.arrow_forward,
+          color: hotspot.color ?? Colors.blue,
+          isLoaded: _loadedPoints[hotspot.targetPointId] ?? false,
+          onTap: () {
+            final target = _findPointById(tourPoints, hotspot.targetPointId);
+            if (target != null) {
+              _navigateToPoint(target);
+            }
+          },
+        ),
+      )
+    ).toList();
+  }
+  
+  // Add a method for cleanup before exiting
+  Future<void> _cleanupBeforeExit() async {
+    try {
+      await ImagePreloader.clearCache();
+    } catch (e) {
+      debugPrint('Error clearing cache: $e');
+    }
+  }
+  
+  // Updated UI overlay with improved navigation controls (responsive)
+  Widget _buildUIOverlay(BuildContext context, List<TourPoint> tourPoints, TourPoint currentPoint, int currentIndex) {
+    return SafeArea(
+      child: Column(
+        children: [
+          // Top bar with panorama name
+          if (!_isSmallScreen || _screenWidth > 400)
+            Padding(
+              padding: EdgeInsets.only(
+                top: 16, 
+                left: _screenWidth * 0.05
+              ),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withAlpha(150),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_isLoadingNext)
+                        Container(
+                          width: 20,
+                          height: 20,
+                          margin: const EdgeInsets.only(right: 10),
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                      Text(
+                        currentPoint.name,
+                        style: TextStyle(
+                          color: Colors.white, 
+                          fontSize: _isSmallScreen ? 14 : 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          
+          const Spacer(),
+          
+          // Bottom navigation controls - responsive
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: _screenWidth * 0.05, 
+              vertical: 16
+            ),
+            child: _buildNavigationControls(tourPoints, currentIndex),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  // Responsive navigation controls
+  Widget _buildNavigationControls(List<TourPoint> tourPoints, int currentIndex) {
+    if (tourPoints.length <= 1) {
+      return const SizedBox.shrink();
+    }
+    
+    // For very small screens, simplify the UI
+    if (_isSmallScreen && _screenWidth < 350) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildNavigationPills(tourPoints, currentIndex),
+        ],
+      );
+    }
+    
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Previous button (icon only)
+        if (currentIndex > 0)
+          _buildNavigationButton(
+            onPressed: () => _navigateToPoint(tourPoints[currentIndex - 1]),
+            icon: Icons.arrow_back,
+            isLoaded: _loadedPoints[tourPoints[currentIndex - 1].id] ?? false,
+          )
+        else
+          const SizedBox(width: 50), // Smaller placeholder since we removed text
+            
+        // Pagination indicators
+        _buildNavigationPills(tourPoints, currentIndex),
+            
+        // Next button (icon only)
+        if (currentIndex < tourPoints.length - 1)
+          _buildNavigationButton(
+            onPressed: () => _navigateToPoint(tourPoints[currentIndex + 1]),
+            icon: Icons.arrow_forward,
+            isLoaded: _loadedPoints[tourPoints[currentIndex + 1].id] ?? false,
+          )
+        else
+          const SizedBox(width: 50), // Smaller placeholder since we removed text
+      ],
+    );
+  }
+  
+  // Navigation button with preload indicator - text removed
+  Widget _buildNavigationButton({
+    required VoidCallback onPressed, 
+    required IconData icon, 
+    required bool isLoaded,
+  }) {
+    return ElevatedButton(
+      onPressed: _isLoadingNext ? null : onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.black.withAlpha(150),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.all(12),
+        shape: const CircleBorder(),
+        minimumSize: const Size(50, 50),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Icon(icon, size: 24),
+          if (isLoaded)
+            Positioned(
+              right: -2,
+              bottom: -2,
+              child: Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+  
+  // Pagination pills
+  Widget _buildNavigationPills(List<TourPoint> tourPoints, int currentIndex) {
+    // For many points, only show a window of points
+    final maxVisiblePills = _isSmallScreen ? 5 : 9;
+    List<int> visibleIndices;
+    
+    if (tourPoints.length <= maxVisiblePills) {
+      visibleIndices = List.generate(tourPoints.length, (i) => i);
+    } else {
+      final halfVisible = maxVisiblePills ~/ 2;
+      int start = currentIndex - halfVisible;
+      int end = currentIndex + halfVisible;
+      
+      if (start < 0) {
+        end += (0 - start);
+        start = 0;
+      }
+      
+      if (end >= tourPoints.length) {
+        start = math.max(0, start - (end - tourPoints.length + 1));
+        end = tourPoints.length - 1;
+      }
+      
+      visibleIndices = List.generate(end - start + 1, (i) => i + start);
+    }
+    
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.black.withAlpha(150),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Show back arrow if we're not showing the first item
+          if (visibleIndices.first > 0)
+            GestureDetector(
+              onTap: () => _navigateToPoint(tourPoints[visibleIndices.first - 1]),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Icon(
+                  Icons.chevron_left,
+                  color: Colors.white.withAlpha(200),
+                  size: 20,
+                ),
+              ),
+            ),
+          
+          // Pagination pills
+          for (final index in visibleIndices)
+            GestureDetector(
+              onTap: _isLoadingNext ? null : () => _navigateToPoint(tourPoints[index]),
+              child: Container(
+                width: 10,
+                height: 10,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: index == currentIndex 
+                    ? Colors.white
+                    : _loadedPoints[tourPoints[index].id] == true
+                      ? Colors.white.withAlpha(150)
+                      : Colors.white.withAlpha(80),
+                ),
+              ),
+            ),
+            
+          // Show forward arrow if we're not showing the last item
+          if (visibleIndices.last < tourPoints.length - 1)
+            GestureDetector(
+              onTap: () => _navigateToPoint(tourPoints[visibleIndices.last + 1]),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Icon(
+                  Icons.chevron_right,
+                  color: Colors.white.withAlpha(200),
+                  size: 20,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
