@@ -39,3 +39,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     "UK",
     "Australia",
   ];
+  final List<String> religions = [
+    "Hinduism",
+    "Islam",
+    "Buddhism",
+    "Christianity",
+  ];
