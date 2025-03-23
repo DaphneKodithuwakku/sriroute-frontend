@@ -155,4 +155,139 @@ class TempleDetailScreen extends StatelessWidget {
         return 'Religious site in Sri Lanka';
     }
   }
+  // Extract badge to separate method
+  Widget _buildVrBadge(Color backgroundColor) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: const Row(
+        children: [
+          Icon(
+            Icons.view_in_ar,
+            color: Colors.white,
+            size: 20,
+          ),
+          SizedBox(width: 4),
+          Text(
+            'VR',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  // Extract details section to separate method
+  Widget _buildDetailsSection(String description) {
+    return Padding(
+      padding: const EdgeInsets.all(_horizontalPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildRatingRow(),
+          const SizedBox(height: 12),
+          const Text(
+            'Sambodhi Pagoda Temple',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: _verticalSpacing),
+          Text(
+            'Shrine in Colombo',
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Description',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: _verticalSpacing),
+          Text(
+            description,
+            style: TextStyle(
+              color: Colors.grey[700],
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildStartTourButton(),
+        ],
+      ),
+    );
+  }
+  
+  // Extract rating row to a separate method
+  Widget _buildRatingRow() {
+    return Row(
+      children: [
+        const Icon(
+          Icons.star,
+          color: Colors.amber,
+          size: _ratingIconSize,
+        ),
+        const SizedBox(width: 4),
+        const Text(
+          '4.6',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: _verticalSpacing),
+        Text(
+          '(599 reviews)',
+          style: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 14,
+          ),
+        ),
+      ],
+    );
+  }
+  
+  // Extract start tour button to a separate method
+  Widget _buildStartTourButton() {
+    return Builder(
+      builder: (context) => ElevatedButton(
+        onPressed: () {
+          // Add logging to verify the storage path
+          print('Starting tour with storage path: $storagePath');
+          
+          Navigator.pushNamed(
+            context, 
+            '/panorama',
+            arguments: storagePath,
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green,
+          minimumSize: const Size(double.infinity, 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        child: const Text(
+          'Start Virtual Tour',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
   
