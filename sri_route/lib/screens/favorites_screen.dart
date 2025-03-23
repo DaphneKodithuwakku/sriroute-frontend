@@ -27,3 +27,40 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     setState(() {
       _isLoading = true;
     });
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw Exception('User not logged in');
+      }
+
+      final snapshot = await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('favoriteEvents')
+          .get();
+
+      final favorites = snapshot.docs.map((doc) {
+        final data = doc.data();
+        return Event(
+          title: data['title'] ?? '',
+          date: (data['date'] as Timestamp).toDate(),
+          location: data['location'] ?? '',
+          description: data['description'] ?? '',
+          isFavorite: true,
+        );
+      }).toList();
+
+      // Sort by date
+      favorites.sort((a, b) => a.date.compareTo(b.date));
+
+      setState(() {
+        _favoriteEvents = favorites;
+        _isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Error loading favorites: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
