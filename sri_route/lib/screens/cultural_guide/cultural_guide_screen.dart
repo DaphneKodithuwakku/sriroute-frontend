@@ -502,3 +502,41 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
+  Widget _buildHinduismVisualGuide() {
+    return Container(
+      height: 120,
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildInteractiveGuideIcon(
+            icon: Icons.donut_large,
+            label: 'Clockwise Walk',
+            color: Colors.deepOrange[700]!,
+            onTap: () => _showInfoDialog('Clockwise Walk'),
+          ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.front_hand,
+            label: 'Accept Tilak',
+            color: Colors.deepOrange[700]!,
+            onTap: () => _showInfoDialog('Accept Tilak'),
+          ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.local_florist,
+            label: 'Marigolds',
+            color: Colors.deepOrange[700]!,
+            onTap: () => _showInfoDialog('Marigolds'),
+          ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.no_drinks,
+            label: 'No Alcohol',
+            color: Colors.deepOrange[700]!,
+            onTap: () => _showInfoDialog('No Alcohol'),
+          ),
+        ],
+      ),
+    );
+  }
