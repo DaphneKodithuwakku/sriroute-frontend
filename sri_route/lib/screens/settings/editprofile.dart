@@ -45,3 +45,144 @@ class _EditProfilePageState extends State<EditProfilePage> {
     "Buddhism",
     "Christianity",
   ];
+
+   @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    
+    try {
+      // Get user data from Firebase Auth
+      final user = _auth.currentUser;
+      if (user != null && mounted) {
+        emailController.text = user.email ?? '';
+        
+        // Check if user has a profile picture
+        if (user.photoURL != null) {
+          setState(() {
+            _profileImageUrl = user.photoURL;
+          });
+        }
+        
+        // Get user data from Firestore
+        try {
+          final userData = await _firestore.collection('users').doc(user.uid).get();
+          
+          if (userData.exists) {
+            final data = userData.data();
+            if (data != null) {
+              setState(() {
+                // Check for username with fallbacks
+                nameController.text = data['username'] ?? data['name'] ?? user.displayName ?? 'User';
+                
+                // Get DOB if it exists
+                if (data['dob'] != null) {
+                  dobController.text = data['dob'];
+                }
+                
+                // Get country if it exists
+                if (data['country'] != null) {
+                  selectedCountry = data['country'];
+                }
+                
+                // Get religion if it exists
+                if (data['religion'] != null) {
+                  selectedReligion = data['religion'];
+                }
+              });
+            }
+          } else {
+            // Use display name if available
+            if (user.displayName != null && user.displayName!.isNotEmpty) {
+              nameController.text = user.displayName!;
+            }
+            
+            // Try to get username from SharedPreferences as fallback
+            final prefs = await SharedPreferences.getInstance();
+            final savedUsername = prefs.getString('username');
+            
+            if (savedUsername != null && savedUsername.isNotEmpty) {
+              nameController.text = savedUsername;
+            } else {
+              nameController.text = "User";
+            }
+          }
+        } catch (firestoreError) {
+          debugPrint("Firestore error: $firestoreError");
+          // Fallback to Auth display name or SharedPreferences
+          if (user.displayName != null && user.displayName!.isNotEmpty) {
+            nameController.text = user.displayName!;
+          } else {
+            // Try SharedPreferences
+            final prefs = await SharedPreferences.getInstance();
+            nameController.text = prefs.getString('username') ?? 'User';
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error loading user data: $e");
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+        maxWidth: 800,  // Limit image size for faster uploads
+        imageQuality: 85,  // Slightly compress for better performance
+      );
+      if (pickedFile != null && mounted) {
+        setState(() {
+          _imageFile = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error selecting image: ${e.toString()}')),
+        );
+      }
+    }
+  }
+
+  Future<String?> _uploadProfilePicture() async {
+    if (_imageFile == null) return _profileImageUrl; // Return current URL if no new image
+
+    try {
+      final user = _auth.currentUser;
+      if (user == null) return null;
+      
+      // Create a reference to the file path in Firebase Storage
+      final storageRef = _storage.ref().child('profile_pictures/${user.uid}');
+      
+      // Upload the file with metadata
+      final metadata = SettableMetadata(
+        contentType: 'image/jpeg',
+        customMetadata: {'userId': user.uid},
+      );
+      final uploadTask = storageRef.putFile(_imageFile!, metadata);
+      
+      // Wait for upload to complete
+      final snapshot = await uploadTask.whenComplete(() {});
+      
+      // Get the download URL
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      
+      return downloadUrl;
+    } catch (e) {
+      debugPrint('Error uploading profile picture: $e');
+      return null;  // Return null if upload fails
+    }
+  }
