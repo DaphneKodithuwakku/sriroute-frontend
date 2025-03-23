@@ -17,17 +17,20 @@ class Event {
   final DateTime date;
   final String location;
   final String description;
-  bool isFavorite;  // Added isFavorite property
+  bool isFavorite;  
+  //propherties for the Event calender
 
+
+// Constructor with required fields and an optional `isFavorite` field
   Event({
     required this.title, 
     required this.date, 
     required this.location, 
     required this.description,
-    this.isFavorite = false,  // Default to not favorite
+    this.isFavorite = false,  
   });
 
-  // Convert to a map for Firestore
+   // Convert Event object to a Map for Firestore storage
   Map<String, dynamic> toMap() {
     return {
       'title': title,
@@ -38,7 +41,8 @@ class Event {
     };
   }
 
-  // Create from a Firestore document
+  
+  // Factory constructor to create an Event object from Firestore data
   factory Event.fromFirestore(Map<String, dynamic> doc) {
     return Event(
       title: doc['title'],
@@ -50,6 +54,8 @@ class Event {
   }
 }
 
+
+// Stateful widget to display the event calendar screen
 class EventCalendarScreen extends StatefulWidget {
   const EventCalendarScreen({super.key});
 
@@ -57,6 +63,7 @@ class EventCalendarScreen extends StatefulWidget {
   _EventCalendarScreenState createState() => _EventCalendarScreenState();
 }
 
+// State class for EventCalendarScreen.
 class _EventCalendarScreenState extends State<EventCalendarScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedMonth = DateTime.now();
@@ -130,6 +137,8 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
       _isLoading = true;
     });
     
+
+    // Get the currently logged-in user
     try {
       final user = _auth.currentUser;
       if (user != null) {
@@ -139,13 +148,13 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
             .collection('favoriteEvents')
             .get();
         
-        // Map of event titles to favorite status
+        // Create a map to store event titles marked as favorite
         final Map<String, bool> favoriteMap = {};
         for (var doc in favoritesSnapshot.docs) {
           favoriteMap[doc.id] = true;
         }
         
-        // Update the favorite status of events
+              // Iterate through events and update the favorite status based on Firestore data
         for (var event in events) {
           if (favoriteMap.containsKey(event.title)) {
             event.isFavorite = true;
@@ -167,38 +176,41 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
   Future<void> _toggleFavorite(Event event) async {
     final user = _auth.currentUser;
     if (user == null) {
+      // Show a message if the user is not logged in
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('You must be logged in to save favorites'))
       );
       return;
     }
-
+// Reference to the specific event in the user's favorites collection
     final eventRef = _firestore
         .collection('users')
         .doc(user.uid)
         .collection('favoriteEvents')
         .doc(event.title);
 
+
+// Toggle favorite status locally for immediate UI update
     setState(() {
       event.isFavorite = !event.isFavorite;
     });
 
     try {
       if (event.isFavorite) {
-        // Add to favorites
+         // Add event to favorites in Firestore
         await eventRef.set(event.toMap());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Added "${event.title}" to favorites'))
         );
       } else {
-        // Remove from favorites
+         // Remove event from favorites in Firestore
         await eventRef.delete();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Removed "${event.title}" from favorites'))
         );
       }
     } catch (e) {
-      // Revert UI if operation failed
+       // Revert UI change if the operation fails
       setState(() {
         event.isFavorite = !event.isFavorite;
       });
@@ -264,7 +276,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
           : SingleChildScrollView(
               child: Column(
                 children: [
-                  // Month selector
+                  // Month selector with previous and next buttons
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Row(
@@ -272,10 +284,10 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
                       children: [
                         IconButton(
                           icon: Icon(Icons.chevron_left),
-                          onPressed: _previousMonth,
+                          onPressed: _previousMonth, // Navigate to previous month
                         ),
                         Text(
-                          _formatMonthYear(_selectedMonth),
+                          _formatMonthYear(_selectedMonth), // Display the selected month
                           style: TextStyle(
                             fontSize: 22, 
                             fontWeight: FontWeight.bold,
@@ -292,7 +304,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
 
                   const SizedBox(height: 10),
 
-                  // Events for selected month
+                  // Events for the selected month
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Column(
@@ -307,7 +319,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
                         ),
                         const SizedBox(height: 10),
 
-                        // Display events for selected month
+                      // Show message if there are no events for the selected month
                         if (_getEventsForSelectedMonth().isEmpty)
                           Padding(
                             padding: const EdgeInsets.all(20.0),
@@ -322,7 +334,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
                             ),
                           ),
 
-                        // List of events for selected month
+                         // Display the list of events for the selected month
                         for (var event in _getEventsForSelectedMonth())
                           _buildEventCard(event),
                       ],
@@ -331,7 +343,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
 
                   const SizedBox(height: 20),
 
-                  // Upcoming events section
+                 // Upcoming events section
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Column(
@@ -346,7 +358,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
                         ),
                         const SizedBox(height: 10),
 
-                        // Display upcoming events
+                        // Display up to 5 upcoming events
                         for (var event in _getUpcomingEvents().take(5))
                           _buildEventCard(event),
                       ],
@@ -360,6 +372,8 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
     );
   }
 
+
+// Widget to build an event card
   Widget _buildEventCard(Event event) {
     return Card(
       margin: EdgeInsets.only(bottom: 10),
@@ -371,7 +385,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              DateFormat('dd').format(event.date),
+              DateFormat('dd').format(event.date),// Display event day
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -379,22 +393,22 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
               ),
             ),
             Text(
-              DateFormat('MMM').format(event.date),
+              DateFormat('MMM').format(event.date),// Display event month
               style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
           ],
         ),
         title: Text(
-          event.title,
+          event.title, // Event title
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(event.location),
+        subtitle: Text(event.location),// Event location
         trailing: IconButton(
           icon: Icon(
-            event.isFavorite ? Icons.favorite : Icons.favorite_border,
+            event.isFavorite ? Icons.favorite : Icons.favorite_border, // Favorite toggle icon
             color: event.isFavorite ? Colors.red : Colors.grey,
           ),
-          onPressed: () => _toggleFavorite(event),
+          onPressed: () => _toggleFavorite(event),// Toggle favorite status
         ),
         onTap: () {
           Navigator.push(
@@ -409,6 +423,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
   }
 }
 
+// Event details screen
 class EventDetailScreen extends StatelessWidget {
   final Event event;
   final Function(Event) onFavoriteToggled;
@@ -425,13 +440,13 @@ class EventDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(event.title),
         actions: [
-          // Add notification button
+          // set Notification button to set reminder
           IconButton(
             icon: const Icon(Icons.notifications_active),
             onPressed: () => _setReminder(context),
             tooltip: 'Set reminder',
           ),
-          // Existing favorite button
+          // Favorite toggle button
           IconButton(
             icon: Icon(
               event.isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -446,6 +461,7 @@ class EventDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Event details card
             Card(
               elevation: 4,
               child: Padding(
@@ -453,6 +469,7 @@ class EventDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Event date
                     Row(
                       children: [
                         Icon(Icons.calendar_today, color: Colors.blue),
@@ -464,6 +481,7 @@ class EventDetailScreen extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 16),
+                    // Event location
                     Row(
                       children: [
                         Icon(Icons.location_on, color: Colors.red),
@@ -479,6 +497,7 @@ class EventDetailScreen extends StatelessWidget {
                     SizedBox(height: 16),
                     Divider(),
                     SizedBox(height: 8),
+                    // Event description
                     Text(
                       'About this event:',
                       style: TextStyle(
@@ -491,7 +510,7 @@ class EventDetailScreen extends StatelessWidget {
                       event.description,
                       style: TextStyle(fontSize: 16, height: 1.5),
                     ),
-                    // Add reminder button
+                    // Button to set reminder
                     SizedBox(height: 20),
                     ElevatedButton.icon(
                       onPressed: () => _setReminder(context),
@@ -507,7 +526,7 @@ class EventDetailScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            // Additional information can be added here
+           // Card widget to display additional information about the event
             Card(
               elevation: 3,
               child: Padding(
@@ -548,9 +567,11 @@ class EventDetailScreen extends StatelessWidget {
     );
   }
 
+
+// Function to set an event reminder
   Future<void> _setReminder(BuildContext context) async {
     try {
-      // Get the event date and check if it's more than 24 hours in the future
+      // Get the current date and time
       final now = DateTime.now();
       final dayBeforeEvent = event.date.subtract(const Duration(hours: 24));
       
@@ -562,20 +583,21 @@ class EventDetailScreen extends StatelessWidget {
             backgroundColor: Colors.orange,
           ),
         );
-        return;
+        return;// Exit the function early
+
       }
       
-      // Create a unique ID for this event using its title (or use another identifier)
+        // Generate a unique identifier for the event using its title
       final eventId = event.title;
       
-      // Add the event reminder with the 24-hour notification
+      // Schedule a notification for the event 24 hours before it starts
       await NotificationService.addEventReminder(
         eventId, 
         event.title, 
         event.date
       );
       
-      // Updated success message
+     // Show a confirmation message to the user
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Reminder set - you will be notified the day before the event'),
@@ -583,6 +605,7 @@ class EventDetailScreen extends StatelessWidget {
         ),
       );
     } catch (e) {
+       // Handle any errors that occur while setting the reminder
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to set reminder: $e'),
