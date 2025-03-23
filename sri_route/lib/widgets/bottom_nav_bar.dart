@@ -58,3 +58,42 @@ class CustomBottomNavBar extends StatelessWidget {
     required this.selectedIndex,
     required this.onItemTapped,
   });
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+      child: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 10,
+              offset: Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // Home
+            _buildNavItem(0, Icons.home, "Home"),
+            
+            // Virtual Tours
+            _buildNavItem(1, null, "Tours", isVRIcon: true),
+            
+            // Pilgrimage Planner
+            _buildNavItem(2, Icons.search, "Planner"),
+            
+            // Cultural Guide
+            _buildNavItem(3, Icons.menu_book, "Guide"),
+            
+            // Settings (accessed via Profile icon)
+            _buildNavItem(5, Icons.person, "Profile"),
+          ],
+        ),
+      ),
+    );
+  }
