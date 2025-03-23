@@ -37,3 +37,28 @@ class Event {
       'isFavorite': isFavorite,
     };
   }
+  // Create from a Firestore document
+  factory Event.fromFirestore(Map<String, dynamic> doc) {
+    return Event(
+      title: doc['title'],
+      date: (doc['date'] as Timestamp).toDate(),
+      location: doc['location'],
+      description: doc['description'],
+      isFavorite: doc['isFavorite'] ?? false,
+    );
+  }
+}
+
+class EventCalendarScreen extends StatefulWidget {
+  const EventCalendarScreen({super.key});
+
+  @override
+  _EventCalendarScreenState createState() => _EventCalendarScreenState();
+}
+
+class _EventCalendarScreenState extends State<EventCalendarScreen> {
+  DateTime _focusedDay = DateTime.now();
+  DateTime _selectedMonth = DateTime.now();
+  bool _isLoading = true;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
