@@ -414,3 +414,15 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
+
+  Widget _buildVisualGuide() {
+    if (selectedReligion == 'Buddhism') {
+      return _buildBuddhismVisualGuide();
+    } else if (selectedReligion == 'Hinduism') {
+      return _buildHinduismVisualGuide();
+    } else if (selectedReligion == 'Christianity') {
+      return _buildChristianityVisualGuide();
+    } else {
+      return _buildIslamVisualGuide();
+    }
+  }
