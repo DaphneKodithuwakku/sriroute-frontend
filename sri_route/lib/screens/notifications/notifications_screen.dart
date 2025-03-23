@@ -48,3 +48,27 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               child: Text('Error: ${snapshot.error}'),
             );
           }
+          final notifications = snapshot.data ?? [];
+          
+          if (notifications.isEmpty) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.notifications_off,
+                    size: 64,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'No notifications',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
