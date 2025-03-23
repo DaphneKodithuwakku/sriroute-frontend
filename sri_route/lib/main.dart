@@ -1,4 +1,25 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'firebase_options.dart';
+import 'screens/welcome/welcomepage1.dart';
+import 'screens/auth/login.dart';
+import 'screens/auth/signup_page.dart';
+import 'screens/auth/completion_page.dart';
+import 'screens/auth/signup_success_page.dart';
+import 'screens/main_screen.dart';
+import 'utils/image_loader.dart';
+import 'services/user_service.dart';
+import 'screens/360_screen/detail_screen.dart';
+import 'screens/360_screen/panorama_screen.dart';
+import 'utils/firebase_auth_helper.dart';
+import 'services/app_check_service.dart';
+import 'screens/notifications/notifications_screen.dart';
+import 'services/notification_service.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -151,5 +172,35 @@ class MyApp extends StatelessWidget {
         return const LoginPage();
       },
     );
+  }
+}
+
+// Improved NavigationObserver to handle null route names
+class NavigationObserver extends NavigatorObserver {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    final routeName = route.settings.name ?? 'unnamed-route';
+    final previousRouteName = previousRoute?.settings.name ?? 'unknown';
+    debugPrint('Navigating to: $routeName (from: $previousRouteName)');
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    final routeName = route.settings.name ?? 'unnamed-route';
+    final previousRouteName = previousRoute?.settings.name ?? 'unknown';
+    debugPrint('Navigating back from: $routeName (to: $previousRouteName)');
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    final routeName = route.settings.name ?? 'unnamed-route';
+    debugPrint('Removed route: $routeName');
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    final newRouteName = newRoute?.settings.name ?? 'unnamed-route';
+    final oldRouteName = oldRoute?.settings.name ?? 'unknown';
+    debugPrint('Replaced $oldRouteName with $newRouteName');
   }
 }
