@@ -1,3 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../models/pilgrimage_models.dart';
+import '../../services/gemini_service.dart';
+import '../../models/location_model.dart';
+import '../../services/maps_service.dart';
+import 'recommendation_details_screen.dart';
+
 class RecommendationsScreen extends StatefulWidget {
   final String religion;
   final String dateRange;
@@ -38,18 +46,17 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
       userLatitude: widget.userLocation.latitude,
       userLongitude: widget.userLocation.longitude,
     );
-    
+
     // Enhance recommendations with travel info
     final enhancedRecommendations = <PilgrimageRecommendation>[];
-    
+
     for (final recommendation in recommendations) {
       final travelInfo = await _mapsService.getTravelInfo(
-        widget.userLocation.latitude, 
-        widget.userLocation.longitude,
-        recommendation.latitude,
-        recommendation.longitude
-      );
-      
+          widget.userLocation.latitude,
+          widget.userLocation.longitude,
+          recommendation.latitude,
+          recommendation.longitude);
+
       enhancedRecommendations.add(PilgrimageRecommendation(
         name: recommendation.name,
         description: recommendation.description,
@@ -63,7 +70,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
         travelTimeByCarFromStart: travelInfo['duration'] ?? 'Unknown',
       ));
     }
-    
+
     return enhancedRecommendations;
   }
 
@@ -120,17 +127,21 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.calendar_today, size: 16, color: Colors.teal[600]),
+                        Icon(Icons.calendar_today,
+                            size: 16, color: Colors.teal[600]),
                         const SizedBox(width: 8),
-                        Text('Date: ${widget.dateRange}', style: TextStyle(color: Colors.teal[700])),
+                        Text('Date: ${widget.dateRange}',
+                            style: TextStyle(color: Colors.teal[700])),
                       ],
                     ),
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(Icons.location_on, size: 16, color: Colors.teal[600]),
+                        Icon(Icons.location_on,
+                            size: 16, color: Colors.teal[600]),
                         const SizedBox(width: 8),
-                        Text('Region: ${widget.region}', style: TextStyle(color: Colors.teal[700])),
+                        Text('Region: ${widget.region}',
+                            style: TextStyle(color: Colors.teal[700])),
                       ],
                     ),
                   ],
@@ -160,7 +171,8 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.error_outline, size: 60, color: Colors.red),
+                            const Icon(Icons.error_outline,
+                                size: 60, color: Colors.red),
                             const SizedBox(height: 16),
                             Text(
                               'Error: ${snapshot.error}',
@@ -171,7 +183,8 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                             ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  _recommendationsFuture = _loadRecommendations();
+                                  _recommendationsFuture =
+                                      _loadRecommendations();
                                 });
                               },
                               child: const Text('Retry'),
@@ -184,7 +197,8 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.search_off, size: 60, color: Colors.grey),
+                            Icon(Icons.search_off,
+                                size: 60, color: Colors.grey),
                             SizedBox(height: 16),
                             Text(
                               'No recommendations found',
@@ -210,7 +224,8 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => RecommendationDetailsScreen(
+                                    builder: (context) =>
+                                        RecommendationDetailsScreen(
                                       recommendation: recommendation,
                                     ),
                                   ),
@@ -232,7 +247,8 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                                           height: 180,
                                           width: double.infinity,
                                           child: GoogleMap(
-                                            initialCameraPosition: CameraPosition(
+                                            initialCameraPosition:
+                                                CameraPosition(
                                               target: LatLng(
                                                 recommendation.latitude,
                                                 recommendation.longitude,
@@ -244,11 +260,190 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                                             myLocationButtonEnabled: false,
                                             markers: {
                                               Marker(
-                                                markerId: MarkerId(recommendation.name),
-                                                position: LatLng(recommendation.latitude, recommendation.longitude),
-                                                infoWindow: InfoWindow(title: recommendation.name),
+                                                markerId: MarkerId(
+                                                    recommendation.name),
+                                                position: LatLng(
+                                                    recommendation.latitude,
+                                                    recommendation.longitude),
+                                                infoWindow: InfoWindow(
+                                                    title: recommendation.name),
                                               ),
                                             },
                                           ),
                                         ),
                                       ),
+                                      // Travel info overlay
+                                      Positioned(
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 8),
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              begin: Alignment.bottomCenter,
+                                              end: Alignment.topCenter,
+                                              colors: [
+                                                Colors.black.withOpacity(0.7),
+                                                Colors.transparent,
+                                              ],
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                      Icons.directions_car,
+                                                      color: Colors.white,
+                                                      size: 16),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    recommendation
+                                                            .distanceFromStart ??
+                                                        'Unknown distance',
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  const Icon(Icons.access_time,
+                                                      color: Colors.white,
+                                                      size: 16),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    recommendation
+                                                            .travelTimeByCarFromStart ??
+                                                        'Unknown time',
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  // Content
+                                  Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          recommendation.name,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          recommendation.description,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.grey[700]),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Wrap(
+                                          spacing:
+                                              16, // horizontal space between children
+                                          runSpacing:
+                                              8, // vertical space between lines
+                                          children: [
+                                            Row(
+                                              mainAxisSize: MainAxisSize
+                                                  .min, // Make the Row take minimum space
+                                              children: [
+                                                Icon(Icons.access_time,
+                                                    size: 16,
+                                                    color: Colors.teal[600]),
+                                                const SizedBox(width: 4),
+                                                Flexible(
+                                                  child: Text(
+                                                    recommendation
+                                                        .estimatedDuration,
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.teal[700]),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisSize: MainAxisSize
+                                                  .min, // Make the Row take minimum space
+                                              children: [
+                                                Icon(Icons.calendar_today,
+                                                    size: 16,
+                                                    color: Colors.teal[600]),
+                                                const SizedBox(width: 4),
+                                                Flexible(
+                                                  child: Text(
+                                                    recommendation
+                                                        .bestTimeToVisit,
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.teal[700]),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: TextButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      RecommendationDetailsScreen(
+                                                    recommendation:
+                                                        recommendation,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: const Text('View Details'),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
