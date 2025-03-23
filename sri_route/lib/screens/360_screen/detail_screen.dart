@@ -120,4 +120,39 @@ class TempleDetailScreen extends StatelessWidget {
         ],
       ),
     );
+  } // Return appropriate asset based on temple name
+  String _getImageAsset(String templeName) {
+    switch (templeName) {
+      case 'Sri Dalada Maligawa':
+        return 'assets/sri_dalada_maligawa.jpg';
+      case 'Jami Ul-Alfar Mosque':
+        return 'assets/jami_ul_alfar.jpg';
+      case 'Sambodhi Pagoda Temple':
+        return 'assets/sambodhi_pagoda.jpg';
+      case 'Sacred Heart of Jesus Church':
+        return 'assets/sacred_heart_church.jpeg'; // Placeholder
+      case 'Ruhunu Maha Kataragama Devalaya':
+        return 'assets/kataragama_devalaya.jpeg'; // Placeholder
+      default:
+        return 'assets/sambodhi_pagoda.jpg';
+    }
   }
+
+  // Return appropriate location text based on temple name
+  String _getLocationText(String templeName) {
+    switch (templeName) {
+      case 'Sri Dalada Maligawa':
+        return 'Temple in Kandy';
+      case 'Jami Ul-Alfar Mosque':
+        return 'Mosque in Pettah, Colombo';
+      case 'Sambodhi Pagoda Temple':
+        return 'Shrine in Colombo';
+      case 'Sacred Heart of Jesus Church':
+        return 'Church in Rajagiriya';
+      case 'Ruhunu Maha Kataragama Devalaya':
+        return 'Temple in Kandy';
+      default:
+        return 'Religious site in Sri Lanka';
+    }
+  }
+  
