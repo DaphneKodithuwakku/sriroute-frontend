@@ -30,3 +30,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   bool _isSaving = false;
   File? _imageFile;
   String? _profileImageUrl;
+
+  final List<String> countries = [
+    "Sri Lanka",
+    "India",
+    "USA",
+    "Canada",
+    "UK",
+    "Australia",
+  ];
