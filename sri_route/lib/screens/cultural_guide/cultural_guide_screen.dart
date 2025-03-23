@@ -847,3 +847,30 @@ class HomePage extends StatelessWidget {
     body: const Center(child: Text('Home Page')),
   );
 }
+
+class TransportPage extends StatelessWidget {
+  const TransportPage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Virtual Videos')),
+    body: const Center(child: Text('Virtual Videos')),
+  );
+}
+
+class PilgrimagePlannerPage extends StatelessWidget {
+  const PilgrimagePlannerPage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Pilgrimage Planner')),
+    body: const Center(child: Text('Pilgrimage Planner Page')),
+  );
+}
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Profile')),
+    body: const Center(child: Text('Profile Page')),
+  );
+}
