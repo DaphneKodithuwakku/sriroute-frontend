@@ -16,3 +16,24 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     // Mark all notifications as read when opening the screen
     NotificationService.markAllAsRead();
   }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Notifications"),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              if (value == 'clear_all') {
+                await _showDeleteConfirmationDialog();
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'clear_all',
+                child: Text('Clear all'),
+              ),
+            ],
+          ),
+        ],
+      ),
