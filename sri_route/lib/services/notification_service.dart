@@ -90,3 +90,10 @@ class NotificationService {
       createdAt: now,
       scheduledFor: notificationTime, // Store scheduled time
     );
+    // Add to Firestore
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('notifications')
+        .add(notification.toMap());
+  }
