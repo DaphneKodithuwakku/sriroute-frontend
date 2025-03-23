@@ -578,3 +578,41 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
+  Widget _buildIslamVisualGuide() {
+    return Container(
+      height: 120,
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildInteractiveGuideIcon(
+            icon: Icons.mosque,
+            label: 'Prayer Space',
+            color: Colors.teal[800]!,
+            onTap: () => _showInfoDialog('Prayer Space'),
+          ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.handshake,
+            label: 'Salam Greeting',
+            color: Colors.teal[800]!,
+            onTap: () => _showInfoDialog('Salam Greeting'),
+          ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.people_alt,
+            label: 'Gender Separate',
+            color: Colors.teal[800]!,
+            onTap: () => _showInfoDialog('Gender Separate'),
+          ),
+          _buildInteractiveGuideIcon(
+            icon: Icons.local_dining,
+            label: 'Ramadan Dates',
+            color: Colors.teal[800]!,
+            onTap: () => _showInfoDialog('Ramadan Dates'),
+          ),
+        ],
+      ),
+    );
+  }
