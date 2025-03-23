@@ -181,3 +181,43 @@ class _SidePanelState extends State<SidePanel> {
       ),
     );
   }
+  // Handle logout separately to maintain proper flow
+  void _handleLogout() async {
+    // First close the drawer
+    Navigator.pop(context);
+    
+    // Show confirmation dialog
+    final shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout Confirmation'),
+        content: const Text('Are you sure you want to log out?'),
+        actions: [
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          TextButton(
+            child: const Text('Logout'),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    ) ?? false;
+    
+    // If confirmed, perform logout
+    if (shouldLogout) {
+      try {
+        await FirebaseAuth.instance.signOut();
+        if (context.mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error logging out: $e'))
+          );
+        }
+      }
+    }
+  }
