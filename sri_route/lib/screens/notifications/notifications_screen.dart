@@ -82,4 +82,116 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         },
       ),
     );
+  }Widget _buildNotificationItem(EventNotification notification) {
+    return Dismissible(
+      key: Key(notification.id),
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        child: const Icon(
+          Icons.delete,
+          color: Colors.white,
+        ),
+      ),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        NotificationService.deleteNotification(notification.id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Notification deleted'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: notification.isRead ? Colors.blue.shade100 : Colors.blue,
+            child: const Icon(
+              Icons.event,
+              color: Colors.white,
+            ),
+          ),
+          title: Text(
+            notification.title,
+            style: TextStyle(
+              fontWeight: notification.isRead ? FontWeight.normal : FontWeight.bold,
+            ),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(notification.body),
+              const SizedBox(height: 4),
+              Text(
+                'Event date: ${DateFormat('MMM dd, yyyy').format(notification.eventDate)}',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+          isThreeLine: true,
+          trailing: Text(
+            _formatNotificationDate(notification.createdAt),
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.grey,
+            ),
+          ),
+          onTap: () {
+            // Mark as read if not already
+            if (!notification.isRead) {
+              NotificationService.markAsRead(notification.id);
+            }
+            
+            // Navigate to event detail if needed
+            // We would need event detail navigation logic here
+          },
+        ),
+      ),
+    );
   }
+  
+  String _formatNotificationDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+    
+    if (difference.inDays > 0) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    } else {
+      return 'Just now';
+    }
+  }
+  
+  Future<void> _showDeleteConfirmationDialog() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Clear all notifications?'),
+        content: const Text('This action cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('CANCEL'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('CLEAR ALL'),
+          ),
+        ],
+      ),
+    );
+    
+    if (result == true) {
+      await NotificationService.deleteAllNotifications();
+    }
+  }
+}
