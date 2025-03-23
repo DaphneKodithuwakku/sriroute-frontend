@@ -22,7 +22,7 @@ class LocationService {
       return false;
     }
 
-    // Check location permission
+    // Checking location permission
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -32,7 +32,7 @@ class LocationService {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Request to open app settings to enable permission
+      // Requesting to open app settings to enable permission
       await openAppSettings();
       return false;
     }
@@ -40,7 +40,7 @@ class LocationService {
     return true;
   }
 
-  // Update getCurrentLocation to include timestamp
+  // Updating getCurrentLocation to include timestamp
   Future<Position?> getCurrentLocation() async {
     bool hasPermission = await checkLocationPermission();
 
@@ -74,7 +74,7 @@ class LocationService {
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
 
-        // Build a more detailed address
+        // Building more detailed address
         List<String> addressParts = [];
 
         if (place.locality != null && place.locality!.isNotEmpty) {
@@ -100,7 +100,7 @@ class LocationService {
     }
   }
 
-  // Get district from coordinates
+  // Getting district from coordinates
   Future<String?> getDistrictFromCoordinates(
       double latitude, double longitude) async {
     try {
