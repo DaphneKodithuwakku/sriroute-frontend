@@ -278,3 +278,187 @@ class _PanoramaScreenState extends State<PanoramaScreen> with SingleTickerProvid
       throw timeoutMessage;
     });
   }
+  // Navigate to a different tour point with smoother transitions
+  Future<void> _navigateToPoint(TourPoint point) async {
+    if (point.id == _currentPointId) return;
+    
+    final isPreloaded = _loadedPoints[point.id] ?? false;
+    
+    // Set loading state only if image isn't preloaded
+    if (!isPreloaded) {
+      setState(() {
+        _isLoadingNext = true;
+        _hasError = false;
+        _errorMessage = null;
+      });
+    }
+    
+    try {
+      // Store previous image URL for transition effect if needed
+      final previousPoint = _currentPoint;
+      final previousImageUrl = previousPoint?.imageUrl;
+      
+      if (isPreloaded) {
+        // For preloaded images, skip the fade transition and switch immediately
+        setState(() {
+          _previousImageUrl = null; // Don't need previous image for transition
+          _currentPointId = point.id;
+          _currentPoint = point;
+          _longitude = point.initialLongitude;
+          _latitude = point.initialLatitude;
+        });
+        
+        // Make sure transition controller is at the forward position
+        if (_transitionController.value != 1.0) {
+          _transitionController.value = 1.0; // Set to end value without animation
+        }
+      } else {
+        // For non-preloaded images, use the fade transition
+        await _transitionController.reverse();
+        
+        setState(() {
+          _previousImageUrl = previousImageUrl;
+          _currentPointId = point.id;
+          _currentPoint = point;
+          _longitude = point.initialLongitude;
+          _latitude = point.initialLatitude;
+          _isLoadingNext = false;
+        });
+        
+        _transitionController.forward();
+      }
+      
+      // Update the cached points list
+      final tourPoints = await _tourPointsFuture;
+      _updateLoadedStatus(tourPoints);
+      
+      // Preload adjacent points
+      final currentIndex = tourPoints.indexWhere((p) => p.id == point.id);
+      if (currentIndex != -1) {
+        _preloadNextImagesInBackground(tourPoints, currentIndex);
+      }
+    } catch (e) {
+      debugPrint('Error during navigation: $e');
+      setState(() {
+        _isLoadingNext = false;
+        _hasError = true;
+        _errorMessage = 'Failed to load next point: ${e.toString()}';
+      });
+      // Forward animation anyway to show the error state
+      _transitionController.forward();
+    }
+  }
+  
+  // Find a tour point by ID in the list
+  TourPoint? _findPointById(List<TourPoint> points, String id) {
+    try {
+      return points.firstWhere((p) => p.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  // Retry after an error
+  void _retryAfterError() {
+    if (_errorRetryCount >= _maxErrorRetries) {
+      // Too many retries, restart the entire process
+      setState(() {
+        _errorRetryCount = 0;
+        _tourPointsFuture = _loadTourPoints();
+      });
+      return;
+    }
+    
+    setState(() {
+      _errorRetryCount++;
+      _hasError = false;
+      _errorMessage = null;
+      
+      if (_currentPoint != null) {
+        _isLoadingNext = true;
+        // Retry loading the current image
+        ImagePreloader.preloadImage(_currentPoint!.imageUrl, highPriority: true)
+          .then((_) {
+            setState(() => _isLoadingNext = false);
+            _transitionController.forward();
+          })
+          .catchError((e) {
+            setState(() {
+              _isLoadingNext = false;
+              _hasError = true;
+              _errorMessage = 'Retry failed: ${e.toString()}';
+            });
+          });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Get screen dimensions for responsive layout
+    final size = MediaQuery.of(context).size;
+    _screenWidth = size.width;
+    _isSmallScreen = _screenWidth < 600;
+    
+    return Scaffold(
+      body: FutureBuilder<List<TourPoint>>(
+        future: _tourPointsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return _buildLoadingView('Loading tour...');
+          }
+          
+          if (snapshot.hasError) {
+            return _buildErrorView('Failed to load tour: ${snapshot.error}');
+          }
+          
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return _buildErrorView('No tour points available');
+          }
+
+          final tourPoints = snapshot.data!;
+          if (_currentPointId == null && tourPoints.isNotEmpty) {
+            _currentPointId = tourPoints.first.id;
+            _currentPoint = tourPoints.first;
+          }
+          
+          final currentPoint = _findPointById(tourPoints, _currentPointId!) ?? tourPoints.first;
+          final currentIndex = tourPoints.indexWhere((p) => p.id == currentPoint.id);
+
+          return PopScope(
+            onPopInvokedWithResult: (didPop, result) async {
+              if (didPop) {
+                await _cleanupBeforeExit();
+              }
+            },
+            child: Stack(
+              children: [
+                // Main panorama content with transition effect
+                _buildPanoramaView(tourPoints, currentPoint),
+                
+                // UI Overlay with improved navigation
+                _buildUIOverlay(context, tourPoints, currentPoint, currentIndex),
+                
+                // Close button in top right
+                Positioned(
+                  top: 16,
+                  right: 16,
+                  child: SafeArea(
+                    child: _buildCloseButton(),
+                  ),
+                ),
+                
+                // Loading overlay if needed
+                if (_isLoading)
+                  _buildLoadingView(_statusMessage),
+                
+                // Error overlay if needed
+                if (_hasError && !_isLoading)
+                  _buildErrorOverlay(),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
