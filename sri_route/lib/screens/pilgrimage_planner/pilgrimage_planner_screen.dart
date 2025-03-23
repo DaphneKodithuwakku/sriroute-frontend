@@ -245,3 +245,62 @@ class PilgrimagePlannerScreen extends StatefulWidget {
   State<PilgrimagePlannerScreen> createState() =>
       _PilgrimagePlannerScreenState();
 }
+
+class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
+  final TextEditingController daysController = TextEditingController();
+  String selectedReligion = 'Buddhism';
+  String selectedRegion = 'Colombo District'; // Default region
+
+  final List<String> religions = [
+    'Buddhism',
+    'Hinduism',
+    'Christianity',
+    'Islam',
+  ];
+
+  // Complete list of Sri Lanka districts
+  final List<String> regions = [
+    'Ampara District',
+    'Anuradhapura District',
+    'Badulla District',
+    'Batticaloa District',
+    'Colombo District',
+    'Galle District',
+    'Gampaha District',
+    'Hambantota District',
+    'Jaffna District',
+    'Kalutara District',
+    'Kandy District',
+    'Kegalle District',
+    'Kilinochchi District',
+    'Kurunegala District',
+    'Mannar District',
+    'Matale District',
+    'Matara District',
+    'Monaragala District',
+    'Mullaitivu District',
+    'Nuwara Eliya District',
+    'Polonnaruwa District',
+    'Puttalam District',
+    'Ratnapura District',
+    'Trincomalee District',
+    'Vavuniya District',
+  ];
+
+  LocationModel? userLocation;
+  bool _isLoadingLocation = false;
+  String? _locationError;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with default location
+    userLocation = LocationModel(
+      latitude: 6.9271, 
+      longitude: 79.8612,
+      name: 'Colombo'
+    );
+    
+    // Attempt to get user's current location when the screen loads
+    _getCurrentLocation();
+  }
