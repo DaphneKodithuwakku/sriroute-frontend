@@ -304,3 +304,71 @@ class _PilgrimagePlannerScreenState extends State<PilgrimagePlannerScreen> {
     // Attempt to get user's current location when the screen loads
     _getCurrentLocation();
   }
+  // Add method to get current location
+  Future<void> _getCurrentLocation() async {
+    setState(() {
+      _isLoadingLocation = true;
+      _locationError = null;
+    });
+    
+    debugPrint('PilgrimagePlanner: Getting current location...');
+    
+    try {
+      // Show feedback if it takes time
+      Future.delayed(const Duration(seconds: 2), () {
+        if (_isLoadingLocation && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Getting your location... Please wait.'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      });
+      
+      // Use the LocationService to get location
+      final locationService = LocationService();
+      final position = await locationService.getCurrentLocation();
+      
+      if (position != null) {
+        final placeName = await locationService.getAddressFromCoordinates(
+          position.latitude, 
+          position.longitude
+        ) ?? 'Current Location';
+        
+        if (mounted) {
+          setState(() {
+            userLocation = LocationModel(
+              latitude: position.latitude,
+              longitude: position.longitude,
+              name: placeName,
+              timestamp: DateTime.now(), // Explicitly add timestamp
+            );
+            _isLoadingLocation = false;
+            
+            // Update the region based on location
+            _updateRegionBasedOnLocation();
+          });
+          
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Location updated: $placeName'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } else {
+        throw Exception('Could not get location');
+      }
+    } catch (e) {
+      debugPrint('Error getting location: $e');
+      
+      if (mounted) {
+        setState(() {
+          _locationError = e.toString();
+          _isLoadingLocation = false;
+        });
+      }
+    }
+  }
