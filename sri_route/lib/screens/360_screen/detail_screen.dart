@@ -111,8 +111,9 @@ class TempleDetailScreen extends StatelessWidget {
         ],
       ),
     );
-  } // Return appropriate asset based on temple name
+  }
 
+  // Return appropriate asset based on temple name
   String _getImageAsset(String templeName) {
     switch (templeName) {
       case 'Sri Dalada Maligawa':
