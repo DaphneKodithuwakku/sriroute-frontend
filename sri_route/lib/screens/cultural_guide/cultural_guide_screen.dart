@@ -464,3 +464,19 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
       ),
     );
   }
+  Widget _buildChristianityVisualGuide() {
+    return Container(
+      height: 120,
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildInteractiveGuideIcon(
+            icon: Icons.pan_tool,
+            label: 'Genuflect',
+            color: Colors.blueGrey[600]!,
+            onTap: () => _showInfoDialog('Genuflect'),
+          ),
