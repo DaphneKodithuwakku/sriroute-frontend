@@ -64,3 +64,39 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       });
     }
   }
+  Future<void> _toggleFavorite(Event event) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return;
+    }
+
+    final eventRef = _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('favoriteEvents')
+        .doc(event.title);
+
+    setState(() {
+      event.isFavorite = !event.isFavorite;
+    });
+
+    try {
+      if (event.isFavorite) {
+        await eventRef.set(event.toMap());
+      } else {
+        await eventRef.delete();
+        // Remove from local list
+        setState(() {
+          _favoriteEvents.removeWhere((e) => e.title == event.title);
+        });
+      }
+    } catch (e) {
+      // Revert UI if operation failed
+      setState(() {
+        event.isFavorite = !event.isFavorite;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating favorite: $e'))
+      );
+    }
+  }
