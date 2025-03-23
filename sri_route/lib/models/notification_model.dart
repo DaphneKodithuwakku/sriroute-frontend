@@ -20,3 +20,14 @@ class EventNotification {
     this.scheduledFor,
     this.isRead = false,
   });
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'body': body,
+      'eventDate': eventDate,
+      'eventId': eventId,
+      'createdAt': createdAt,
+      'scheduledFor': scheduledFor, // Include scheduled time in map
+      'isRead': isRead,
+    };
+  }
