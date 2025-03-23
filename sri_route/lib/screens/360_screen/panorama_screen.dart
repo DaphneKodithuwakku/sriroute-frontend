@@ -9,11 +9,14 @@ import '../../utils/image_loader.dart';
 import '../../widgets/panorama_hotspot.dart';
 import '../../widgets/transition_panorama.dart';
 
+/// This screen displays a 360° panorama with interactive hotspots
+///
 class PanoramaScreen extends StatefulWidget {
-  final String? storagePath;
-  final TourLocation? location;
+  final String? storagePath; // Path to local or Firebase storage for image
+  final TourLocation? location; // Specific location containing multiple points
   final String? initialPointId;
 
+  // Ensure either storagePath or location is provided
   const PanoramaScreen({
     Key? key,
     this.storagePath,
@@ -28,20 +31,23 @@ class PanoramaScreen extends StatefulWidget {
 
 class _PanoramaScreenState extends State<PanoramaScreen>
     with SingleTickerProviderStateMixin {
-  final TourService _tourService = TourService();
-  late Future<List<TourPoint>> _tourPointsFuture;
+  final TourService _tourService = TourService(); // Tour service instance
+  late Future<List<TourPoint>>
+  _tourPointsFuture; // Future to load all tour points
   TourPoint? _currentPoint;
   String? _currentPointId;
   String? _previousImageUrl;
   bool _isLoading = true;
   String _statusMessage = '';
-  bool _isLoadingNext = false;
-  double _longitude = 0;
+  bool _isLoadingNext = false; // Flag used when jumping to the next panorama
+  double _longitude = 0; // Current horizontal camera rotation
   double _latitude = 0;
+
+  // Animation controller for fade transition between panoramas
   late AnimationController _transitionController;
   late Animation<double> _fadeAnimation;
-  final Map<String, bool> _loadedPoints = {};
-  Timer? _preloadTimer;
+  final Map<String, bool> _loadedPoints = {}; //Cache to avoid reloading images
+  Timer? _preloadTimer; // Timer to periodically preload nearby tour points
 
   // Error tracking
   String? _errorMessage;
