@@ -2,17 +2,15 @@ class LocationModel {
   final double latitude;
   final double longitude;
   final String name;
-  final DateTime timestamp; // Not optional anymore
-
+  final DateTime timestamp;
   LocationModel({
     required this.latitude,
     required this.longitude,
     required this.name,
     DateTime? timestamp,
-  }) : timestamp = timestamp ??
-            DateTime.now(); // Default to current timestamp if not provided
+  }) : timestamp = timestamp ?? DateTime.now();
 
-  // Create a default location (Colombo, Sri Lanka)
+  // Creating a default location (Colombo, Sri Lanka)
   factory LocationModel.defaultLocation() {
     return LocationModel(
       latitude: 6.9271,
