@@ -28,7 +28,7 @@ class MapScreen extends StatelessWidget {
               style: TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 30),
-            ElevatedButton(
+            ElevatedButton( // Button to navigate back to the previous screen
               onPressed: () => Navigator.pop(context),
               child: const Text('Go Back'),
             ),
