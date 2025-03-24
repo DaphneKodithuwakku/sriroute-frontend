@@ -53,7 +53,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             );
           }).toList();
 
-      // Sort by date
+      // Arrange by date
       favorites.sort((a, b) => a.date.compareTo(b.date));
 
       setState(() {
@@ -89,13 +89,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         await eventRef.set(event.toMap());
       } else {
         await eventRef.delete();
-        // Remove from local list
+        // Delete from the local list
         setState(() {
           _favoriteEvents.removeWhere((e) => e.title == event.title);
         });
       }
     } catch (e) {
-      // Revert UI if operation failed
+      // Undo UI changes if the operation fails
       setState(() {
         event.isFavorite = !event.isFavorite;
       });
