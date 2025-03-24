@@ -111,7 +111,7 @@ class WelcomePage2 extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
+                            MaterialPageRoute( // Navigate to the next welcome screen
                               builder: (context) => WelcomePage3(),
                             ),
                           );
