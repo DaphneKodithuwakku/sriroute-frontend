@@ -41,14 +41,12 @@ void main() async {
 
     // Initialize App Check with enhanced error handling
     debugPrint("Initializing Firebase App Check...");
-    await AppCheckService.initializeAppCheck()
-        .then((_) {
-          debugPrint("App Check initialization completed");
-        })
-        .catchError((error) {
-          debugPrint("App Check initialization error: $error");
-          // App can continue without App Check if needed
-        });
+    await AppCheckService.initializeAppCheck().then((_) {
+      debugPrint("App Check initialization completed");
+    }).catchError((error) {
+      debugPrint("App Check initialization error: $error");
+      // App can continue without App Check if needed
+    });
 
     // Initialize notifications with error handling
     try {
@@ -127,16 +125,14 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         if (settings.name == '/details') {
           return MaterialPageRoute(
-            builder:
-                (context) =>
-                    TempleDetailScreen.fromArguments(settings.arguments),
+            builder: (context) =>
+                TempleDetailScreen.fromArguments(settings.arguments),
           );
         }
         if (settings.name == '/panorama') {
           return MaterialPageRoute(
-            builder:
-                (context) =>
-                    PanoramaScreen(storagePath: settings.arguments as String?),
+            builder: (context) =>
+                PanoramaScreen(storagePath: settings.arguments as String?),
           );
         }
         return null;

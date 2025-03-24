@@ -107,7 +107,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header with search criteria
-              //           Container(
+              Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.teal.withOpacity(0.1),
@@ -272,7 +272,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                                           ),
                                         ),
                                       ),
-                                      // Travel info 
+                                      // Travel info
                                       Positioned(
                                         left: 0,
                                         right: 0,

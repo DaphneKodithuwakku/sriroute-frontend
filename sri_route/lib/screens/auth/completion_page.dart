@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// StatefulWidget for completing signup details
 class SignupCompletionPage extends StatefulWidget {
   const SignupCompletionPage({super.key});
 
@@ -10,20 +11,26 @@ class SignupCompletionPage extends StatefulWidget {
 }
 
 class _SignupCompletionPageState extends State<SignupCompletionPage> {
+  // Controller for the additional information input field
   final TextEditingController _additionalInfoController =
       TextEditingController();
+
+  // Form key for validation
   final _formKey = GlobalKey<FormState>();
+  // Variables to hold user preferences
   String? _selectedLanguage;
   bool _isAgreed = false;
   bool _isLoading = false;
   String? _errorMessage;
+
+  // Firebase authentication instance
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
     _loadPreferredLanguage();
-    _checkAuthStatus();
+    _checkAuthStatus(); // Ensure the user is still authenticated
   }
 
   // Check if user is still authenticated
@@ -36,6 +43,7 @@ class _SignupCompletionPageState extends State<SignupCompletionPage> {
     }
   }
 
+  // Load the user's preferred language from shared preferences
   Future<void> _loadPreferredLanguage() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -57,7 +65,7 @@ class _SignupCompletionPageState extends State<SignupCompletionPage> {
     }
   }
 
-  // Method to finalize the signup process
+  // Method to finalize signup and save preferences
   Future<void> _finalizeSignup() async {
     setState(() {
       _isLoading = true;
@@ -76,6 +84,7 @@ class _SignupCompletionPageState extends State<SignupCompletionPage> {
       if (_selectedLanguage != null) {
         await prefs.setString('language', _selectedLanguage!);
       }
+
       await prefs.setBool('notificationsEnabled', _isAgreed);
 
       // Save additional info if provided
@@ -102,6 +111,7 @@ class _SignupCompletionPageState extends State<SignupCompletionPage> {
       });
       debugPrint("Error during completion: $e");
     } finally {
+      // Stop loading spinner
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -114,7 +124,7 @@ class _SignupCompletionPageState extends State<SignupCompletionPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // Prevent back button
+        // Prevent back navigation to keep user on this screen
         return false;
       },
       child: Scaffold(
@@ -209,15 +219,14 @@ class _SignupCompletionPageState extends State<SignupCompletionPage> {
                       prefixIcon: const Icon(Icons.language),
                     ),
                     value: _selectedLanguage,
-                    items:
-                        ["English", "Spanish", "French", "German"]
-                            .map(
-                              (lang) => DropdownMenuItem(
-                                value: lang,
-                                child: Text(lang),
-                              ),
-                            )
-                            .toList(),
+                    items: ["English", "Spanish", "French", "German"]
+                        .map(
+                          (lang) => DropdownMenuItem(
+                            value: lang,
+                            child: Text(lang),
+                          ),
+                        )
+                        .toList(),
                     onChanged: (value) {
                       setState(() {
                         _selectedLanguage = value;
@@ -250,32 +259,34 @@ class _SignupCompletionPageState extends State<SignupCompletionPage> {
 
                   const Spacer(),
 
-                  // Continue Button
+                  // Show either a loading spinner or the "Continue" button based on `_isLoading` state
+                  // If `_isLoading` is true, show a circular progress indicator to indicate the process is ongoing
                   _isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.greenAccent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.greenAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
                             ),
-                          ),
-                          onPressed: _finalizeSignup,
-                          child: const Text(
-                            "Continue",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                            onPressed: _finalizeSignup,
+                            child: const Text(
+                              "Continue",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(
+                      height: 30), // Add some vertical spacing at the bottom
                 ],
               ),
             ),
@@ -285,7 +296,10 @@ class _SignupCompletionPageState extends State<SignupCompletionPage> {
     );
   }
 
+// Called when the widget is permanently removed from the widget tree
   @override
+  // Disposes the TextEditingController to free up resources
+  // This is important to prevent memory leaks when the widget is destroyed
   void dispose() {
     _additionalInfoController.dispose();
     super.dispose();
