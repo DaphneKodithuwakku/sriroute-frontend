@@ -295,7 +295,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
     if (picked != null) {
       setState(() {
-        dobController.text = DateFormat('dd/MM/yyyy').format(picked);
+        dobController.text = DateFormat('dd/MM/yyyy').format(picked); // Format date
       });
     }
   }
