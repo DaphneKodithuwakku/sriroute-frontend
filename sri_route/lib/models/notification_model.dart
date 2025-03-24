@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
+// Class to represent an event notification
 class EventNotification {
   final String id;
   final String title;
@@ -10,6 +12,8 @@ class EventNotification {
   final DateTime? scheduledFor; // Add scheduled time field
   bool isRead;
 
+
+// Constructor for creating an EventNotification instance
   EventNotification({
     required this.id,
     required this.title,
@@ -17,9 +21,12 @@ class EventNotification {
     required this.eventDate,
     required this.eventId,
     required this.createdAt,
-    this.scheduledFor,
-    this.isRead = false,
+    this.scheduledFor, // Scheduled time is optional
+    this.isRead = false, // Default value for isRead is false
   });
+
+
+  // Converts an EventNotification instance into a map for Firestore
   Map<String, dynamic> toMap() {
     return {
       'title': title,
@@ -32,6 +39,8 @@ class EventNotification {
     };
   }
   
+
+    // Factory constructor to create an EventNotification instance from a Firestore document
   factory EventNotification.fromMap(String id, Map<String, dynamic> map) {
     return EventNotification(
       id: id,
