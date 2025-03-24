@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import '../../models/notification_model.dart';
 import '../../services/notification_service.dart';
 
+
+// StatefulWidget to handle notifications screen
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
 
@@ -19,9 +21,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // AppBar for the notifications screen
       appBar: AppBar(
         title: const Text("Notifications"),
         actions: [
+          // Popup menu to clear all notifications
           PopupMenuButton<String>(
             onSelected: (value) async {
               if (value == 'clear_all') {
@@ -36,20 +40,26 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             ],
           ),
         ],
+         // StreamBuilder listens to the notifications stream and rebuilds the UI when new data arrives
       ),body: StreamBuilder<List<EventNotification>>(
         stream: NotificationService.getNotifications(),
         builder: (context, snapshot) {
+          // Show a loading indicator if the connection state is waiting
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
           
+          // Show error message if there's an error
           if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
           }
+           // Get the list of notifications from the snapshot
           final notifications = snapshot.data ?? [];
           
+
+          // If there are no notifications, display a "No notifications" message
           if (notifications.isEmpty) {
             return const Center(
               child: Column(
@@ -72,6 +82,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               ),
             );
           }
+          // If there are notifications, display them in a ListView
           return ListView.builder(
             itemCount: notifications.length,
             itemBuilder: (context, index) {
@@ -82,6 +93,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         },
       ),
     );
+    // Build each notification item in the list
   }Widget _buildNotificationItem(EventNotification notification) {
     return Dismissible(
       key: Key(notification.id),
@@ -94,16 +106,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           color: Colors.white,
         ),
       ),
+      // Direction in which the swipe to dismiss is allowed
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
+        // Delete the notification from Firestore
         NotificationService.deleteNotification(notification.id);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
+            // Show a snackbar to confirm deletion
             content: Text('Notification deleted'),
             duration: Duration(seconds: 2),
           ),
         );
       },
+           // Notification card displaying the details
       child: Card(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         child: ListTile(
@@ -114,12 +130,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               color: Colors.white,
             ),
           ),
+          // Title of the notification
           title: Text(
             notification.title,
             style: TextStyle(
               fontWeight: notification.isRead ? FontWeight.normal : FontWeight.bold,
             ),
           ),
+          // Subtitle displaying body and event date
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -134,7 +152,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               ),
             ],
           ),
-          isThreeLine: true,
+          isThreeLine: true,// Allow for three lines in the notification item
           trailing: Text(
             _formatNotificationDate(notification.createdAt),
             style: const TextStyle(
@@ -142,6 +160,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               color: Colors.grey,
             ),
           ),
+          // On tap, mark notification as read and navigate to event details (if applicable)
           onTap: () {
             // Mark as read if not already
             if (!notification.isRead) {
@@ -149,17 +168,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             }
             
             // Navigate to event detail if needed
-            // We would need event detail navigation logic here
+            
           },
         ),
       ),
     );
   }
   
+
+  // Helper function to format notification creation date
   String _formatNotificationDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
-    
+    // Return relative time (e.g., "2d ago", "1h ago")
     if (difference.inDays > 0) {
       return '${difference.inDays}d ago';
     } else if (difference.inHours > 0) {
@@ -171,6 +192,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }
   }
   
+  // Confirmation dialog to clear all notifications
   Future<void> _showDeleteConfirmationDialog() async {
     final result = await showDialog<bool>(
       context: context,
@@ -189,7 +211,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ],
       ),
     );
-    
+     // If confirmed, clear all notifications
     if (result == true) {
       await NotificationService.deleteAllNotifications();
     }
