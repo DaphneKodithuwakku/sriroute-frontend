@@ -4,7 +4,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../models/tour_models.dart';
 import '../utils/image_loader.dart';
 
+/// A service class responsible for managing virtual tour data
+/// including loading tour locations, parsing configuration files,
+/// preloading images, and generating dynamic tour points.
 class TourService {
+  // Firebase Storage instance used to fetch data from cloud
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   // Singleton pattern
@@ -54,7 +58,7 @@ class TourService {
     }
   }
 
-  // Parse config data from JSON - implement properly
+  /// Converts raw bytes from config.json into a usable Map
   Map<String, dynamic> parseConfigData(List<int> data) {
     try {
       // Convert bytes to string and parse as JSON
@@ -115,15 +119,14 @@ class TourService {
         final listResult = await storageRef.listAll();
 
         // Filter for image files
-        items =
-            listResult.items
-                .where(
-                  (item) =>
-                      item.name.toLowerCase().endsWith('.jpg') ||
-                      item.name.toLowerCase().endsWith('.jpeg') ||
-                      item.name.toLowerCase().endsWith('.png'),
-                )
-                .toList();
+        items = listResult.items
+            .where(
+              (item) =>
+                  item.name.toLowerCase().endsWith('.jpg') ||
+                  item.name.toLowerCase().endsWith('.jpeg') ||
+                  item.name.toLowerCase().endsWith('.png'),
+            )
+            .toList();
 
         debugPrint('Found ${items.length} image files in $storagePath');
       } catch (e) {
@@ -169,20 +172,19 @@ class TourService {
             name: 'Entrance View (${names[0]})',
             imageUrl: urls[0],
             storagePath: '${storagePath}/${names[0]}',
-            hotspots:
-                urls.length > 1
-                    ? [
-                      TourHotspot(
-                        id: 'hotspot_0_to_1',
-                        longitude: 30.0,
-                        latitude: 0.0,
-                        targetPointId: 'point_1',
-                        label: 'Enter',
-                        icon: Icons.arrow_forward,
-                        color: Colors.blue,
-                      ),
-                    ]
-                    : [],
+            hotspots: urls.length > 1
+                ? [
+                    TourHotspot(
+                      id: 'hotspot_0_to_1',
+                      longitude: 30.0,
+                      latitude: 0.0,
+                      targetPointId: 'point_1',
+                      label: 'Enter',
+                      icon: Icons.arrow_forward,
+                      color: Colors.blue,
+                    ),
+                  ]
+                : [],
           ),
         );
       }
