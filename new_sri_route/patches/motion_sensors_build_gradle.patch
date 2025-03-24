@@ -1,0 +1,8 @@
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
++        namespace "com.pravera.flutter.motion_sensors"
+        minSdkVersion 16
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
