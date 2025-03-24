@@ -23,7 +23,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  // List of pages or screens (replace with your actual screens)
+  // Collection of pages or views
   static const List<Widget> _widgetOptions = <Widget>[
     Text('Home Screen'),
     Text('VR Tour Screen'),
