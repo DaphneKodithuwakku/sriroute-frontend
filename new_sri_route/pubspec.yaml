@@ -1,4 +1,4 @@
-name: new_sri_route
+name: Sri_Route
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -33,24 +33,24 @@ dependencies:
   flutter_cache_manager: ^3.3.1
   path_provider: ^2.0.15
   google_maps_flutter: ^2.5.0  # Added Google Maps package
-  table_calendar: ^3.0.9
+  table_calendar: ^3.2.0
   flutter_signin_button: ^2.0.0
-  intl: ^0.18.1  # Add this if it's not already there
+  intl: ^0.20.2
   cloud_firestore: ^4.13.1
   http: ^1.3.0
   google_fonts: ^6.1.0
   url_launcher: ^6.1.0
   image_picker: ^1.0.4
   firebase_app_check: ^0.2.1+15
-  geolocator: ^10.0.0
-  geocoding: ^2.1.1
+  geolocator: ^13.0.3
+  geocoding: ^3.0.0
   permission_handler: ^11.4.0
-  permission_handler_android: ^12.1.0
+  permission_handler_android: 12.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.0  # Add this line
+  flutter_launcher_icons: ^0.14.3
 
 dependency_overrides:
   motion_sensors:
@@ -167,3 +167,4 @@ flutter_launcher_icons:
   remove_alpha_ios: true
   web:
     generate: false
+    
