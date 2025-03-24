@@ -4,7 +4,7 @@ class TempleDetailScreen extends StatelessWidget {
   final String templeName;
   final String? storagePath;
 
-  // Define constants for sizes and paddings
+  // Defining constants for sizes and paddings
   static const double _imageBannerHeight = 300.0;
   static const double _horizontalPadding = 16.0;
   static const double _verticalSpacing = 8.0;
@@ -34,7 +34,7 @@ class TempleDetailScreen extends StatelessWidget {
     final String description = _getDescription(templeName);
     final Color overlayColor = Colors.black.withOpacity(0.6);
 
-    // Get appropriate asset image based on temple name
+    // adding an asset image based on temple name
     final String imageAsset = _getImageAsset(templeName);
     final String locationText = _getLocationText(templeName);
 
@@ -113,7 +113,7 @@ class TempleDetailScreen extends StatelessWidget {
     );
   }
 
-  // Return appropriate asset based on temple name
+  // Returning an asset based on temple name
   String _getImageAsset(String templeName) {
     switch (templeName) {
       case 'Sri Dalada Maligawa':
@@ -131,7 +131,7 @@ class TempleDetailScreen extends StatelessWidget {
     }
   }
 
-  // Return appropriate location text based on temple name
+  // Returning a location text based on temple name
   String _getLocationText(String templeName) {
     switch (templeName) {
       case 'Sri Dalada Maligawa':
@@ -224,13 +224,13 @@ class TempleDetailScreen extends StatelessWidget {
     );
   }
 
-  // Extract start tour button to a separate method
+  // To extract start tour button to a separate method
   Widget _buildStartTourButton() {
     return Builder(
       builder:
           (context) => ElevatedButton(
             onPressed: () {
-              // Add logging to verify the storage path
+              // Adding logging to verify the storage path
               print('Starting tour with storage path: $storagePath');
 
               Navigator.pushNamed(context, '/panorama', arguments: storagePath);
