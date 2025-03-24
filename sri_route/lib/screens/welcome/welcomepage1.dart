@@ -11,7 +11,7 @@ class WelcomePage1 extends StatelessWidget {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('showWelcome', false);
 
-    // Navigate to login page
+    // Navigate directly to login screen
     Navigator.pushReplacementNamed(context, '/login');
   }
 
@@ -32,7 +32,7 @@ class WelcomePage1 extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: 325,
+              height: 325, //Fixed height, consider making it responsive
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -68,8 +68,8 @@ class WelcomePage1 extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 25), // Added more space
-                  // Navigation Dots
+                  SizedBox(height: 25), // Added more space before navigation dots
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(5, (index) {
@@ -110,7 +110,7 @@ class WelcomePage1 extends StatelessWidget {
                       // Centered FAB
                       FloatingActionButton(
                         onPressed: () {
-                          Navigator.push(
+                          Navigator.push(  // Navigate to the next welcome screen
                             context,
                             MaterialPageRoute(
                               builder: (context) => WelcomePage2(),
