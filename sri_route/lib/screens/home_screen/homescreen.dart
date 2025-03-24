@@ -420,7 +420,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 10),
 
-                    SizedBox(
+                    SizedBox( //Popular Virtual Tours
                       height: 130,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
