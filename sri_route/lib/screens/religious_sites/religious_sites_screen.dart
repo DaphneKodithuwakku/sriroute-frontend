@@ -6,6 +6,7 @@ void main() {
   runApp(MyApp());
 }
 
+//Main application widget
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.grey[100],
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: MyHomePage(),
+      home: MyHomePage(), //setting the homescreen
     );
   }
 }
@@ -29,6 +30,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
+  //list of pages in the nav bar
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     const Center(child: Text('VR Tour Screen')),
