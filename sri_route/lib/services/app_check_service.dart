@@ -4,7 +4,7 @@ import 'dart:math' as math;
 
 class AppCheckService {
   static bool _isInitialized = false;
-  static int _retryAttempts = 0;
+  static int _retryAttempts = 0; // Counter for retry attempts
   static const int _maxRetryAttempts = 3;
   static String? _debugToken;
 
