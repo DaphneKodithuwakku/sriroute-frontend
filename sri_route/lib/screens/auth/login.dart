@@ -5,9 +5,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/user_service.dart';
 import '../../utils/google_signin_helper.dart';
-import 'signup_page.dart'; // Import Signup Page
-import 'completion_page.dart'; // Import Completion Page
-import 'signup_success_page.dart'; // Import Signup Success Page
+import 'signup_page.dart';
+import 'completion_page.dart';
+import 'signup_success_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -23,16 +23,16 @@ class MyApp extends StatelessWidget {
       home: const LoginPage(),
       routes: {
         "/signup": (context) => const SignUpPage(), // Route for SignUp Page
-        "/completion":
-            (context) =>
-                const SignupCompletionPage(), // Route for Completion Page
-        "/signup-success":
-            (context) => const SignupSuccessPage(), // ✅ Route for Success Page
+        "/completion": (context) =>
+            const SignupCompletionPage(), // Route for Completion Page
+        "/signup-success": (context) =>
+            const SignupSuccessPage(), // Route for Success Page
       },
     );
   }
 }
 
+// LoginPage is a StatefulWidget because it needs to update UI state during login
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -45,12 +45,14 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+// State variables
   bool _isLoading = false;
   String? _errorMessage;
   bool _obscurePassword = true;
 
-  // Email & Password Sign In - Updated to use helper
+  /// Method to handle login using email and password
   Future<void> _signInWithEmailAndPassword() async {
+    // First, validate inputs
     if (_emailController.text.trim().isEmpty ||
         _passwordController.text.isEmpty) {
       setState(() {
@@ -59,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+// Show loading and clear previous errors
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -68,9 +71,9 @@ class _LoginPageState extends State<LoginPage> {
       // Use helper method to handle sign in with error recovery
       final UserCredential? userCredential =
           await FirebaseAuthHelper.signInWithEmailPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-          );
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
 
       // Check if the user is authenticated despite possible errors
       if (userCredential == null && !FirebaseAuthHelper.isUserAuthenticated()) {
@@ -145,8 +148,8 @@ class _LoginPageState extends State<LoginPage> {
       // Add special handling for the type casting error
       if (e.toString().contains("type 'List<Object?>") &&
           e.toString().contains(
-            "is not a subtype of type 'PigeonUserDetails?'",
-          )) {
+                "is not a subtype of type 'PigeonUserDetails?'",
+              )) {
         errorMessage = "There's a technical issue. Please try again.";
       }
 
@@ -231,8 +234,8 @@ class _LoginPageState extends State<LoginPage> {
       String errorMessage;
       if (e.toString().contains("type 'List<Object?>") &&
           e.toString().contains(
-            "is not a subtype of type 'PigeonUserDetails?'",
-          )) {
+                "is not a subtype of type 'PigeonUserDetails?'",
+              )) {
         errorMessage =
             "There's a compatibility issue with Google Sign-In. Please try email login instead.";
       } else if (e.toString().contains("ApiException: 10:")) {
@@ -257,98 +260,100 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+// Function to show a dialog for password reset via email
   void _showResetPasswordDialog() {
+    // Controller to capture the user's email input
     final TextEditingController resetEmailController = TextEditingController();
 
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text("Reset Password"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  "Enter your email address to receive a password reset link.",
-                  style: TextStyle(fontSize: 14),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: resetEmailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    hintText: "Email",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ],
+      builder: (context) => AlertDialog(
+        title: const Text("Reset Password"),
+        content: Column(
+          //Make the column fit content vertically
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "Enter your email address to receive a password reset link.",
+              style: TextStyle(fontSize: 14),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
+            const SizedBox(height: 10),
+            TextField(
+              controller: resetEmailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                hintText: "Email",
+                border: OutlineInputBorder(),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (resetEmailController.text.trim().isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Please enter your email address"),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                    return;
-                  }
-
-                  try {
-                    await _auth.sendPasswordResetEmail(
-                      email: resetEmailController.text.trim(),
-                    );
-
-                    if (mounted) {
-                      Navigator.pop(context);
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Password reset email sent. Please check your inbox.",
-                          ),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    }
-                  } on FirebaseAuthException catch (e) {
-                    String message;
-                    switch (e.code) {
-                      case 'user-not-found':
-                        message = 'No user found with this email address.';
-                        break;
-                      case 'invalid-email':
-                        message = 'The email address is not valid.';
-                        break;
-                      default:
-                        message = e.message ?? 'Failed to send reset email.';
-                    }
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(message),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Error: ${e.toString()}"),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-                child: const Text("Send Link"),
-              ),
-            ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
           ),
+          ElevatedButton(
+            onPressed: () async {
+              if (resetEmailController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Please enter your email address"),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              try {
+                await _auth.sendPasswordResetEmail(
+                  email: resetEmailController.text.trim(),
+                );
+
+                if (mounted) {
+                  Navigator.pop(context);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Password reset email sent. Please check your inbox.",
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+              } on FirebaseAuthException catch (e) {
+                String message;
+                switch (e.code) {
+                  case 'user-not-found':
+                    message = 'No user found with this email address.';
+                    break;
+                  case 'invalid-email':
+                    message = 'The email address is not valid.';
+                    break;
+                  default:
+                    message = e.message ?? 'Failed to send reset email.';
+                }
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(message),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Error: ${e.toString()}"),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: const Text("Send Link"),
+          ),
+        ],
+      ),
     );
   }
 
@@ -457,23 +462,23 @@ class _LoginPageState extends State<LoginPage> {
                 _isLoading
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: _signInWithEmailAndPassword,
+                        child: const Text(
+                          "Log In",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                      onPressed: _signInWithEmailAndPassword,
-                      child: const Text(
-                        "Log In",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
 
                 const SizedBox(height: 20),
                 const Row(
@@ -491,7 +496,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
 
-                // Updated Social Media Sign-in Buttons - matching login button style
+                //Social Media Sign-in Buttons - matching login button style
                 _buildStyledSocialButton(
                   icon: Icon(Icons.g_mobiledata, size: 24, color: Colors.red),
                   text: "Continue with Google",
@@ -554,7 +559,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // New method for styled social buttons matching main login button
+  // Custom widget builder for social login buttons (e.g., Google, Apple)
+// Reuses consistent styling to match the main login UI
   Widget _buildStyledSocialButton({
     required Widget icon,
     required String text,
@@ -569,7 +575,7 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(color: Colors.grey.shade300),
         ),
-        elevation: 0,
+        elevation: 0, // Flat button with no shadow
       ),
       onPressed: onPressed,
       child: Row(
@@ -583,6 +589,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+// Dispose controllers to clean up resources and avoid memory leaks
   @override
   void dispose() {
     _emailController.dispose();
