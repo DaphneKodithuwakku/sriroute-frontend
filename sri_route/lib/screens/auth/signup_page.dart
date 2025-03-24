@@ -53,7 +53,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  // Email/password signup - Updated with better null handling
+  // Email/password signup
   Future<void> _signUp() async {
     if (_formKey.currentState!.validate() && agreeToTerms) {
       setState(() {
@@ -65,11 +65,11 @@ class _SignUpPageState extends State<SignUpPage> {
         // Use the helper to create the user account
         final UserCredential? userCredential =
             await FirebaseAuthHelper.signUpWithEmailPassword(
-              email: _emailController.text.trim(),
-              password: _passwordController.text,
-              username: _usernameController.text.trim(),
-              language: selectedLanguage,
-            );
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          username: _usernameController.text.trim(),
+          language: selectedLanguage,
+        );
 
         // Check if current user exists despite possible null userCredential
         // This handles the case when our error recovery flow was used
@@ -114,8 +114,8 @@ class _SignUpPageState extends State<SignUpPage> {
         // Check for the specific type casting error
         if (e.toString().contains("type 'List<Object?>") &&
             e.toString().contains(
-              "is not a subtype of type 'PigeonUserDetails?'",
-            )) {
+                  "is not a subtype of type 'PigeonUserDetails?'",
+                )) {
           message =
               "There's a compatibility issue with our authentication system. Please try again or contact support.";
         }
@@ -339,10 +339,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     hintText: "Select language",
                   ),
                   value: selectedLanguage,
-                  items:
-                      languages.map((lang) {
-                        return DropdownMenuItem(value: lang, child: Text(lang));
-                      }).toList(),
+                  items: languages.map((lang) {
+                    return DropdownMenuItem(value: lang, child: Text(lang));
+                  }).toList(),
                   onChanged: (value) {
                     setState(() {
                       selectedLanguage = value;
@@ -391,20 +390,20 @@ class _SignUpPageState extends State<SignUpPage> {
                 _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: _signUp,
+                        child: const Text(
+                          "Create Account",
+                          style: TextStyle(fontSize: 16),
                         ),
                       ),
-                      onPressed: _signUp,
-                      child: const Text(
-                        "Create Account",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
 
                 const SizedBox(height: 20),
 
