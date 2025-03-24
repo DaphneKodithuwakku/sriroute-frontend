@@ -10,7 +10,7 @@ class LocationModel {
     DateTime? timestamp,
   }) : timestamp = timestamp ?? DateTime.now();
 
-  // Creating a default location (Colombo, Sri Lanka)
+  // Creating a default location to (Colombo, Sri Lanka)
   factory LocationModel.defaultLocation() {
     return LocationModel(
       latitude: 6.9271,
