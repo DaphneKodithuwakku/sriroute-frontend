@@ -22,8 +22,8 @@ class PanoramaScreen extends StatefulWidget {
     this.storagePath,
     this.location,
     this.initialPointId,
-  }) : assert(storagePath != null || location != null),
-       super(key: key);
+  })  : assert(storagePath != null || location != null),
+        super(key: key);
 
   @override
   State<PanoramaScreen> createState() => _PanoramaScreenState();
@@ -33,7 +33,7 @@ class _PanoramaScreenState extends State<PanoramaScreen>
     with SingleTickerProviderStateMixin {
   final TourService _tourService = TourService(); // Tour service instance
   late Future<List<TourPoint>>
-  _tourPointsFuture; // Future to load all tour points
+      _tourPointsFuture; // Future to load all tour points
   TourPoint? _currentPoint;
   String? _currentPointId;
   String? _previousImageUrl;
@@ -410,16 +410,15 @@ class _PanoramaScreenState extends State<PanoramaScreen>
         // Retry loading the current image
         ImagePreloader.preloadImage(_currentPoint!.imageUrl, highPriority: true)
             .then((_) {
-              setState(() => _isLoadingNext = false);
-              _transitionController.forward();
-            })
-            .catchError((e) {
-              setState(() {
-                _isLoadingNext = false;
-                _hasError = true;
-                _errorMessage = 'Retry failed: ${e.toString()}';
-              });
-            });
+          setState(() => _isLoadingNext = false);
+          _transitionController.forward();
+        }).catchError((e) {
+          setState(() {
+            _isLoadingNext = false;
+            _hasError = true;
+            _errorMessage = 'Retry failed: ${e.toString()}';
+          });
+        });
       }
     });
   }
@@ -527,18 +526,17 @@ class _PanoramaScreenState extends State<PanoramaScreen>
       builder: (context, child) {
         return Opacity(opacity: _fadeAnimation.value, child: child);
       },
-      child:
-          _hasError
-              ? _buildImageErrorDisplay()
-              : TransitionPanorama(
-                imageUrl: currentPoint.imageUrl,
-                previousImageUrl: _previousImageUrl,
-                longitude: _longitude,
-                latitude: _latitude,
-                onLongitudeChanged: (value) => _longitude = value,
-                onLatitudeChanged: (value) => _latitude = value,
-                hotspots: _buildHotspots(currentPoint, tourPoints),
-              ),
+      child: _hasError
+          ? _buildImageErrorDisplay()
+          : TransitionPanorama(
+              imageUrl: currentPoint.imageUrl,
+              previousImageUrl: _previousImageUrl,
+              longitude: _longitude,
+              latitude: _latitude,
+              onLongitudeChanged: (value) => _longitude = value,
+              onLatitudeChanged: (value) => _latitude = value,
+              hotspots: _buildHotspots(currentPoint, tourPoints),
+            ),
     );
   }
 
@@ -583,10 +581,11 @@ class _PanoramaScreenState extends State<PanoramaScreen>
     }
   }
 
-  // Updated UI overlay with improved navigation controls (responsive)
+  // This widget builds a UI overlay on top of a virtual tour/panorama view
+// It displays the current tour point name and loading indicator, and is responsive for different screen sizes
   Widget _buildUIOverlay(
     BuildContext context,
-    List<TourPoint> tourPoints,
+    List<TourPoint> tourPoints, //List of all tour points in the virtual tour
     TourPoint currentPoint,
     int currentIndex,
   ) {
@@ -598,7 +597,8 @@ class _PanoramaScreenState extends State<PanoramaScreen>
             Padding(
               padding: EdgeInsets.only(top: 16, left: _screenWidth * 0.05),
               child: Align(
-                alignment: Alignment.topLeft,
+                alignment:
+                    Alignment.topLeft, // Aligns the info bar to top-left corner
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -611,6 +611,7 @@ class _PanoramaScreenState extends State<PanoramaScreen>
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      // Show loading spinner when transitioning to the next point
                       if (_isLoadingNext)
                         Container(
                           width: 20,
@@ -776,8 +777,8 @@ class _PanoramaScreenState extends State<PanoramaScreen>
           // Show back arrow if we're not showing the first item
           if (visibleIndices.first > 0)
             GestureDetector(
-              onTap:
-                  () => _navigateToPoint(tourPoints[visibleIndices.first - 1]),
+              onTap: () =>
+                  _navigateToPoint(tourPoints[visibleIndices.first - 1]),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Icon(
@@ -791,20 +792,18 @@ class _PanoramaScreenState extends State<PanoramaScreen>
           // Pagination pills
           for (final index in visibleIndices)
             GestureDetector(
-              onTap:
-                  _isLoadingNext
-                      ? null
-                      : () => _navigateToPoint(tourPoints[index]),
+              onTap: _isLoadingNext
+                  ? null
+                  : () => _navigateToPoint(tourPoints[index]),
               child: Container(
                 width: 10,
                 height: 10,
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color:
-                      index == currentIndex
-                          ? Colors.white
-                          : _loadedPoints[tourPoints[index].id] == true
+                  color: index == currentIndex
+                      ? Colors.white
+                      : _loadedPoints[tourPoints[index].id] == true
                           ? Colors.white.withAlpha(150)
                           : Colors.white.withAlpha(80),
                 ),
@@ -814,8 +813,8 @@ class _PanoramaScreenState extends State<PanoramaScreen>
           // Show forward arrow if we're not showing the last item
           if (visibleIndices.last < tourPoints.length - 1)
             GestureDetector(
-              onTap:
-                  () => _navigateToPoint(tourPoints[visibleIndices.last + 1]),
+              onTap: () =>
+                  _navigateToPoint(tourPoints[visibleIndices.last + 1]),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Icon(

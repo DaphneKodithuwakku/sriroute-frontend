@@ -4,16 +4,7 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
-/// Default [FirebaseOptions] for use with your Firebase apps.
-///
-/// Example:
-/// ```dart
-/// import 'firebase_options.dart';
-/// // ...
-/// await Firebase.initializeApp(
-///   options: DefaultFirebaseOptions.currentPlatform,
-/// );
-/// ```
+// Determines the current platform and returns the corresponding FirebaseOptions
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -50,6 +41,7 @@ class DefaultFirebaseOptions {
     measurementId: 'G-XPQYDW13ME',
   );
 
+  /// Android Firebase configuration
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyA8cOLHOAxGq5jUOJRv23jdKwN8dDgTCw4',
     appId: '1:898585044292:android:48b031ab8ae59624212311',

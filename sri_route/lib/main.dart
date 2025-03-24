@@ -171,8 +171,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Improved NavigationObserver to handle null route names
+// Custom NavigatorObserver to track and debug route navigation events
+// Handles cases where route names might be null, and prints navigation activity to console
 class NavigationObserver extends NavigatorObserver {
+  // Called when a new route is pushed onto the navigator stack
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     final routeName = route.settings.name ?? 'unnamed-route';
@@ -180,6 +182,7 @@ class NavigationObserver extends NavigatorObserver {
     debugPrint('Navigating to: $routeName (from: $previousRouteName)');
   }
 
+// Called when a route is popped (i.e., user navigates back)
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     final routeName = route.settings.name ?? 'unnamed-route';
@@ -187,12 +190,14 @@ class NavigationObserver extends NavigatorObserver {
     debugPrint('Navigating back from: $routeName (to: $previousRouteName)');
   }
 
+// Called when a route is removed from the stack without navigating (e.g., programmatic removal)
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     final routeName = route.settings.name ?? 'unnamed-route';
     debugPrint('Removed route: $routeName');
   }
 
+// Called when a route is replaced with another (e.g., using pushReplacement)
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     final newRouteName = newRoute?.settings.name ?? 'unnamed-route';
