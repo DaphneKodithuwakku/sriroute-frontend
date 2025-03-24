@@ -313,12 +313,12 @@ class _CulturalSensitivityPageState extends State<CulturalSensitivityPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Check if we're in a MainScreen context
+            //"Let's check if we're currently on the MainScreen."
             if (ModalRoute.of(context)?.settings.name == '/home') {
-              // If in MainScreen, just navigate back to home tab
+              // "If we're already on the MainScreen, just switch back to the home tab."
               Navigator.of(context).pushReplacementNamed('/home', arguments: 0);
             } else if (Navigator.canPop(context)) {
-              // If we can pop (we're on a separate route), just pop back
+              // "If we're on a separate page and can go back, just pop back to the previous screen."
               Navigator.of(context).pop();
             } else {
               // Otherwise, navigate to home as fallback
