@@ -160,7 +160,7 @@ class _SidePanelState extends State<SidePanel> {
             () => _selectTab(TabIndex.favorites)
           ),
           
-          // Add a Notifications menu item with badge
+          // Add a Notifications menu with badge
           _buildNotificationMenuItem(
             context, 
             "Notifications", 
