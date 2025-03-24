@@ -8,7 +8,7 @@ import '360_screen/360_home_screen.dart';
 import 'cultural_guide/cultural_guide_screen.dart';
 import 'pilgrimage_planner/pilgrimage_planner_screen.dart';
 import 'home_screen/sidepanel.dart';
-import 'favorites_screen.dart'; // Add this import
+import 'favorites_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -112,42 +112,38 @@ class _MainScreenState extends State<MainScreen> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        drawer:
-            showCustomDrawer
-                ? SidePanel(
-                  onTabSelected: (index) {
-                    // Update the selected index when side panel item is clicked
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  },
-                )
-                : null,
-        appBar:
-            _shouldShowAppBar()
-                ? AppBar(
-                  leading:
-                      _selectedIndex == 0 ||
-                              _selectedIndex == 1 ||
-                              _selectedIndex == 2
-                          ? IconButton(
-                            icon: const Icon(Icons.menu),
-                            onPressed: () {
-                              _scaffoldKey.currentState?.openDrawer();
-                            },
-                          )
-                          : null,
-                  title: Text(_getAppBarTitle()),
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                )
-                : null,
+        drawer: showCustomDrawer
+            ? SidePanel(
+                onTabSelected: (index) {
+                  // Update the selected index when side panel item is clicked
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+              )
+            : null,
+        appBar: _shouldShowAppBar()
+            ? AppBar(
+                leading: _selectedIndex == 0 ||
+                        _selectedIndex == 1 ||
+                        _selectedIndex == 2
+                    ? IconButton(
+                        icon: const Icon(Icons.menu),
+                        onPressed: () {
+                          _scaffoldKey.currentState?.openDrawer();
+                        },
+                      )
+                    : null,
+                title: Text(_getAppBarTitle()),
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+              )
+            : null,
         // Since _selectedIndex could be 5 (settings) but _widgetOptions only has
         // indices 0-5, we need to ensure we don't go out of bounds
-        body:
-            _selectedIndex < _widgetOptions.length
-                ? _widgetOptions.elementAt(_selectedIndex)
-                : _widgetOptions.last, // Fallback to last item (Settings)
+        body: _selectedIndex < _widgetOptions.length
+            ? _widgetOptions.elementAt(_selectedIndex)
+            : _widgetOptions.last, // Fallback to last item (Settings)
         bottomNavigationBar: CustomBottomNavBar(
           selectedIndex: _selectedIndex,
           onItemTapped: _onItemTapped,
