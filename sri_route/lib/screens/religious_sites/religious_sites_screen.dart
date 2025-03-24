@@ -115,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+//creating a function to go to religious sites
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -373,6 +374,7 @@ class ReligiousSitesList extends StatelessWidget {
 
   const ReligiousSitesList({this.religion, this.district});
 
+  // function to choose the religion
   IconData _getReligionIcon(String religion) {
     switch (religion) {
       case "Buddhism":
@@ -514,6 +516,7 @@ class ReligiousSitesList extends StatelessWidget {
   }
 }
 
+//adding classes to display the religious sites
 class ReligiousSite {
   final String name;
   final String religion;
