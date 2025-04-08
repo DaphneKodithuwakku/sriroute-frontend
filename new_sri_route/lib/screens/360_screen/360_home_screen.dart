@@ -69,7 +69,7 @@ class _ReligionSelectionScreenState extends State<ReligionSelectionScreen> {
         });
       }
     } catch (e) {
-      debugPrint("Error loading user data: $e");
+      debugPrint("Error loading usdder data: $e");
       if (mounted) {
         setState(() {
           _isLoading = false;
